@@ -1,6 +1,6 @@
 ---
 name: caijing-earnings
-description: 财经·财报——只回答"这季财报行不行"。财报发布后的事件驱动快评：同比环比速览、超预期三层基准判定（一致预期>公司指引>历史季节性）、扣非与现金流含金量验证、前瞻指标（合同负债/订单/资本开支）。产出专业版财报点评 docx + 客户版财报速览卡+文案。触发："XX出财报了""点评XX年报/中报/季报""这季业绩怎么样"。
+description: 财经·财报——只回答"这季财报行不行"。财报发布后的事件驱动快评：最新期核验 gate（先确认评的是最新披露期）、同比环比速览、超预期三层基准判定（一致预期>公司指引>历史季节性）、扣非与现金流含金量验证、前瞻指标（合同负债/订单/资本开支）。产出专业版财报点评 docx + 客户版财报速览卡+文案。触发："XX出财报了""点评XX年报/中报/季报""这季业绩怎么样"；命令 /caijing:earnings。
 ---
 
 # 财经·财报（caijing-earnings）
@@ -9,7 +9,7 @@ description: 财经·财报——只回答"这季财报行不行"。财报发布
 
 **边界（接力关系）**：公司质地全面体检 → `caijing-fundamental`；贵不贵 → `caijing-valuation`；深度排雷 → `caijing-risk`。
 
-执行前先读共享层：`../references/compliance.md`、`../references/compliance-rendering.md`、`../references/output-spec.md`、`../references/data-sourcing.md`、`../references/data-fallback.md`。
+执行前先读共享层：`../references/compliance.md`、`../references/compliance-rendering.md`、`../references/output-spec.md`、`../references/data-sourcing.md`、`../references/data-fallback.md`、`../references/freshness-gate.md`。
 
 ## 一、三问主线
 
@@ -82,8 +82,9 @@ description: 财经·财报——只回答"这季财报行不行"。财报发布
 
 ## 六、工作流
 
-1. 取数（财报原文优先），逐条标来源与确定性；没有本期财报原文时按 data-fallback.md 降级，不做超预期判定。
-2. 依六个分析块产出结构化内核（一份，唯一事实源）。
-3. 渲染专业版 docx + 客户版卡片文案（口径切换见 output-spec.md 与 compliance-rendering.md）。
-4. 合规检查（客户版逐句过 checklist；禁"会涨/会跌"类引申）。
-5. 交付，标数据截至日 + 确定性分级 + 数据缺口。
+1. **时效核验（财报 gate，按 freshness-gate.md）**：先确认所评财报为公司最新披露期（搜最新业绩公告对照）；已有更新一期 → 提示并默认改评最新期，用户坚持评旧期 → 全文标注"非最新期，历史复盘口径"；一致预期数据超 1 个月须重取。
+2. 取数（财报原文优先），逐条标来源与确定性；没有本期财报原文时按 data-fallback.md 降级，不做超预期判定。
+3. 依六个分析块产出结构化内核（一份，唯一事实源）。
+4. 渲染专业版 docx + 客户版卡片文案（口径切换见 output-spec.md 与 compliance-rendering.md）。
+5. 合规检查（客户版逐句过 checklist；禁"会涨/会跌"类引申）。
+6. 交付，标数据截至日 + 确定性分级 + 数据缺口。

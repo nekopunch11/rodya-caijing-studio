@@ -13,6 +13,7 @@
 - ✅ 客户版内容零操作指令、零目标价、零收益承诺——只有数据、来源和风险提示
 - ✅ 判断权交还客户，工具只负责把事实摆清楚
 - ✅ 每份输出自带来源标注、数据截至日和免责声明，**复制即用**
+- ✅ 时效核验 gate：财报必须最新一期、招股必须在期内、孖展/统计/费率超时间窗自动重取或降级——不用过期数据硬出结论
 
 同一个逻辑贯穿所有模块：不替任何人做决策，让专业的呈现代替情绪的煽动。
 
@@ -76,6 +77,7 @@ rodya-caijing-studio/            父 skill：路由 + 通用工作流
 │   ├── output-spec.md           输出层：内核 schema、三形态渲染、口径切换
 │   ├── data-sourcing.md         取数层：数据源优先级、口径纪律、确定性分级
 │   ├── data-fallback.md         缺数据/联网失败/冲突口径时的降级规则
+│   ├── freshness-gate.md        时效核验 gate：最新期/招股期/时间窗，超窗降级
 │   ├── formulas-and-thresholds.md 公式、阈值、评分与 IPO 分档
 │   ├── sector-adapters.md       金融/地产/周期/未盈利科技等行业适配
 │   └── card-components.md       卡片层：布局功能位、固定件
@@ -123,6 +125,22 @@ https://github.com/nekopunch11/rodya-caijing-studio
 把文件夹压缩为 zip，在 **设置 → 功能（Capabilities）→ 技能** 中上传。
 
 > 💡 Codex 用户注意：打开本仓库时，根目录 `AGENTS.md` 会自动加载合规硬约束；优先调用父 skill `rodya-caijing-studio`，由父 skill 路由到七个子模块。不同运行器对子目录 skill 的递归发现可能不同。
+
+## ⌨️ 稳定命令入口
+
+不想让路由猜？直接敲命令，后面跟分析对象：
+
+| 命令 | 模块 | 示例 |
+|---|---|---|
+| `/caijing:fundamental` | 🩺 基本面 | `/caijing:fundamental 宁德时代` |
+| `/caijing:earnings` | 📈 财报 | `/caijing:earnings 茅台年报` |
+| `/caijing:valuation` | ⚖️ 估值 | `/caijing:valuation 招商银行` |
+| `/caijing:risk` | 🚨 排雷 | `/caijing:risk XX公司` |
+| `/caijing:industry` | 🔗 产业链 | `/caijing:industry 固态电池` |
+| `/caijing:ipo-a` | 🆕 A股打新 | `/caijing:ipo-a XX（科创板）` |
+| `/caijing:ipo-hk` | 🎯 港股打新 | `/caijing:ipo-hk` + 贴招股资料 |
+
+命令在任何 runner 中都作为文本触发词生效，跳过路由判断直达模块；`caijing:xxx` 不带斜杠同样有效。
 
 ## 💬 用法
 

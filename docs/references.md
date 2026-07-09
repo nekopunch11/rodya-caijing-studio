@@ -10,6 +10,7 @@
 | `compliance-rendering.md` | 客户版渲染降级：把评级、档位、受益、打新表达改成客观信息 | 生成客户版卡片或文案时必读 |
 | `data-sourcing.md` | 数据源优先级、来源标注、确定性分级、口径纪律 | 取数时必读 |
 | `data-fallback.md` | 联网失败、缺一手材料、数据冲突、样本不足时的降级规则 | 关键数据缺失或冲突时必读 |
+| `freshness-gate.md` | 时效核验 gate：财报最新期、招股期状态、孖展/统计/费率时间窗，超窗重取或降级 | 每次取数前必读（earnings/ipo-a/ipo-hk 有模块专属 gate） |
 | `output-spec.md` | 结构化分析内核、docx/卡片/PPT 的渲染规则、视觉模板未完成前的交付降级 | 产出内核和交付物时必读 |
 | `formulas-and-thresholds.md` | ROIC/WACC、反向 DCF、M-Score、Z-Score、红黄绿扫描、IPO 分档等公式阈值 | 涉及计算、评分、分档时必读 |
 | `sector-adapters.md` | 银行、保险、券商、地产、周期、18A/18C、平台型公司等行业适配 | 个股基本面或估值分析前必读 |
@@ -29,10 +30,11 @@
 1. `compliance.md`
 2. `compliance-rendering.md`
 3. `data-fallback.md`
-4. `data-sourcing.md`
-5. `formulas-and-thresholds.md`
-6. `sector-adapters.md`
-7. 各模块 `SKILL.md`
+4. `freshness-gate.md`
+5. `data-sourcing.md`
+6. `formulas-and-thresholds.md`
+7. `sector-adapters.md`
+8. 各模块 `SKILL.md`
 
 这个顺序的意思是：宁可少说、降级、留白，也不要为了完整性输出不可靠或有建议感的内容。
 
