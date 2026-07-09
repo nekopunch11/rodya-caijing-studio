@@ -123,6 +123,33 @@ npx skills add nekopunch11/rodya-caijing-studio
 
 [skills CLI](https://github.com/vercel-labs/skills) 是 agent skills 生态的通用安装器，自动检测机器上的 Claude Code / Codex / Cursor 等 agent 并装进对应目录。加 `-g` 装全局；日后 `npx skills update` 一键更新。
 
+## 🔄 更新
+
+### 方式一：让 AI 自己更新
+
+把这句话发给 Claude 或 Codex：
+
+```
+帮我把已安装的 rodya-caijing-studio skill 更新到最新版：
+https://github.com/nekopunch11/rodya-caijing-studio
+```
+
+让它检查本地 skills 目录里的 `rodya-caijing-studio`，拉取 GitHub 最新版本并覆盖旧文件。更新后可以让它报一遍 README 里的安装与更新小节，确认已经是新版。
+
+### 方式二：npx 一行命令
+
+如果你是通过 skills CLI 安装的，直接运行：
+
+```bash
+npx skills update rodya-caijing-studio
+```
+
+也可以更新全部已安装 skills：
+
+```bash
+npx skills update
+```
+
 > 💡 Codex 用户注意：打开本仓库时，根目录 `AGENTS.md` 会自动加载合规硬约束；优先调用父 skill `rodya-caijing-studio`，由父 skill 路由到七个子模块。不同运行器对子目录 skill 的递归发现可能不同。
 
 ## ⌨️ 稳定命令入口
