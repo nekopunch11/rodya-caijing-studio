@@ -136,6 +136,10 @@ https://github.com/nekopunch11/rodya-caijing-studio
 
 让它检查本地 skills 目录里的 `rodya-caijing-studio`，拉取 GitHub 最新版本并覆盖旧文件。更新后可以让它报一遍 README 里的安装与更新小节，确认已经是新版。
 
+更新时注意：不要在 `~/.codex/skills/` 下创建任何包含 `SKILL.md` 的 backup 目录。Codex 会扫描该目录下的 skill，备份目录只要还带 `SKILL.md`，就会被当成另一套正式 skill，导致列表重复。
+
+如果需要备份，放到 `~/.codex/skill-backups/`，或把备份里的 `SKILL.md` 改名为 `SKILL.md.disabled`。更新完成后检查 `~/.codex/skills/` 下是否只剩一个 `rodya-caijing-studio`。
+
 ### 方式二：npx 一行命令
 
 如果你是通过 skills CLI 安装的，直接运行：

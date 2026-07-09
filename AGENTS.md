@@ -23,3 +23,9 @@
 ## 在 Codex 中安装
 
 本包符合 agent skills 开放标准（agentskills.io）。整个目录放入 `~/.agents/skills/`（个人全局）或项目内 `.agents/skills/`（仓库共享）即可被发现；`$` 提及或 `/skills` 显式调用，任务匹配各 SKILL.md 的 description 时亦可隐式触发。
+
+## 更新卫生
+
+- 更新 `rodya-caijing-studio` 时，不要在 `~/.codex/skills/` 下创建任何包含 `SKILL.md` 的 backup 目录；该目录会被 Codex 扫描，备份会被识别成重复 skill。
+- 如需备份，放到 `~/.codex/skill-backups/`，或把备份里的 `SKILL.md` 改名为 `SKILL.md.disabled`。
+- 更新后检查 `~/.codex/skills/` 下是否只剩一个 `rodya-caijing-studio` 目录。
