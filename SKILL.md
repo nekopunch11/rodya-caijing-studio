@@ -46,21 +46,23 @@ description: 财经内容台——给券商投顾/客户经理的财经内容生
 
 ## 通用工作流（七步，所有模块共用）
 
-1. **定模块与口径**：识别单模块/组合；确认听众（默认专业版+客户版都出）。
+1. **定模块与口径**：识别单模块/组合；确认听众（**默认只出专业版**；客户版卡片+文案按需，仅用户要转客户或明确要客户版时才出）。
 2. **取数**：按 [references/data-sourcing.md](references/data-sourcing.md)；取数前先过 [references/freshness-gate.md](references/freshness-gate.md) 时效核验（财报是否最新期、招股是否在期内、孖展/统计/费率是否超窗），超窗先重取，不可得再按 [references/data-fallback.md](references/data-fallback.md) 标注数据档次、结论边界和补充要求。
 3. **产内核**：生成该模块的「结构化分析内核」（通用 schema 见 [references/output-spec.md](references/output-spec.md)，各模块字段见其 SKILL.md）。
    ⚠️ **一份内核、三形态渲染**：docx/卡片/PPT 全部从这一份内核渲染，绝不各写各的分析——否则三处不一致、改一处漏两处。
 4. **计算与适配**：涉及公式、评分、分档时按 [references/formulas-and-thresholds.md](references/formulas-and-thresholds.md)；涉及行业特殊口径时按 [references/sector-adapters.md](references/sector-adapters.md)；涉及三情景、逻辑支柱、同业四分位、利润池、竞争分类、瓶颈点、证伪链、排雷恶化因子时按 [references/research-methods.md](references/research-methods.md)。
-5. **渲染**：按下方默认产出规则；单模块专业版默认生成 `.docx`。视觉模板未完成前，卡片/PPT 可先交付结构稿；不得因数据档次把专业版降成短评。
+5. **渲染**：按下方默认产出规则；单模块专业版默认生成 `.docx`（按 [references/docx-visual-spec.md](references/docx-visual-spec.md)）。**客户版仅在用户要求时渲染**；视觉模板未完成前，卡片/PPT 可先交付结构稿；不得因数据档次把专业版降成短评。
 6. **合规检查**：对照 compliance.md 过一遍；客户版再按 [references/compliance-rendering.md](references/compliance-rendering.md) 降级逐句检查。
-7. **交付**：每份输出标注数据截至日 + 确定性分级 + 免责声明。
+7. **交付**：每份输出标注数据截至日 + 确定性分级 + 免责声明。**交付专业版后主动提醒使用者：如需转客户，可再让我出客户版（卡片图+文案）。**
 
 ## 默认产出规则
 
 | 场景 | 产出 | 不产出 |
 |---|---|---|
-| 单模块 | 专业版 docx + 客户版（卡片图+文案） | PPT（杀鸡不用牛刀） |
+| 单模块 | 专业版 docx（客户版按需，见下） | 客户版默认不出、PPT（杀鸡不用牛刀） |
 | 多模块组合 | 汇报 PPT（默认专业口径，可指定客户口径） | 需要文字稿时再附 docx |
+
+**客户版按需规则**：单模块默认只出专业版 docx；客户版（卡片图+文案）仅在用户要转客户或明确要客户版时才渲染，届时全量走合规降级（compliance-rendering.md）。交付专业版后必须主动提醒使用者可另出客户版。（`caijing-ipo-hk` 的对客模式同理，已内建按需触发。）
 
 ## 共享层（references/，改一处全生效）
 
