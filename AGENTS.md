@@ -10,7 +10,7 @@
 
 ## 不可破的硬约束（合规灵魂，破了整套工具就失效）
 
-- 只做客观数据体检，不荐股：任何输出禁止买卖建议、目标价、收益承诺、操作指令。
+- 对客内容只做客观数据体检，不荐股：任何对客输出禁止买卖建议、目标价、收益承诺、操作指令。唯一例外：`caijing-ipo-hk` 的自用计算模式（2026-07-09 经用户批准）可对使用者本人给申购方案，其客户版输出仍按本条执行。
 - 客户版（供转发客户的内容）逐句过 `references/compliance.md` 的发布前 checklist，并按 `references/compliance-rendering.md` 将评级、档位、受益标的、打新表述降级为客观信息。
 - 一份内核、三形态渲染：docx / 卡片 / PPT 必须从同一份「结构化分析内核」渲染（schema 见 `references/output-spec.md`），绝不各写各的分析。
 - 关键数字必标来源与数据截至日，区分"已核实/估算"（分级见 `references/data-sourcing.md`）；数据不足时按 `references/data-fallback.md` 降级，宁缺不编。
