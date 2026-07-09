@@ -12,6 +12,7 @@
 | `data-fallback.md` | 联网失败、缺一手材料、数据冲突、样本不足时的降级规则 | 关键数据缺失或冲突时必读 |
 | `freshness-gate.md` | 时效核验 gate：财报最新期、招股期状态、孖展/统计/费率时间窗，超窗重取或降级 | 每次取数前必读（earnings/ipo-a/ipo-hk 有模块专属 gate） |
 | `output-spec.md` | 结构化分析内核、docx/卡片/PPT 的渲染规则、视觉模板未完成前的交付降级 | 产出内核和交付物时必读 |
+| `research-methods.md` | A股/港股研究方法论：三情景、逻辑支柱、同业四分位、行业关键指标、利润池五因子、竞争分类、瓶颈点、证伪链、排雷恶化因子 | 涉及基本面、财报、估值、产业链、排雷、打新方法论时读 |
 | `formulas-and-thresholds.md` | ROIC/WACC、反向 DCF、M-Score、Z-Score、红黄绿扫描、IPO 分档等公式阈值 | 涉及计算、评分、分档时必读 |
 | `sector-adapters.md` | 银行、保险、券商、地产、周期、18A/18C、平台型公司等行业适配 | 个股基本面或估值分析前必读 |
 | `card-components.md` | 卡片结构硬点、功能位、模块签名图形建议、视觉 token 占位 | 生成卡片结构稿或未来视觉模板时读 |
@@ -33,8 +34,9 @@
 4. `freshness-gate.md`
 5. `data-sourcing.md`
 6. `formulas-and-thresholds.md`
-7. `sector-adapters.md`
-8. 各模块 `SKILL.md`
+7. `research-methods.md`
+8. `sector-adapters.md`
+9. 各模块 `SKILL.md`
 
 这个顺序的意思是：宁可少说、降级、留白，也不要为了完整性输出不可靠或有建议感的内容。
 
