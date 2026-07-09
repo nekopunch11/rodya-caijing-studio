@@ -19,9 +19,9 @@ description: 财经内容台——给券商投顾/客户经理的财经内容生
 | 财经·财报 | `caijing-earnings/` | 这季财报行不行 | "XX出财报了""点评一下XX年报" |
 | 财经·估值 | `caijing-valuation/` | 现在贵不贵 | "XX贵不贵""现在什么位置" |
 | 财经·排雷 | `caijing-risk/` | 有没有雷 | "XX有没有雷""帮我排查风险" |
-| 财经·产业链 | `caijing-industry/` | 受益标的有哪些 | "XX题材梳理""产业链图谱" |
-| 财经·A股打新 | `caijing-ipo-a/` | A股新股破发风险多大 | "XX明天申购""科创板新股分析" |
-| 财经·港股打新 | `caijing-ipo-hk/` | 港股新股值不值得打 | "分析这个新股""XX招股了" |
+| 财经·产业链 | `caijing-industry/` | 题材链条怎么分、代表公司有哪些 | "XX题材梳理""产业链图谱" |
+| 财经·A股打新 | `caijing-ipo-a/` | A股新股破发统计风险多大 | "XX明天申购""科创板新股分析" |
+| 财经·港股打新 | `caijing-ipo-hk/` | 港股新股破发统计风险多大 | "分析这个新股""XX招股了" |
 
 **路由规则：**
 
@@ -31,15 +31,16 @@ description: 财经内容台——给券商投顾/客户经理的财经内容生
 - 涉及多个问题 → 逐模块产内核，组合输出 PPT。
 - **接力关系**：基本面里估值/风险只做简版；用户要深挖时接力到估值/排雷模块增量分析，不重复劳动。
 
-## 通用工作流（六步，所有模块共用）
+## 通用工作流（七步，所有模块共用）
 
 1. **定模块与口径**：识别单模块/组合；确认听众（默认专业版+客户版都出）。
-2. **取数**：按 [references/data-sourcing.md](references/data-sourcing.md)。联网检索为主、用户上传（财报截图/终端导出/招股书）为补充。
+2. **取数**：按 [references/data-sourcing.md](references/data-sourcing.md)；遇到联网失败、缺一手材料、数据冲突时先按 [references/data-fallback.md](references/data-fallback.md) 降级。
 3. **产内核**：生成该模块的「结构化分析内核」（通用 schema 见 [references/output-spec.md](references/output-spec.md)，各模块字段见其 SKILL.md）。
    ⚠️ **一份内核、三形态渲染**：docx/卡片/PPT 全部从这一份内核渲染，绝不各写各的分析——否则三处不一致、改一处漏两处。
-4. **渲染**：按下方默认产出规则。
-5. **合规检查**：对照 compliance.md 过一遍；客户版逐句检查。
-6. **交付**：每份输出标注数据截至日 + 确定性分级 + 免责声明。
+4. **计算与适配**：涉及公式、评分、分档时按 [references/formulas-and-thresholds.md](references/formulas-and-thresholds.md)；涉及行业特殊口径时按 [references/sector-adapters.md](references/sector-adapters.md)。
+5. **渲染**：按下方默认产出规则；视觉模板未完成前，卡片/PPT 先交付结构稿或 Markdown 版。
+6. **合规检查**：对照 compliance.md 过一遍；客户版再按 [references/compliance-rendering.md](references/compliance-rendering.md) 降级逐句检查。
+7. **交付**：每份输出标注数据截至日 + 确定性分级 + 免责声明。
 
 ## 默认产出规则
 
@@ -53,8 +54,12 @@ description: 财经内容台——给券商投顾/客户经理的财经内容生
 | 文件 | 职责 |
 |---|---|
 | [compliance.md](references/compliance.md) | 合规层：两口径分层规则、措辞红线、免责声明、客户版 checklist |
+| [compliance-rendering.md](references/compliance-rendering.md) | 客户版渲染降级：评级/档位/受益标的/打新表述统一降级 |
 | [output-spec.md](references/output-spec.md) | 双版本输出层：内核 schema、docx/卡片/PPT 三形态规范、口径切换 |
 | [data-sourcing.md](references/data-sourcing.md) | 取数规范：数据源优先级、口径纪律、确定性分级 |
+| [data-fallback.md](references/data-fallback.md) | 取数失败与数据缺口降级规则：缺关键材料时不硬出结论 |
+| [formulas-and-thresholds.md](references/formulas-and-thresholds.md) | 公式、阈值、评分与 IPO 分档的统一口径 |
+| [sector-adapters.md](references/sector-adapters.md) | 银行/保险/地产/周期/未盈利科技等行业适配规则 |
 | [card-components.md](references/card-components.md) | 数据卡片层：已锁硬点、固定件、字段功能位（视觉待定稿） |
 
 ## 模块方法论

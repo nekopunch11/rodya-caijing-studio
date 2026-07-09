@@ -9,7 +9,7 @@ description: 财经·基本面——只回答"这公司好不好"。对 A股/港
 
 **边界（接力关系）**：估值只做简版（贵不贵深挖 → `caijing-valuation`）；风险只做红旗速扫（排雷深挖 → `caijing-risk`）。不越界重复劳动。
 
-执行前先读共享层：`../references/compliance.md`、`../references/output-spec.md`、`../references/data-sourcing.md`。
+执行前先读共享层：`../references/compliance.md`、`../references/compliance-rendering.md`、`../references/output-spec.md`、`../references/data-sourcing.md`、`../references/data-fallback.md`、`../references/sector-adapters.md`。涉及 ROIC/WACC 时读 `../references/formulas-and-thresholds.md`。
 
 ## 一、三问主线（分析的叙事脊柱，docx 和文案都沿这条线讲）
 
@@ -42,7 +42,7 @@ description: 财经·基本面——只回答"这公司好不好"。对 A股/港
 ### 4. 财务体检（三层）
 
 - **盈利能力——杜邦拆解**：ROE = 净利率 × 总资产周转率 × 权益乘数，近 5 年三因子趋势，回答"利润是靠产品力、效率还是杠杆赚的"。
-- **价值创造——ROIC vs WACC**：ROIC = NOPAT / 投入资本；WACC 可粗估（标"估算"，写明假设）。ROIC 持续 > WACC 才在创造价值；只比增速不看回报率是常见误导。
+- **价值创造——ROIC vs WACC**：先按 sector-adapters.md 判断是否适用；适用时按 formulas-and-thresholds.md 计算并标假设。金融、保险、券商、类金融平台不把 ROIC-WACC 放入关键数字。
 - **盈利质量**：经营现金流 / 净利润（近 3 年均值，<0.8 打问号）；收现比（销售收现 / 营收）；扣非净利润占比（利润是否靠一次性损益撑着）。
 - **财务结构**：资产负债率（行业口径）、有息负债与货币资金对比、流动比率。
 
@@ -77,7 +77,7 @@ description: 财经·基本面——只回答"这公司好不好"。对 A股/港
 
 ## 四、内核字段（继承通用 schema 的具体化）
 
-- `关键数字` 固定 7 条：ROE（及 5 年趋势）、ROIC vs WACC 差值、经营现金流/净利润、营收 5 年 CAGR、毛利率、护城河总分、资产负债率。
+- `关键数字` 固定 7 条：ROE（及 5 年趋势）、ROIC vs WACC 差值（行业不适用时替换为 sector-adapters.md 指定主指标）、经营现金流/净利润、营收 5 年 CAGR、毛利率、护城河总分、资产负债率。
 - `分析块` = 上述七个分析块。
 - `结论.客观概括` 句式参考："{公司} 近五年 ROE 均值 X%、经营现金流/净利润 Y，护城河评分 Z/10，主要看点与风险各 N 项。"
 - `结论.专业判断`（仅专业版）句式参考："基本面偏强/中性/偏弱；多空关键变量：……"
@@ -107,8 +107,8 @@ description: 财经·基本面——只回答"这公司好不好"。对 A股/港
 
 ## 六、工作流
 
-1. 按取数清单收集数据（联网 + 用户上传），逐条标来源与确定性。
-2. 依八个分析块产出结构化内核（一份，唯一事实源）。
-3. 渲染专业版 docx；渲染客户版卡片 + 文案（口径切换规则见 output-spec.md）。
+1. 按取数清单收集数据（联网 + 用户上传），逐条标来源与确定性；不满足 data-fallback.md 最低材料时只出待核实体检框架。
+2. 先判行业并应用 sector-adapters.md，再依八个分析块产出结构化内核（一份，唯一事实源）。
+3. 渲染专业版 docx；渲染客户版卡片 + 文案（口径切换规则见 output-spec.md 与 compliance-rendering.md）。
 4. 合规检查（客户版逐句）。
 5. 交付，标数据截至日 + 确定性分级 + 数据缺口。

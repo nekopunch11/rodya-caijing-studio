@@ -9,7 +9,7 @@ description: 财经·财报——只回答"这季财报行不行"。财报发布
 
 **边界（接力关系）**：公司质地全面体检 → `caijing-fundamental`；贵不贵 → `caijing-valuation`；深度排雷 → `caijing-risk`。
 
-执行前先读共享层：`../references/compliance.md`、`../references/output-spec.md`、`../references/data-sourcing.md`。
+执行前先读共享层：`../references/compliance.md`、`../references/compliance-rendering.md`、`../references/output-spec.md`、`../references/data-sourcing.md`、`../references/data-fallback.md`。
 
 ## 一、三问主线
 
@@ -82,8 +82,8 @@ description: 财经·财报——只回答"这季财报行不行"。财报发布
 
 ## 六、工作流
 
-1. 取数（财报原文优先），逐条标来源与确定性。
+1. 取数（财报原文优先），逐条标来源与确定性；没有本期财报原文时按 data-fallback.md 降级，不做超预期判定。
 2. 依六个分析块产出结构化内核（一份，唯一事实源）。
-3. 渲染专业版 docx + 客户版卡片文案（口径切换见 output-spec.md）。
+3. 渲染专业版 docx + 客户版卡片文案（口径切换见 output-spec.md 与 compliance-rendering.md）。
 4. 合规检查（客户版逐句过 checklist；禁"会涨/会跌"类引申）。
 5. 交付，标数据截至日 + 确定性分级 + 数据缺口。

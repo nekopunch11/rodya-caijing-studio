@@ -4,16 +4,18 @@
 
 ## 入口与路由
 
-1. 先读根目录 `SKILL.md`——父 skill，含模块路由表、六步通用工作流、默认产出规则。
+1. 先读根目录 `SKILL.md`——父 skill，含模块路由表、七步通用工作流、默认产出规则。
 2. 按用户问题路由到七个子模块之一（`caijing-fundamental/` 基本面、`caijing-earnings/` 财报、`caijing-valuation/` 估值、`caijing-risk/` 排雷、`caijing-industry/` 产业链、`caijing-ipo-a/` A股打新、`caijing-ipo-hk/` 港股打新），读其 `SKILL.md` 照做。
-3. 所有模块共用 `references/` 四个共享层文件；**执行任何模块前必读 `references/compliance.md`**。
+3. 所有模块共用 `references/` 共享层；**执行任何模块前必读 `references/compliance.md`**。遇到客户版渲染、数据缺口、公式评分、行业特殊口径时，按下方硬约束读取对应文件。
 
 ## 不可破的硬约束（合规灵魂，破了整套工具就失效）
 
 - 只做客观数据体检，不荐股：任何输出禁止买卖建议、目标价、收益承诺、操作指令。
-- 客户版（供转发客户的内容）逐句过 `references/compliance.md` 的发布前 checklist。
+- 客户版（供转发客户的内容）逐句过 `references/compliance.md` 的发布前 checklist，并按 `references/compliance-rendering.md` 将评级、档位、受益标的、打新表述降级为客观信息。
 - 一份内核、三形态渲染：docx / 卡片 / PPT 必须从同一份「结构化分析内核」渲染（schema 见 `references/output-spec.md`），绝不各写各的分析。
-- 关键数字必标来源与数据截至日，区分"已核实/估算"（分级见 `references/data-sourcing.md`）；数据不足时明说，宁缺不编。
+- 关键数字必标来源与数据截至日，区分"已核实/估算"（分级见 `references/data-sourcing.md`）；数据不足时按 `references/data-fallback.md` 降级，宁缺不编。
+- 公式、评分、分档必须按 `references/formulas-and-thresholds.md`；不满足参数或样本数要求时不硬算。
+- 银行、保险、券商、地产、周期、18A/18C、平台型公司等先按 `references/sector-adapters.md` 选指标，禁用不适用指标。
 - 单模块不出 PPT，多模块组合才出。
 
 ## 在 Codex 中安装
