@@ -69,6 +69,7 @@ description: 财经内容台——给券商投顾/客户经理的财经内容生
 | [compliance.md](references/compliance.md) | 合规层：两口径分层规则、措辞红线、免责声明、客户版 checklist |
 | [compliance-rendering.md](references/compliance-rendering.md) | 客户版渲染降级：评级/档位/受益标的/打新表述统一降级 |
 | [output-spec.md](references/output-spec.md) | 双版本输出层：内核 schema、docx/卡片/PPT 三形态规范、口径切换 |
+| [docx-visual-spec.md](references/docx-visual-spec.md) | docx 专业版视觉规范（唯一视觉事实源）：配色/字体/首页版式/编号图表来源纪律；渲染 docx 时必读 |
 | [data-sourcing.md](references/data-sourcing.md) | 取数规范：数据源优先级、口径纪律、确定性分级 |
 | [data-fallback.md](references/data-fallback.md) | 数据档次与补充提示规则：缺关键材料时不硬出强结论，但不降档交付物 |
 | [freshness-gate.md](references/freshness-gate.md) | 时效核验 gate：财报最新期/招股期状态/孖展/统计/费率时间窗，超窗提示并限制结论强度 |
