@@ -15,7 +15,7 @@
 所以这套工具做两件事：
 
 - **自用分析**：把基本面、财报、估值、排雷、产业链、A股打新、港股打新拆成七个标准模块，帮你形成一套稳定的研究检查表。
-- **对客交付**：同一份结构化分析内核，可以生成专业版报告，也可以降级成客户版卡片、结构稿和转发文案，保留事实、来源和风险，去掉买卖建议、目标价和收益承诺。
+- **对客交付**：同一份结构化分析内核，可以生成专业版报告，也可以渲染成客户版卡片、结构稿和转发文案，保留事实、来源和风险，去掉买卖建议、目标价和收益承诺。
 
 它解决的不是“替你拍脑袋做决策”，而是让你每次分析都有框架、每次输出都有依据、每次对外表达都有边界。
 
@@ -63,7 +63,7 @@
 | 🆕 A股打新 | 新股体检 docx | 打新速览卡 + 文案 |
 | 🎯 港股打新 | 新股体检 docx + 自用申购方案（三档+推荐） | 打新速览卡 + 文案 |
 
-> 多模块组合时产出**汇报 PPT**（晨会、客户沙龙主场）；单模块不出 PPT。视觉模板完成前，默认先交付结构化内核、Markdown 专业稿、客户版文案和卡片/PPT 结构稿。所有形态同源一份「结构化分析内核」——改一处，处处同步。
+> 多模块组合时产出**汇报 PPT**（晨会、客户沙龙主场）；单模块不出 PPT。单模块专业版默认生成 docx；视觉模板完成前，卡片/PPT 可先交付结构稿。所有形态同源一份「结构化分析内核」——改一处，处处同步。
 
 ## 🏗️ 架构
 
@@ -78,8 +78,8 @@ rodya-caijing-studio/            父 skill：路由 + 通用工作流
 │   ├── compliance-rendering.md  客户版渲染降级：评级/档位/受益表述
 │   ├── output-spec.md           输出层：内核 schema、三形态渲染、口径切换
 │   ├── data-sourcing.md         取数层：数据源优先级、口径纪律、确定性分级
-│   ├── data-fallback.md         缺数据/联网失败/冲突口径时的降级规则
-│   ├── freshness-gate.md        时效核验 gate：最新期/招股期/时间窗，超窗降级
+│   ├── data-fallback.md         缺数据/联网失败/冲突口径时的数据档次与补充提示
+│   ├── freshness-gate.md        时效核验 gate：最新期/招股期/时间窗，超窗提示
 │   ├── research-methods.md      研究方法：三情景/逻辑支柱/四分位/利润池/瓶颈点/证伪链
 │   ├── formulas-and-thresholds.md 公式、阈值、评分与 IPO 分档
 │   ├── sector-adapters.md       金融/地产/周期/未盈利科技等行业适配
@@ -104,15 +104,7 @@ rodya-caijing-studio/            父 skill：路由 + 通用工作流
 
 本包同时兼容 Claude 和 Codex——两家用的是同一套 [agent skills 开放标准](https://agentskills.io)，一份文件两边通用。
 
-### 方式一：npx 一行命令（推荐，全平台通用）
-
-```bash
-npx skills add nekopunch11/rodya-caijing-studio
-```
-
-[skills CLI](https://github.com/vercel-labs/skills) 是 agent skills 生态的通用安装器，自动检测机器上的 Claude Code / Codex / Cursor 等 agent 并装进对应目录。加 `-g` 装全局；日后 `npx skills update` 一键更新。
-
-### 方式二：让 AI 自己装（最省心）
+### 方式一：让 AI 自己装（最省心）
 
 不想碰命令行？把仓库地址直接发给你的 Claude 或 Codex，加一句话：
 
@@ -123,9 +115,13 @@ https://github.com/nekopunch11/rodya-caijing-studio
 
 它会自己 clone 到正确位置。装完可以让它报一遍七个模块的名字，对得上就是装好了。
 
-### 方式三：claude.ai / Claude 桌面版（Cowork）
+### 方式二：npx 一行命令（全平台通用）
 
-把文件夹压缩为 zip，在 **设置 → 功能（Capabilities）→ 技能** 中上传。
+```bash
+npx skills add nekopunch11/rodya-caijing-studio
+```
+
+[skills CLI](https://github.com/vercel-labs/skills) 是 agent skills 生态的通用安装器，自动检测机器上的 Claude Code / Codex / Cursor 等 agent 并装进对应目录。加 `-g` 装全局；日后 `npx skills update` 一键更新。
 
 > 💡 Codex 用户注意：打开本仓库时，根目录 `AGENTS.md` 会自动加载合规硬约束；优先调用父 skill `rodya-caijing-studio`，由父 skill 路由到七个子模块。不同运行器对子目录 skill 的递归发现可能不同。
 
