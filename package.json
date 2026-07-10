@@ -1,0 +1,14 @@
+{
+  "name": "rodya-caijing-cards",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "description": "财经内容台客户版卡片渲染与校验（墨账本 Swiss）",
+  "scripts": {
+    "render": "node render-cards.mjs",
+    "validate": "node validate-cards.mjs"
+  },
+  "dependencies": {
+    "playwright": "^1.44.0"
+  }
+}

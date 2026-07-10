@@ -65,6 +65,7 @@
 
 ## 七、生成管线
 
-- 单文件 HTML → 截图渲染 → 2× PNG。卡片 HTML 模板：`assets/template-card.html`（v0.1，基本面为参考实现，其余六模块签名图形作为可替换片段附在文件底部 SIGNATURE LIBRARY）。
-- 配色走 CSS 变量、锁死预设；渲染后校验卡面溢出 / 字号上限 / footer 碰撞。
+- 卡片 HTML 模板：`assets/template-card.html`（v0.2，七模块完整卡片，1080×1440，配色走锁死 CSS 变量）。
+- **渲染**：`node render-cards.mjs [输入.html] [输出目录]`——Playwright 逐张 `.card` 截 2× PNG（默认 `assets/template-card.html` → `output/`；`SCALE` 环境变量控倍率）。首次需 `npx playwright install chromium`。
+- **校验**：`node validate-cards.mjs [输入.html]`——查卡面溢出、招牌带 / footer 固定件缺失、数据截至日、以及配色纪律（红 / 绿不得进招牌带）。`package.json` 提供 `npm run render` / `npm run validate`。
 - **License 注意**：本视觉为自建，参考 guizang 等第三方（AGPL）只取设计思想，**不得并入其模板 / CSS 代码**，以免整个 skill 被传染为 AGPL。
