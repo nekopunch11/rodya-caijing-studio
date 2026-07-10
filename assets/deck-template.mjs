@@ -65,10 +65,12 @@ s3.addText([
 ],{x:0.4,y:2.85,w:4.2,h:1.8,fontFace:MONO,fontSize:14,color:P.ink,lineSpacingMultiple:1.4,margin:0});
 s3.addText("客观概括",{x:5.2,y:1.1,w:4.4,h:0.3,fontFace:SANS,fontSize:11,color:P.muted,charSpacing:2,margin:0});
 s3.addText("近五年平均 ROE 18.5%，经营现金流对净利润覆盖 1.15 倍，护城河评分 7/10。",{x:5.2,y:1.4,w:4.4,h:0.9,fontFace:SANS,fontSize:14,color:"333333",lineSpacingMultiple:1.3,margin:0});
-stat(s3,5.2,2.6,2.1,"现金流/净利","1.15×");
-stat(s3,7.5,2.6,2.1,"营收 5Y CAGR","32% ▲",P.up); // 涨=红，唯一用红处
-s3.addText("风险",{x:5.2,y:3.9,w:4.4,h:0.28,fontFace:SANS,fontSize:11,color:P.muted,margin:0});
-s3.addText("公开信息提示 2 项，重点关注 1 项",{x:5.2,y:4.15,w:4.4,h:0.4,fontFace:SANS,fontSize:14,color:P.ink,margin:0});
+stat(s3,5.2,2.55,2.1,"现金流/净利","1.15×");
+stat(s3,7.5,2.55,2.1,"营收 5Y CAGR","32% ▲",P.up); // 涨=红，唯一用红处
+stat(s3,5.2,3.5,2.1,"ROIC−WACC","+6.2pt");
+stat(s3,7.5,3.5,2.1,"毛利率","20.1%");
+s3.addText("风险",{x:5.2,y:4.45,w:4.4,h:0.26,fontFace:SANS,fontSize:11,color:P.muted,margin:0});
+s3.addText("商誉占比偏高、近期解禁；公开信息提示 2 项，重点关注 1 项",{x:5.2,y:4.68,w:4.4,h:0.4,fontFace:SANS,fontSize:12,color:P.ink,margin:0});
 footer(s3,"来源 Wind · 公司年报 · 3 / 6");
 
 // 4 数据大字报 · 估值（hero + 分位 band，当前点墨色非涨跌）
@@ -81,7 +83,8 @@ s4.addShape(pres.shapes.RECTANGLE,{x:0.4,y:3.0,w:7.18,h:0.14,fill:{color:P.ink},
 s4.addShape(pres.shapes.OVAL,{x:7.44,y:2.92,w:0.3,h:0.3,fill:{color:P.ink},line:{type:"none"}});
 [0.27,0.5,0.73].forEach(f=>s4.addShape(pres.shapes.RECTANGLE,{x:0.4+9.2*f,y:2.94,w:0.02,h:0.26,fill:{color:P.empty},line:{type:"none"}}));
 s4.addText([{text:"P25",options:{align:"left"}},{text:"中位",options:{align:"center"}},{text:"P75",options:{align:"right"}}],{x:0.4,y:3.25,w:9.2,h:0.3,fontFace:MONO,fontSize:10,color:P.muted,margin:0});
-s4.addText("当前估值处近 5 年偏高区间；PE-TTM 27.3×、股息率 2.1%。（客观呈现，非买卖信号）",{x:0.4,y:3.95,w:9.2,h:0.5,fontFace:SANS,fontSize:14,color:"444444",margin:0});
+stat(s4,0.4,3.6,2.1,"PE-TTM","27.3×"); stat(s4,2.7,3.6,2.1,"PB","8.1×"); stat(s4,5.0,3.6,2.1,"股息率","2.1%"); stat(s4,7.3,3.6,2.1,"隐含增速","11%");
+s4.addText("当前估值处近 5 年偏高区间。（客观呈现，非买卖信号）",{x:0.4,y:4.62,w:9.2,h:0.4,fontFace:SANS,fontSize:13,color:"444444",margin:0});
 footer(s4,"来源 Wind · 4 / 6");
 
 // 5 Pipeline · 产业链（利润池墨阶）
