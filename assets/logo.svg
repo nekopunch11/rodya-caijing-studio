@@ -1,0 +1,14 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="财经内容台">
+  <rect x="24" y="24" width="464" height="464" rx="112" fill="#111111" stroke="#2a2a2a" stroke-width="2"/>
+  <!-- 招牌带 -->
+  <rect x="112" y="150" width="288" height="24" rx="6" fill="#FFFFFF"/>
+  <!-- 涨（红）蜡烛 -->
+  <line x1="172" y1="210" x2="172" y2="400" stroke="#C0392B" stroke-width="7"/>
+  <rect x="156" y="250" width="32" height="110" fill="#C0392B"/>
+  <!-- 中性蜡烛 -->
+  <line x1="256" y1="225" x2="256" y2="395" stroke="#EDEDED" stroke-width="7"/>
+  <rect x="240" y="265" width="32" height="90" fill="#EDEDED"/>
+  <!-- 跌（绿）蜡烛 -->
+  <line x1="340" y1="215" x2="340" y2="405" stroke="#1E9E5A" stroke-width="7"/>
+  <rect x="324" y="245" width="32" height="125" fill="#1E9E5A"/>
+</svg>
