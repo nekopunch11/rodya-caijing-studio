@@ -1,5 +1,7 @@
 # Unified Card Visual System B Implementation Plan
 
+> **状态：已被 2026-07-10 三形态视觉终稿替代，禁止继续执行本计划。** Claude 后续实现已提交至 `16b9ac3`、`670acbd`、`09c9780`；当前只按最新交接做一致性修复、验收、运行副本同步和状态收尾。本文件保留为历史计划记录。
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** 将客户卡片统一升级为方案 B「机构主视觉 + 墨账本数据系统」，落地六种版式、七模块映射和 Claude/Codex 双路径，同时保持合规、客户版按需和零依赖 HTML 交付。

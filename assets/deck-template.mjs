@@ -1,4 +1,4 @@
-// 财经内容台 · 汇报 PPT 生成器（墨账本 Swiss · pptxgenjs）参考母版 v0.1
+// 财经内容台 · 汇报 PPT 生成器（墨账本 Swiss · pptxgenjs）参考母版 v0.2
 // 规范：references/output-spec.md §三③ ；视觉参照：assets/template-deck.html
 // PPT 为按需件（仅用户明确要"汇报/PPT/deck"时才出）。默认 .pptx（本文件）；用户要浏览器演示/PDF 用 template-deck.html。
 // 用法：把下方示例数据换成真实内核 → `npm i pptxgenjs && node deck-template.mjs` → 用 pptx skill 的 rezip.py 重压 → 出 deck.pptx。
@@ -49,7 +49,7 @@ s2.addTable([
  [{text:"排雷",options:{bold:true,fontFace:SANS,fontSize:13}},{text:"财务维度 1 项重点关注",options:{fontFace:SANS,fontSize:12,color:"444444"}},{text:"商誉/净资 32%",options:{fontFace:MONO,fontSize:12,align:"right"}},{text:"B",options:{fontFace:MONO,fontSize:12,align:"center"}}],
 ],{x:0.4,y:1.2,w:9.2,colW:[1.5,4.5,2.2,1.0],rowH:[0.5,0.62,0.62,0.62],border:{type:"solid",pt:0.5,color:P.hair},valign:"middle",margin:4});
 s2.addText("来源：Wind、公司年报，截至 2026-07-10",{x:0.4,y:3.9,w:9,h:0.3,fontFace:MONO,fontSize:9,color:P.muted,margin:0});
-footer(s2,"财经内容台 · 2 / 6");
+footer(s2,"财经内容台 · 2 / 7");
 
 // 3 模块页 · 基本面（左大数+五源 / 右概括+关键数字+风险）
 let s3=pres.addSlide(); s3.background={color:P.paper};
@@ -71,7 +71,7 @@ stat(s3,5.2,3.5,2.1,"ROIC−WACC","+6.2pt");
 stat(s3,7.5,3.5,2.1,"毛利率","20.1%");
 s3.addText("风险",{x:5.2,y:4.45,w:4.4,h:0.26,fontFace:SANS,fontSize:11,color:P.muted,margin:0});
 s3.addText("商誉占比偏高、近期解禁；公开信息提示 2 项，重点关注 1 项",{x:5.2,y:4.68,w:4.4,h:0.4,fontFace:SANS,fontSize:12,color:P.ink,margin:0});
-footer(s3,"来源 Wind · 公司年报 · 3 / 6");
+footer(s3,"来源 Wind · 公司年报 · 3 / 7");
 
 // 4 数据大字报 · 估值（hero + 分位 band，当前点墨色非涨跌）
 let s4=pres.addSlide(); s4.background={color:P.paper};
@@ -85,7 +85,7 @@ s4.addShape(pres.shapes.OVAL,{x:7.44,y:2.92,w:0.3,h:0.3,fill:{color:P.ink},line:
 s4.addText([{text:"P25",options:{align:"left"}},{text:"中位",options:{align:"center"}},{text:"P75",options:{align:"right"}}],{x:0.4,y:3.25,w:9.2,h:0.3,fontFace:MONO,fontSize:10,color:P.muted,margin:0});
 stat(s4,0.4,3.6,2.1,"PE-TTM","27.3×"); stat(s4,2.7,3.6,2.1,"PB","8.1×"); stat(s4,5.0,3.6,2.1,"股息率","2.1%"); stat(s4,7.3,3.6,2.1,"隐含增速","11%");
 s4.addText("当前估值处近 5 年偏高区间。（客观呈现，非买卖信号）",{x:0.4,y:4.62,w:9.2,h:0.4,fontFace:SANS,fontSize:13,color:"444444",margin:0});
-footer(s4,"来源 Wind · 4 / 6");
+footer(s4,"来源 Wind · 4 / 7");
 
 // 5 Pipeline · 产业链（利润池墨阶）
 let s5=pres.addSlide(); s5.background={color:P.paper};
@@ -99,12 +99,24 @@ seg.forEach((g,idx)=>{const [lab,pc,col,h]=g; const bx=0.9+idx*2.9;
   if(idx<2) s5.addText("→",{x:bx+2.15,y:2.85,w:0.55,h:0.5,fontFace:SANS,fontSize:24,color:P.lg,align:"center",margin:0});
 });
 s5.addText("墨色越深＝利润池越集中（中游电芯）。代表公司按相关度客观列示，不构成推荐。",{x:0.4,y:4.5,w:9.2,h:0.35,fontFace:MONO,fontSize:10,color:P.muted,margin:0});
-footer(s5,"来源 行业公开资料 · 5 / 6");
+footer(s5,"来源 行业公开资料 · 5 / 7");
 
-// 6 免责（深底）
-let s6=pres.addSlide(); s6.background={color:P.ink};
-s6.addText("免责声明",{x:0.6,y:1.7,w:8,h:0.4,fontFace:SANS,fontSize:16,color:P.lg,charSpacing:3,margin:0});
-s6.addText("本材料由「财经内容台」基于公开信息整理，仅作客观数据体检与信息呈现，不构成任何证券的买卖建议、目标价或收益承诺，判断权归投资者本人。数据截至 2026-07-10，来源见各页脚注。市场有风险，决策需谨慎。",{x:0.6,y:2.2,w:8.5,h:1.8,fontFace:SANS,fontSize:15,color:"DDDDDD",lineSpacingMultiple:1.5,margin:0});
-footer(s6,"财经内容台 · 6 / 6",true);
+// 6 风险汇总（账本表）
+let s6=pres.addSlide(); s6.background={color:P.paper};
+header(s6,"风险汇总","","重点关注","公开信息提示 · 数据截至 2026-07-10");
+s6.addTable([
+ [hd("模块"),hd("公开信息提示 / 重点关注")],
+ [{text:"基本面",options:{bold:true,fontFace:SANS,fontSize:13}},{text:"风险速扫 2 项：商誉占比、近期解禁；重点 1 项。",options:{fontFace:SANS,fontSize:12,color:"444444"}}],
+ [{text:"估值",options:{bold:true,fontFace:SANS,fontSize:13}},{text:"估值处近 5 年偏高区间，回撤敏感度上升。",options:{fontFace:SANS,fontSize:12,color:"444444"}}],
+ [{text:"排雷",options:{bold:true,fontFace:SANS,fontSize:13}},{text:"财务维度重点关注 1 项：商誉/净资产 32%，关注减值测试。",options:{fontFace:SANS,fontSize:12,color:"444444"}}],
+],{x:0.4,y:1.25,w:9.2,colW:[1.65,7.55],rowH:[0.5,0.7,0.7,0.7],border:{type:"solid",pt:0.5,color:P.hair},valign:"middle",margin:5});
+s6.addText("以上为公开信息提示，不构成风险定性或买卖建议。",{x:0.4,y:4.2,w:9.2,h:0.3,fontFace:MONO,fontSize:9,color:P.muted,margin:0});
+footer(s6,"财经内容台 · 6 / 7");
+
+// 7 免责（深底）
+let s7=pres.addSlide(); s7.background={color:P.ink};
+s7.addText("免责声明",{x:0.6,y:1.7,w:8,h:0.4,fontFace:SANS,fontSize:16,color:P.lg,charSpacing:3,margin:0});
+s7.addText("本材料由「财经内容台」基于公开信息整理，仅作客观数据体检与信息呈现，不构成任何证券的买卖建议、目标价或收益承诺，判断权归投资者本人。数据截至 2026-07-10，来源见各页脚注。市场有风险，决策需谨慎。",{x:0.6,y:2.2,w:8.5,h:1.8,fontFace:SANS,fontSize:15,color:"DDDDDD",lineSpacingMultiple:1.5,margin:0});
+footer(s7,"财经内容台 · 7 / 7",true);
 
 pres.writeFile({fileName:"deck.pptx"}).then(()=>console.log("written deck.pptx"));

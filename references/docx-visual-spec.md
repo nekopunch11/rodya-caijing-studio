@@ -116,4 +116,4 @@
 ## 十三、生成实现
 
 - 用 docx skill / python-docx 生成，字体走上表回退链；对外分发需嵌入时只嵌思源宋体 + MiSans。
-- 本文件是 docx 视觉唯一事实源；卡片视觉见 card-components.md，PPT 母版待视觉专场后另订。
+- 本文件是 docx 视觉唯一事实源；卡片视觉见 card-components.md，PPT 视觉见 output-spec.md §三③及 assets/deck-template.mjs。

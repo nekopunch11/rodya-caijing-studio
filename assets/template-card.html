@@ -1,8 +1,8 @@
 <!--
-  财经内容台 · 客户版卡片模板（墨账本 Swiss · 数据台密度）v0.3
+  财经内容台 · 客户版卡片模板（墨账本 Swiss · 数据台密度）v0.4
   规范唯一事实源：references/card-components.md
   画板 3:4 / 1080×1440。渲染=填数后浏览器打开截图（zero-dep）。
-  v0.3 变更：从海报留白改为数据台密度——hero 收小、关键数字铺 5–8 条紧凑网格、发丝线撑层级。
+  v0.4 变更：在 v0.3 六指标网格基础上补 3 项跟踪/证伪指标，消除集中空白带；重要信息优先占版。
   铁律：配色只走 :root 变量；红/绿只标涨跌方向数据；品牌墨黑只进招牌带；排雷/统计一律墨色。
 -->
 <!DOCTYPE html><html lang="zh"><head><meta charset="utf-8"><style>
@@ -17,7 +17,7 @@
   .mast .cd{font-family:var(--mono);font-size:26px;color:#bcbcbc;}
   .mast .m{margin-left:auto;font-size:22px;letter-spacing:5px;}
   .mast .meta{font-family:var(--mono);font-size:21px;color:#9a9a9a;margin-top:12px;letter-spacing:1px;}
-  .body{flex:1;padding:38px 64px 0;display:flex;flex-direction:column;}
+  .body{flex:1;padding:38px 64px 0;display:flex;flex-direction:column;justify-content:space-between;}
   .sl{font-size:20px;letter-spacing:4px;color:var(--muted);}
   .rule{height:3px;background:var(--ink);} .hair{height:2px;background:var(--hair);}
   .up{color:var(--up);} .down{color:var(--down);} .tab{font-variant-numeric:tabular-nums;}
@@ -39,8 +39,13 @@
   .statbar{height:12px;background:var(--hair);margin-top:12px;} .statbar>span{display:block;height:12px;background:var(--ink);}
   .risk{border-left:6px solid var(--ink);padding-left:20px;}
   .risk .k{font-size:18px;letter-spacing:2px;color:var(--muted);} .risk .t{font-size:26px;margin-top:4px;line-height:1.35;}
+  .track{display:grid;grid-template-columns:repeat(3,1fr);border-top:3px solid var(--ink);border-bottom:2px solid var(--hair);}
+  .track .it{padding:16px 18px;border-right:2px solid var(--hair);}
+  .track .it:last-child{border-right:0;}
+  .track .k{font-family:var(--mono);font-size:18px;color:var(--muted);letter-spacing:1px;}
+  .track .v{font-size:26px;line-height:1.25;margin-top:6px;}
   .foot{padding:22px 64px 34px;} .foot .bar{display:flex;justify-content:space-between;font-family:var(--mono);font-size:20px;color:var(--muted);margin-top:16px;}
-  .sp{flex:1;} .mb{margin-top:30px;}
+  .sp{display:none;} .mb{margin-top:30px;}
 </style></head><body>
 
 <!-- 1 基本面 -->
@@ -61,6 +66,7 @@
     </div>
     <div class="mb"><div style="display:flex;justify-content:space-between;"><span class="sl">当前估值 · 近 5 年 PE 分位</span><span class="mono tab" style="font-size:26px;">62%</span></div><div class="band"><div class="fl" style="width:62%;"></div><div class="dt" style="left:62%;"></div></div></div>
     <div class="risk mb"><div class="k">风险</div><div class="t">商誉占比偏高、近期解禁；公开信息提示 2 项，重点关注 1 项。</div></div>
+    <div class="track"><div class="it"><div class="k">跟踪 01</div><div class="v">订单兑现</div></div><div class="it"><div class="k">跟踪 02</div><div class="v">应收增速</div></div><div class="it"><div class="k">跟踪 03</div><div class="v">估值变化</div></div></div>
     <div class="sp"></div>
   </div>
   <div class="foot"><div class="rule"></div><div class="bar"><span>客观体检 · 不含买卖建议</span><span>来源 Wind · 公司年报 · 2026-07-10</span></div></div>
@@ -85,6 +91,7 @@
       <div class="cell"><div class="k">存货增速</div><div class="v tab">+9<small>%</small></div></div>
     </div>
     <div class="risk mb"><div class="k">风险</div><div class="t">应收账款增速快于营收，关注回款质量与减值。</div></div>
+    <div class="track"><div class="it"><div class="k">跟踪 01</div><div class="v">毛利率变化</div></div><div class="it"><div class="k">跟踪 02</div><div class="v">现金转化</div></div><div class="it"><div class="k">跟踪 03</div><div class="v">在手订单</div></div></div>
     <div class="sp"></div>
   </div>
   <div class="foot"><div class="rule"></div><div class="bar"><span>客观体检 · 不含买卖建议</span><span>来源 公司三季报 · 2026-07-10</span></div></div>
@@ -109,6 +116,7 @@
       <div class="cell"><div class="k">隐含增速</div><div class="v tab">11<small>%</small></div></div>
     </div>
     <div class="risk mb"><div class="k">提示</div><div class="t">当前估值处近 5 年偏高区间；反向 DCF 隐含增速 11%。（客观呈现，非买卖信号）</div></div>
+    <div class="track"><div class="it"><div class="k">跟踪 01</div><div class="v">利率坐标</div></div><div class="it"><div class="k">跟踪 02</div><div class="v">盈利增速</div></div><div class="it"><div class="k">跟踪 03</div><div class="v">同业分位</div></div></div>
     <div class="sp"></div>
   </div>
   <div class="foot"><div class="rule"></div><div class="bar"><span>客观体检 · 不含买卖建议</span><span>来源 Wind · 2026-07-10</span></div></div>
@@ -132,6 +140,7 @@
       <div class="cell"><div class="k">恶化因子命中</div><div class="v tab">3</div></div>
     </div>
     <div class="risk mb"><div class="k">重点关注</div><div class="t">财务维度：商誉/净资产 32% 偏高，关注年报减值测试。</div></div>
+    <div class="track"><div class="it"><div class="k">核查 01</div><div class="v">审计意见</div></div><div class="it"><div class="k">核查 02</div><div class="v">监管记录</div></div><div class="it"><div class="k">核查 03</div><div class="v">质押减持</div></div></div>
     <div class="sp"></div>
   </div>
   <div class="foot"><div class="rule"></div><div class="bar"><span>公开信息提示 · 不构成风险定性</span><span>来源 公司公告 · 巨潮 · 2026-07-10</span></div></div>
@@ -156,6 +165,7 @@
       <div class="cell"><div class="k">行业增速</div><div class="v tab up">＞50<small>%</small></div></div>
     </div>
     <div class="risk mb"><div class="k">说明</div><div class="t">墨色越深＝利润池越集中（中游电芯）。代表公司按相关度客观列示，不构成推荐。</div></div>
+    <div class="track"><div class="it"><div class="k">跟踪 01</div><div class="v">渗透率</div></div><div class="it"><div class="k">跟踪 02</div><div class="v">原料价格</div></div><div class="it"><div class="k">跟踪 03</div><div class="v">产能利用</div></div></div>
     <div class="sp"></div>
   </div>
   <div class="foot"><div class="rule"></div><div class="bar"><span>客观图谱 · 不含买卖建议</span><span>来源 行业公开资料 · 2026-07-10</span></div></div>
@@ -177,6 +187,7 @@
       <div class="cell"><div class="k">网下入围</div><div class="v tab">82<small>%</small></div></div>
     </div>
     <div class="risk mb"><div class="k">提示</div><div class="t">发行 PE 高于行业约 29%，板块同类破发率 43%。以上为统计参考，不含申购建议。</div></div>
+    <div class="track"><div class="it"><div class="k">跟踪 01</div><div class="v">发行估值</div></div><div class="it"><div class="k">跟踪 02</div><div class="v">弃购比例</div></div><div class="it"><div class="k">跟踪 03</div><div class="v">板块破发率</div></div></div>
     <div class="sp"></div>
   </div>
   <div class="foot"><div class="rule"></div><div class="bar"><span>统计参考 · 不含申购建议</span><span>来源 交易所 · 统计截至 2026-07-10</span></div></div>
@@ -198,6 +209,7 @@
       <div class="cell"><div class="k">定价四分位</div><div class="v tab">P60</div></div>
     </div>
     <div class="risk mb"><div class="k">提示</div><div class="t">同类组首日破发率 38%。对客只呈现发行结构与统计，不含申购建议 / 档位方案。</div></div>
+    <div class="track"><div class="it"><div class="k">跟踪 01</div><div class="v">基石结构</div></div><div class="it"><div class="k">跟踪 02</div><div class="v">孖展金额</div></div><div class="it"><div class="k">跟踪 03</div><div class="v">同类破发率</div></div></div>
     <div class="sp"></div>
   </div>
   <div class="foot"><div class="rule"></div><div class="bar"><span>统计参考 · 不含申购建议</span><span>来源 招股书 · 统计截至 2026-07-10</span></div></div>

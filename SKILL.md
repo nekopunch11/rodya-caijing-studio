@@ -1,6 +1,6 @@
 ---
 name: rodya-caijing-studio
-description: 财经内容台——给券商投顾/客户经理的财经内容生产工具包（A股+港股）。当用户要求分析个股/新股/题材并产出对客或自用内容时使用：全面分析某公司（基本面）、点评财报、判断估值贵不贵、排查财务风险/红旗、梳理题材产业链、体检A股/港股新股；默认产出专业版（研报级 docx）；客户版（卡片图+文案）按需转客户时再出；多模块组合出汇报 PPT。触发词：基本面、财报点评、估值、贵不贵、排雷、红旗、产业链、受益标的、打新、新股体检、怎么打、打多少手、客户版、专业版、投顾内容；稳定命令 /caijing:fundamental、/caijing:earnings、/caijing:valuation、/caijing:risk、/caijing:industry、/caijing:ipo-a、/caijing:ipo-hk 直达对应模块。核心原则：对客内容只做客观数据体检、判断权交还客户、不荐股；例外——港股打新模块含自用计算模式，可给申购方案与建议。
+description: 财经内容台——给券商投顾/客户经理的财经内容生产工具包（A股+港股）。当用户要求分析个股/新股/题材并产出对客或自用内容时使用：全面分析某公司（基本面）、点评财报、判断估值贵不贵、排查财务风险/红旗、梳理题材产业链、体检A股/港股新股；默认产出专业版（研报级 docx）；客户版（卡片图+文案）按需转客户时再出；仅用户点名汇报/PPT/deck/幻灯时生成汇报 PPT。触发词：基本面、财报点评、估值、贵不贵、排雷、红旗、产业链、受益标的、打新、新股体检、怎么打、打多少手、客户版、专业版、投顾内容；稳定命令 /caijing:fundamental、/caijing:earnings、/caijing:valuation、/caijing:risk、/caijing:industry、/caijing:ipo-a、/caijing:ipo-hk 直达对应模块。核心原则：对客内容只做客观数据体检、判断权交还客户、不荐股；例外——港股打新模块含自用计算模式，可给申购方案与建议。
 ---
 
 # 财经内容台（rodya-caijing-studio）
@@ -78,7 +78,7 @@ description: 财经内容台——给券商投顾/客户经理的财经内容生
 | [research-methods.md](references/research-methods.md) | 研究方法论库：三情景、逻辑支柱、同业四分位、行业关键指标、利润池、竞争分类、瓶颈点、证伪链、排雷恶化因子 |
 | [formulas-and-thresholds.md](references/formulas-and-thresholds.md) | 公式、阈值、评分与 IPO 分档的统一口径 |
 | [sector-adapters.md](references/sector-adapters.md) | 银行/保险/地产/周期/未盈利科技等行业适配规则 |
-| [card-components.md](references/card-components.md) | 数据卡片层：已锁硬点、固定件、字段功能位（视觉待定稿） |
+| [card-components.md](references/card-components.md) | 客户卡片唯一视觉事实源：墨账本 Swiss、数据台密度、七模块签名图形与 HTML+截图交付规则 |
 
 ## 模块方法论
 
