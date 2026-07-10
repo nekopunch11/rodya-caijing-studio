@@ -5,7 +5,7 @@ description: 财经内容台——给券商投顾/客户经理的财经内容生
 
 # 财经内容台（rodya-caijing-studio）
 
-给券商投顾/客户经理的财经内容生产工具包：把对一只股票/新股/题材的研究，产出**两口径**内容——专业版（投顾自己看，研报级，**默认产出**）+ 客户版（转客户，一张图+一段文案，**按需产出**：要转客户时再出）；多模块组合时产出汇报 PPT。市场范围：**A股 + 港股**。
+给券商投顾/客户经理的财经内容生产工具包：把对一只股票/新股/题材的研究，产出**两口径**内容——专业版（投顾自己看，研报级，**默认产出**）+ 客户版（转客户，一张图+一段文案，**按需产出**：要转客户时再出）；多模块组合按需出汇报 PPT。市场范围：**A股 + 港股**。
 
 ## 灵魂（任何环节不可破）
 
@@ -41,7 +41,7 @@ description: 财经内容台——给券商投顾/客户经理的财经内容生
 - 用户点名模块或输入稳定命令 → 直接进对应模块，读其 `SKILL.md` 执行。
 - "全面分析这家公司" → 基本面（内含估值/风险简版）。
 - "能不能买/该不该买" → 估值模块，只答"贵不贵"；判断权交还的表述见合规层。
-- 涉及多个问题 → 逐模块产内核，组合输出 PPT。
+- 涉及多个问题 → 逐模块产内核；**用户点名要汇报/PPT/deck 时才**组合出 deck（默认 .pptx）。
 - **接力关系**：基本面里估值/风险只做简版；用户要深挖时接力到估值/排雷模块增量分析，不重复劳动。
 
 ## 通用工作流（七步，所有模块共用）
@@ -51,7 +51,7 @@ description: 财经内容台——给券商投顾/客户经理的财经内容生
 3. **产内核**：生成该模块的「结构化分析内核」（通用 schema 见 [references/output-spec.md](references/output-spec.md)，各模块字段见其 SKILL.md）。
    ⚠️ **一份内核、三形态渲染**：docx/卡片/PPT 全部从这一份内核渲染，绝不各写各的分析——否则三处不一致、改一处漏两处。
 4. **计算与适配**：涉及公式、评分、分档时按 [references/formulas-and-thresholds.md](references/formulas-and-thresholds.md)；涉及行业特殊口径时按 [references/sector-adapters.md](references/sector-adapters.md)；涉及三情景、逻辑支柱、同业四分位、利润池、竞争分类、瓶颈点、证伪链、排雷恶化因子时按 [references/research-methods.md](references/research-methods.md)。
-5. **渲染**：按下方默认产出规则；单模块专业版默认生成 `.docx`（按 [references/docx-visual-spec.md](references/docx-visual-spec.md)）。**客户版仅在用户要求时渲染**；卡片/PPT 视觉模板未完成前可先交付结构稿（docx 视觉已定稿）；不得因数据档次把专业版降成短评。
+5. **渲染**：按下方默认产出规则；单模块专业版默认生成 `.docx`（按 [references/docx-visual-spec.md](references/docx-visual-spec.md)）。**客户版仅在用户要求时渲染**；三形态视觉均已定稿（docx→docx-visual-spec.md、卡片→card-components.md、PPT→output-spec §三③）；不得因数据档次把专业版降成短评。
 6. **合规检查**：对照 compliance.md 过一遍；客户版再按 [references/compliance-rendering.md](references/compliance-rendering.md) 降级逐句检查。
 7. **交付**：每份输出标注数据截至日 + 确定性分级 + 免责声明。**交付专业版后主动提醒使用者：如需转客户，可再让我出客户版（卡片图+文案）。**
 
@@ -60,7 +60,7 @@ description: 财经内容台——给券商投顾/客户经理的财经内容生
 | 场景 | 产出 | 不产出 |
 |---|---|---|
 | 单模块 | 专业版 docx（客户版按需，见下） | 客户版默认不出、PPT（杀鸡不用牛刀） |
-| 多模块组合 | 汇报 PPT（默认专业口径，可指定客户口径） | 需要文字稿时再附 docx |
+| 多模块组合 | 逐模块专业版 docx（或合并摘要） | **PPT 不自动出**——仅用户点名"汇报/PPT/deck"时才出（默认 .pptx，见 output-spec §三③） |
 
 **客户版按需规则**：单模块默认只出专业版 docx；客户版（卡片图+文案）仅在用户要转客户或明确要客户版时才渲染，届时全量走合规降级（compliance-rendering.md）。交付专业版后必须主动提醒使用者可另出客户版。（`caijing-ipo-hk` 的对客模式同理，已内建按需触发。）
 

@@ -71,13 +71,14 @@ meta:
   4. 固定免责声明
 - 文案必须过 compliance.md 客户版 checklist，做到**复制即用**。
 
-### ③ 汇报 PPT（多模块组合主场，HTML 翻页 deck）
+### ③ 汇报 PPT（按需件：仅用户明确要"汇报/PPT/deck/幻灯"时才出）
 
-- 仅在多模块组合时产出；单模块不出 PPT。
-- **形态 = 单文件 HTML 翻页 deck（墨账本 Swiss 皮），零依赖**：模板 `assets/template-deck.html`（16:9；← → / 圆点 / 滚轮 / 触屏翻页，`Ctrl/Cmd+P` 打印成 PDF）。复制 `.slide` 填内核数据即用；视觉与卡片同源（招牌带 + 墨黑 + 红绿只给涨跌数据、不进招牌带），**不另造视觉、不依赖 pptx skill / PowerPoint**。
+- **触发**：PPT **不随多模块组合自动产出**；只在用户明确要求时生成。多模块组合默认仍是逐模块专业版 docx（或合并摘要）。
+- **默认形态 = 真 .pptx（可在 PowerPoint/WPS 编辑）**，用 pptxgenjs 按墨账本渲染：参考生成器 `assets/deck-template.mjs`，视觉参照 `assets/template-deck.html`。招牌带作功能性页眉、墨黑账本底、红绿只给涨跌方向数据（不进招牌带）；封面 / 免责用深底。生成后用 pptx skill 的 `scripts/rezip.py` 重压。
+- **零依赖备选 = HTML 翻页 deck** `assets/template-deck.html`（← → / 圆点 / 滚轮 / 触屏翻页，`Ctrl/Cmd+P` 存 PDF）：用户没装 PowerPoint、或只要浏览器演示/PDF 时用。
 - 结构（版式库）：封面 → 总览页（各模块结论汇总表）→ 每模块页（数据大字报 / 左右分栏，套卡片签名图形）→ Pipeline（产业链）/ 对比页按需 → 风险汇总页 → 免责页。
-- 默认专业口径；用户指定客户口径时全部页面按口径切换规则降级（去「专业判断 / 三情景」等）。
-- 交付：给 HTML 文件 + 提醒「浏览器打开演示，或 `Ctrl/Cmd+P` 存成 PDF」。
+- 默认专业口径；客户口径按口径切换规则降级（去「专业判断 / 三情景」等）。
+- 说明：.pptx 保真略低于 HTML（pptxgenjs 用形状重搭），换来可编辑；二者同一套墨账本设计语言。
 
 ## 四、口径切换规则（渲染时执行，不改内核）
 
@@ -93,11 +94,11 @@ meta:
 
 - **docx 视觉已定稿（2026-07-10）**：规范见 [docx-visual-spec.md](docx-visual-spec.md)，渲染专业版 docx 时按其执行。
 - **卡片视觉已定稿并落地（2026-07-10）**：见 [card-components.md](card-components.md)「墨账本 Swiss」——墨黑招牌带 + 冷白账本底 + 红绿只给涨跌数据；模板 `assets/template-card.html`（七模块完整卡片）已建。**默认交付填好数据的 HTML + 提醒截图，不出 PNG**。
-- **PPT 视觉已定稿（2026-07-10）**：单文件 HTML 翻页 deck（墨账本皮），模板 `assets/template-deck.html`，见 §三③。
+- **PPT 视觉已定稿（2026-07-10）**：**按需件**，默认真 .pptx（pptxgenjs 墨账本，参考 `assets/deck-template.mjs`），零依赖备选 HTML 翻页 deck `assets/template-deck.html`；见 §三③。
 
 **各形态交付规则（三形态视觉均已定稿）：**
 
 - 单模块默认交付：专业版 `.docx`（按 docx-visual-spec.md 渲染）+ 结构化内核摘要 +（按需）客户版文案。文档生成工具不可用或文件写入失败时，必须列为“文件生成阻塞”，提醒使用者补齐工具/权限；只有用户明确不要文件时，才改为结构化内核 YAML + Markdown 专业稿，且必须保留完整专业内容和篇幅底线。
 - 客户版卡片（按需）交付「填好数据的 HTML 卡片（复制 template-card.html 对应 .card 填内核）+ 文案 + 提醒截图」，不出 PNG。
-- 多模块 PPT 交付 HTML 翻页 deck（复制 template-deck.html 的 .slide 填数）+ 提醒「浏览器演示 / `Ctrl/Cmd+P` 存 PDF」。
+- PPT 为**按需件**（仅用户点名"汇报/PPT/deck"才出，多模块不自动出）：默认真 .pptx（pptxgenjs 墨账本，见 §三③）；用户没装 PowerPoint 或只要 PDF 时给 HTML 翻页 deck。
 - 若环境无法写文件，先说明阻塞，再按现有素材产最小可用版。
