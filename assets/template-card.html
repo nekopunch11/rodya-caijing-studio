@@ -1,9 +1,11 @@
 <!--
-  财经内容台 · 客户版卡片模板（墨账本 Swiss）v0.1
+  财经内容台 · 客户版卡片模板（墨账本 Swiss）v0.2
   规范唯一事实源：references/card-components.md
-  画板：3:4 / 1080×1440（小红书·朋友圈·微信通吃）。渲染：Playwright 或 html2canvas 截 .card，1×→1080×1440，或 2× 出高清。
-  用法：复制 .card 骨架 → 招牌带填标的/代码/市场/数据截至 → 主视觉区换成对应模块签名图形（见文件底部 SIGNATURE LIBRARY）→ 填关键数字/风险 → footer 固定件保持不动。
-  铁律：配色只走下方 :root 变量，禁自定义 hex；红/绿只标涨跌方向数据；品牌墨黑只进招牌带。
+  画板：3:4 / 1080×1440。渲染：Playwright/html2canvas 逐个截 .card（1×→1080×1440，或 2× 高清）。
+  含 7 张模块参考卡：基本面/财报/估值/排雷/产业链/A股打新/港股打新。
+  用法：复制对应 .card → 改招牌带与数据 → 保持 footer 固定件不动。
+  铁律：配色只走 :root 变量，禁自定义 hex；红/绿只标涨跌方向数据；品牌墨黑只进招牌带；排雷/统计一律墨色。
+  合规：示例中排雷/打新用占位标的，勿写真实公司的负面定性。
 -->
 <!DOCTYPE html>
 <html lang="zh">
@@ -11,173 +13,168 @@
 <meta charset="utf-8">
 <style>
   :root{
-    --ink:#111111;      /* 墨：文字/线/图形/招牌带 */
-    --paper:#FFFFFF;    /* 冷白纸底 */
-    --muted:#888888;    /* 次级文字 */
-    --hair:#EDEDED;     /* 内部发丝线 */
-    --empty:#DCDCDC;    /* 空态填充 */
-    --up:#C0392B;       /* 涨（红）——仅涨跌数据 */
-    --down:#1E9E5A;     /* 跌（绿）——仅涨跌数据 */
+    --ink:#111111;--paper:#FFFFFF;--muted:#888888;--hair:#EDEDED;--empty:#DCDCDC;
+    --up:#C0392B;--down:#1E9E5A;
     --sans:"Source Han Sans SC","Noto Sans SC","MiSans","Microsoft YaHei",sans-serif;
     --mono:"SF Mono","JetBrains Mono","Consolas",monospace;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
-  body{background:#5a5a5a;}
-  .card{
-    width:1080px;height:1440px;background:var(--paper);color:var(--ink);
-    font-family:var(--sans);display:flex;flex-direction:column;overflow:hidden;
-  }
-  /* 招牌带 */
+  body{background:#5a5a5a;display:flex;flex-direction:column;align-items:center;gap:40px;padding:40px 0;}
+  .card{width:1080px;height:1440px;background:var(--paper);color:var(--ink);font-family:var(--sans);display:flex;flex-direction:column;overflow:hidden;}
   .masthead{background:var(--ink);color:#fff;padding:44px 72px 40px;}
   .masthead .row{display:flex;align-items:baseline;gap:20px;}
   .masthead .name{font-size:52px;font-weight:600;letter-spacing:1px;}
   .masthead .code{font-family:var(--mono);font-size:30px;color:#bdbdbd;}
   .masthead .module{margin-left:auto;font-size:26px;letter-spacing:6px;}
   .masthead .meta{font-family:var(--mono);font-size:24px;color:#9a9a9a;margin-top:14px;letter-spacing:1px;}
-  /* body */
-  .body{flex:1;padding:56px 72px 0;display:flex;flex-direction:column;}
+  .body{flex:1;padding:52px 72px 0;display:flex;flex-direction:column;}
   .seclabel{font-size:24px;letter-spacing:6px;color:var(--muted);}
-  .rule{height:2px;background:var(--ink);}
-  .hair{height:2px;background:var(--hair);}
-  /* hero 越大越细 */
-  .hero-num{font-size:200px;font-weight:200;line-height:.9;letter-spacing:-4px;font-variant-numeric:tabular-nums;}
-  .hero-unit{font-size:64px;font-weight:300;}
-  /* 五源清单 */
-  .moat{font-family:var(--mono);font-size:34px;line-height:2.1;}
+  .rule{height:2px;background:var(--ink);} .hair{height:2px;background:var(--hair);}
+  .hero-num{font-size:190px;font-weight:200;line-height:.9;letter-spacing:-4px;font-variant-numeric:tabular-nums;}
+  .hero-unit{font-size:60px;font-weight:300;}
+  .moat{font-family:var(--mono);font-size:34px;line-height:2.0;}
   .moat .li{display:flex;justify-content:space-between;}
   .moat .sq{letter-spacing:6px;}
-  .total-num{font-size:96px;font-weight:200;font-variant-numeric:tabular-nums;}
-  /* 关键数字栅格 */
+  .total-num{font-size:92px;font-weight:200;font-variant-numeric:tabular-nums;}
   .kpis{display:grid;grid-template-columns:1fr 1fr;border-top:2px solid var(--ink);}
-  .kpi{padding:26px 24px;}
-  .kpi:first-child{border-right:2px solid var(--hair);}
+  .kpi{padding:24px 24px;} .kpi:first-child{border-right:2px solid var(--hair);}
   .kpi .k{font-size:22px;letter-spacing:2px;color:var(--muted);}
-  .kpi .v{font-size:64px;font-weight:300;font-variant-numeric:tabular-nums;margin-top:6px;}
-  .kpi .v small{font-size:30px;color:var(--muted);}
+  .kpi .v{font-size:60px;font-weight:300;font-variant-numeric:tabular-nums;margin-top:6px;}
+  .kpi .v small{font-size:28px;color:var(--muted);}
   .up{color:var(--up);} .down{color:var(--down);}
-  /* 风险 */
   .risk{border-left:6px solid var(--ink);padding-left:22px;}
   .risk .k{font-size:22px;letter-spacing:2px;color:var(--muted);}
   .risk .t{font-size:30px;margin-top:4px;}
-  /* footer 固定件 */
-  .footer{padding:28px 72px 40px;}
+  .footer{padding:26px 72px 40px;}
   .footer .bar{display:flex;justify-content:space-between;font-family:var(--mono);font-size:22px;color:var(--muted);margin-top:20px;}
   .spacer{flex:1;}
+  .matrix{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:38px;}
+  .matrix td{padding:10px 0;} .matrix .hd td{color:var(--muted);font-size:24px;}
+  .band{position:relative;height:10px;background:var(--hair);margin-top:16px;}
+  .band .fill{position:absolute;left:0;top:0;height:10px;background:var(--ink);}
+  .band .dot{position:absolute;top:-6px;width:22px;height:22px;border-radius:50%;background:var(--ink);transform:translateX(-50%);}
+  .band .tick{position:absolute;top:-6px;width:2px;height:22px;background:var(--empty);}
+  .chain{display:flex;gap:12px;text-align:center;font-family:var(--mono);}
+  .chain .seg{flex:1;} .chain .bar{height:70px;} .chain .lab{font-size:26px;margin-top:12px;}
+  .statbar{height:12px;background:var(--hair);margin-top:14px;}
+  .statbar>span{display:block;height:12px;background:var(--ink);}
 </style>
 </head>
 <body>
 
+<!-- ============ 1. 基本面 ============ -->
 <div class="card">
-
-  <!-- ===== 招牌带（所有模块共用，只换文字） ===== -->
-  <div class="masthead">
-    <div class="row">
-      <span class="name">宁德时代</span>
-      <span class="code">300750</span>
-      <span class="module">基本面体检</span>
-    </div>
-    <div class="meta">A股 · 数据截至 2026-07-10</div>
-  </div>
-
+  <div class="masthead"><div class="row"><span class="name">宁德时代</span><span class="code">300750</span><span class="module">基本面体检</span></div><div class="meta">A股 · 数据截至 2026-07-10</div></div>
   <div class="body">
-
-    <!-- ===== 主视觉区：签名图形（此处为基本面参考实现，换模块见底部 LIBRARY） ===== -->
-    <div style="margin-bottom:8px;">
-      <div class="seclabel">近 5 年平均 ROE</div>
-      <div style="display:flex;align-items:flex-end;gap:12px;">
-        <span class="hero-num">18.5</span><span class="hero-unit" style="margin-bottom:22px;">%</span>
-      </div>
-    </div>
-
-    <div style="margin-top:34px;">
-      <div style="display:flex;justify-content:space-between;align-items:baseline;">
-        <span class="seclabel">护城河五源</span>
-        <span class="total-num">7<span style="font-size:40px;color:var(--muted);"> / 10</span></span>
-      </div>
-      <div class="hair" style="margin:12px 0 16px;"></div>
-      <div class="moat">
-        <div class="li">无形资产<span class="sq">■■</span></div>
-        <div class="li">转换成本<span class="sq">■□</span></div>
-        <div class="li">网络效应<span class="sq">□□</span></div>
-        <div class="li">成本优势<span class="sq">■■</span></div>
-        <div class="li">规模效应<span class="sq">■□</span></div>
-      </div>
-    </div>
-
-    <!-- ===== 关键数字区（3–5 条，涨跌染色） ===== -->
-    <div class="kpis" style="margin-top:44px;">
-      <div class="kpi"><div class="k">现金流 / 净利</div><div class="v">1.15<small>×</small></div></div>
-      <div class="kpi"><div class="k">营收 5Y CAGR</div><div class="v">32<small>%</small> <span style="font-size:34px;">▲</span></div></div>
-    </div>
-
-    <!-- ===== 估值分位 band ===== -->
-    <div style="margin-top:44px;">
-      <div style="display:flex;justify-content:space-between;"><span class="seclabel">当前估值 · 近 5 年分位</span><span style="font-family:var(--mono);font-size:30px;">62%</span></div>
-      <div style="position:relative;height:10px;background:var(--hair);margin-top:16px;">
-        <div style="position:absolute;left:0;top:0;height:10px;width:62%;background:var(--ink);"></div>
-        <div style="position:absolute;left:62%;top:-5px;width:4px;height:20px;background:var(--ink);"></div>
-      </div>
-    </div>
-
-    <!-- ===== 风险提示区（最高 1 条） ===== -->
-    <div class="risk" style="margin-top:44px;">
-      <div class="k">风险</div>
-      <div class="t">公开信息提示 2 项，重点关注 1 项</div>
-    </div>
-
+    <div class="seclabel">近 5 年平均 ROE</div>
+    <div style="display:flex;align-items:flex-end;gap:12px;"><span class="hero-num">18.5</span><span class="hero-unit" style="margin-bottom:22px;">%</span></div>
+    <div style="margin-top:30px;"><div style="display:flex;justify-content:space-between;align-items:baseline;"><span class="seclabel">护城河五源</span><span class="total-num">7<span style="font-size:38px;color:var(--muted);"> / 10</span></span></div>
+      <div class="hair" style="margin:12px 0 14px;"></div>
+      <div class="moat"><div class="li">无形资产<span class="sq">■■</span></div><div class="li">转换成本<span class="sq">■□</span></div><div class="li">网络效应<span class="sq">□□</span></div><div class="li">成本优势<span class="sq">■■</span></div><div class="li">规模效应<span class="sq">■□</span></div></div></div>
+    <div class="kpis" style="margin-top:40px;"><div class="kpi"><div class="k">现金流 / 净利</div><div class="v">1.15<small>×</small></div></div><div class="kpi"><div class="k">营收 5Y CAGR</div><div class="v">32<small>%</small> <span style="font-size:32px;">▲</span></div></div></div>
+    <div style="margin-top:40px;"><div style="display:flex;justify-content:space-between;"><span class="seclabel">当前估值 · 近 5 年分位</span><span style="font-family:var(--mono);font-size:30px;">62%</span></div><div class="band"><div class="fill" style="width:62%;"></div><div class="dot" style="left:62%;"></div></div></div>
+    <div class="risk" style="margin-top:40px;"><div class="k">风险</div><div class="t">公开信息提示 2 项，重点关注 1 项</div></div>
     <div class="spacer"></div>
   </div>
+  <div class="footer"><div class="rule"></div><div class="bar"><span>客观体检 · 不含买卖建议</span><span>来源 Wind · 公司年报 · 2026-07-10</span></div></div>
+</div>
 
-  <!-- ===== footer 固定件（锁定，勿改结构） ===== -->
-  <div class="footer">
-    <div class="rule"></div>
-    <div class="bar">
-      <span>客观体检 · 不含买卖建议</span>
-      <span>来源 Wind · 公司年报 · 2026-07-10</span>
-    </div>
+<!-- ============ 2. 财报 ============ -->
+<div class="card">
+  <div class="masthead"><div class="row"><span class="name">比亚迪</span><span class="code">002594</span><span class="module">财报点评</span></div><div class="meta">A股 · 2025 三季报 · 数据截至 2026-07-10</div></div>
+  <div class="body">
+    <div class="seclabel">归母净利 · 同比</div>
+    <div style="display:flex;align-items:flex-end;gap:12px;"><span class="hero-num up">+24</span><span class="hero-unit up" style="margin-bottom:22px;">%</span></div>
+    <div style="margin-top:30px;"><span class="seclabel">超预期矩阵</span><div class="hair" style="margin:12px 0 10px;"></div>
+      <table class="matrix"><tr class="hd"><td></td><td align="center">同比</td><td align="center">环比</td><td align="center">预期</td></tr>
+      <tr><td>营收</td><td align="center" class="up">▲</td><td align="center" class="up">▲</td><td align="center" class="up">beat</td></tr>
+      <tr><td>归母净利</td><td align="center" class="up">▲</td><td align="center" class="down">▼</td><td align="center" style="color:var(--muted)">=</td></tr>
+      <tr><td>扣非净利</td><td align="center" class="up">▲</td><td align="center" class="up">▲</td><td align="center" class="down">miss</td></tr></table>
+      <div style="font-family:var(--mono);font-size:22px;color:var(--muted);margin-top:14px;">▲涨/超预期　▼跌/不及　=持平</div></div>
+    <div class="kpis" style="margin-top:40px;"><div class="kpi"><div class="k">营收 · 同比</div><div class="v up">+18<small>%</small></div></div><div class="kpi"><div class="k">毛利率</div><div class="v">20.1<small>%</small></div></div></div>
+    <div class="risk" style="margin-top:40px;"><div class="k">风险</div><div class="t">应收账款增速快于营收，需关注回款质量</div></div>
+    <div class="spacer"></div>
   </div>
-
+  <div class="footer"><div class="rule"></div><div class="bar"><span>客观体检 · 不含买卖建议</span><span>来源 公司三季报 · 2026-07-10</span></div></div>
 </div>
 
-<!--
-================= SIGNATURE LIBRARY（把对应块贴进「主视觉区」替换基本面） =================
-
-【财报 · 超预期矩阵】红绿=涨跌/超预期，唯一常态用彩处
-<table style="width:100%;border-collapse:collapse;font-family:var(--mono);font-size:34px;">
-  <tr style="color:var(--muted);font-size:24px;"><td></td><td align="center">同比</td><td align="center">环比</td><td align="center">预期</td></tr>
-  <tr><td>营收</td><td align="center" class="up">▲</td><td align="center" class="up">▲</td><td align="center" class="up">beat</td></tr>
-  <tr><td>归母净利</td><td align="center" class="up">▲</td><td align="center" class="down">▼</td><td align="center" style="color:var(--muted)">=</td></tr>
-  <tr><td>扣非</td><td align="center" class="up">▲</td><td align="center" class="up">▲</td><td align="center" class="down">miss</td></tr>
-</table>
-
-【估值 · 分位 band】当前点墨色（非涨跌）
-（用主卡里的 band 块，配 P25/中位/P75 刻度 + 当前分位大数）
-
-【排雷 · 风险维度】墨色标记，不上红绿灯
-<div class="moat">
-  <div class="li">经营<span>○</span></div>
-  <div class="li">财务<span>●</span></div>
-  <div class="li">治理<span>◐</span></div>
-  <div class="li">政策<span>○</span></div>
-  <div class="li">流动性<span>◐</span></div>
-</div>
-底部计数：●重点 1 · ◐提示 2 · ○无 2
-
-【产业链 · 利润池图谱】墨阶深浅=利润池集中度
-<div style="display:flex;gap:10px;text-align:center;font-family:var(--mono);">
-  <div style="flex:1"><div style="height:52px;background:#bdbdbd"></div><div>上游 25%</div></div>
-  <div style="flex:1"><div style="height:52px;background:var(--ink)"></div><div>中游 45%</div></div>
-  <div style="flex:1"><div style="height:52px;background:#6b6b6b"></div><div>下游 30%</div></div>
+<!-- ============ 3. 估值 ============ -->
+<div class="card">
+  <div class="masthead"><div class="row"><span class="name">贵州茅台</span><span class="code">600519</span><span class="module">估值体检</span></div><div class="meta">A股 · 数据截至 2026-07-10</div></div>
+  <div class="body">
+    <div class="seclabel">当前 PE-TTM · 近 5 年分位</div>
+    <div style="display:flex;align-items:flex-end;gap:12px;"><span class="hero-num">78</span><span class="hero-unit" style="margin-bottom:22px;">%</span></div>
+    <div style="margin-top:30px;"><div style="display:flex;justify-content:space-between;"><span class="seclabel">历史分位区间</span><span style="font-family:var(--mono);font-size:26px;color:var(--muted);">P0 — P100</span></div>
+      <div class="band" style="margin-top:22px;"><div class="tick" style="left:25%;"></div><div class="tick" style="left:50%;"></div><div class="tick" style="left:75%;"></div><div class="fill" style="width:78%;"></div><div class="dot" style="left:78%;"></div></div>
+      <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:20px;color:var(--muted);margin-top:12px;"><span>P25</span><span>中位</span><span>P75</span></div></div>
+    <div class="kpis" style="margin-top:48px;"><div class="kpi"><div class="k">PE-TTM</div><div class="v">27.3<small>×</small></div></div><div class="kpi"><div class="k">股息率</div><div class="v">2.1<small>%</small></div></div></div>
+    <div class="risk" style="margin-top:40px;"><div class="k">提示</div><div class="t">当前估值处近 5 年偏高区间，非买卖信号</div></div>
+    <div class="spacer"></div>
+  </div>
+  <div class="footer"><div class="rule"></div><div class="bar"><span>客观体检 · 不含买卖建议</span><span>来源 Wind · 2026-07-10</span></div></div>
 </div>
 
-【A股打新 · 破发统计】纯统计无建议
-发行 PE 28.4× / 行业 PE 22.1×（tabular 对照）+ 板块同类组首日破发率大数 + 墨色进度条
+<!-- ============ 4. 排雷（占位标的，勿用真实公司负面定性） ============ -->
+<div class="card">
+  <div class="masthead"><div class="row"><span class="name">示例标的</span><span class="code">300000</span><span class="module">风险体检</span></div><div class="meta">A股 · 数据截至 2026-07-10</div></div>
+  <div class="body">
+    <div class="seclabel">公开信息提示 · 分维</div>
+    <div class="hair" style="margin:14px 0 16px;"></div>
+    <div class="moat" style="font-size:38px;line-height:2.0;"><div class="li">经营<span>○</span></div><div class="li">财务<span>●</span></div><div class="li">治理<span>◐</span></div><div class="li">政策<span>○</span></div><div class="li">流动性<span>◐</span></div></div>
+    <div style="font-family:var(--mono);font-size:24px;margin-top:18px;">●重点关注 1 · ◐提示 2 · ○无 2</div>
+    <div class="kpis" style="margin-top:44px;"><div class="kpi"><div class="k">商誉 / 净资产</div><div class="v">32<small>%</small></div></div><div class="kpi"><div class="k">控股股东质押</div><div class="v">45<small>%</small></div></div></div>
+    <div class="risk" style="margin-top:40px;"><div class="k">重点关注</div><div class="t">财务维度：商誉占比偏高，关注年报减值测试</div></div>
+    <div class="spacer"></div>
+  </div>
+  <div class="footer"><div class="rule"></div><div class="bar"><span>公开信息提示 · 不构成风险定性</span><span>来源 公司公告 · 巨潮 · 2026-07-10</span></div></div>
+</div>
 
-【港股打新 · 关键因子】对客不含申购建议
-基石占比 52% / 孖展超购 8.3× / 保荐人近12月 6/8 未破（中性清单）+ 同类组首日破发率大数 + 墨条
+<!-- ============ 5. 产业链（题材） ============ -->
+<div class="card">
+  <div class="masthead"><div class="row"><span class="name">固态电池</span><span class="code">题材</span><span class="module">产业链图谱</span></div><div class="meta">A股 · 数据截至 2026-07-10</div></div>
+  <div class="body">
+    <div class="seclabel">利润池图谱 · 上中下游</div>
+    <div class="hair" style="margin:14px 0 24px;"></div>
+    <div class="chain"><div class="seg"><div class="bar" style="background:#bdbdbd;"></div><div class="lab">上游<br>材料</div><div style="font-size:40px;font-weight:200;">25%</div></div>
+      <div class="seg"><div class="bar" style="background:var(--ink);"></div><div class="lab">中游<br>电芯</div><div style="font-size:40px;font-weight:200;">45%</div></div>
+      <div class="seg"><div class="bar" style="background:#6b6b6b;"></div><div class="lab">下游<br>应用</div><div style="font-size:40px;font-weight:200;">30%</div></div></div>
+    <div style="font-family:var(--mono);font-size:22px;color:var(--muted);margin-top:20px;">墨色越深＝利润池越集中（中游电芯环节）</div>
+    <div class="kpis" style="margin-top:44px;"><div class="kpi"><div class="k">环节数</div><div class="v">3</div></div><div class="kpi"><div class="k">代表公司</div><div class="v">12<small> 家</small></div></div></div>
+    <div class="risk" style="margin-top:40px;"><div class="k">说明</div><div class="t">代表公司按业务相关度客观列示，不构成推荐</div></div>
+    <div class="spacer"></div>
+  </div>
+  <div class="footer"><div class="rule"></div><div class="bar"><span>客观图谱 · 不含买卖建议</span><span>来源 行业公开资料 · 2026-07-10</span></div></div>
+</div>
 
-================================================================================
--->
+<!-- ============ 6. A股打新（占位新股） ============ -->
+<div class="card">
+  <div class="masthead"><div class="row"><span class="name">新股示例</span><span class="code">001888</span><span class="module">打新体检</span></div><div class="meta">A股 · 申购日 2026-07-11 · 数据截至 2026-07-10</div></div>
+  <div class="body">
+    <div class="seclabel">板块同类组 · 首日破发率</div>
+    <div style="display:flex;align-items:flex-end;gap:12px;"><span class="hero-num">43</span><span class="hero-unit" style="margin-bottom:22px;">%</span></div>
+    <div class="statbar" style="margin-top:8px;"><span style="width:43%;"></span></div>
+    <div class="kpis" style="margin-top:44px;"><div class="kpi"><div class="k">发行 PE</div><div class="v">28.4<small>×</small></div></div><div class="kpi"><div class="k">行业 PE</div><div class="v" style="color:var(--muted);">22.1<small>×</small></div></div></div>
+    <div class="kpis" style="margin-top:0;border-top:none;"><div class="kpi"><div class="k">募资</div><div class="v">18.5<small> 亿</small></div></div><div class="kpi"><div class="k">近月板块弃购率</div><div class="v">0.6<small>%</small></div></div></div>
+    <div class="risk" style="margin-top:40px;"><div class="k">提示</div><div class="t">以上为统计参考，不含申购建议</div></div>
+    <div class="spacer"></div>
+  </div>
+  <div class="footer"><div class="rule"></div><div class="bar"><span>统计参考 · 不含申购建议</span><span>来源 交易所 · 统计截至 2026-07-10</span></div></div>
+</div>
+
+<!-- ============ 7. 港股打新（占位新股，对客不含申购建议） ============ -->
+<div class="card">
+  <div class="masthead"><div class="row"><span class="name">港股新股示例</span><span class="code">02888</span><span class="module">打新体检</span></div><div class="meta">港股 · 招股中 · 数据截至 2026-07-10</div></div>
+  <div class="body">
+    <div class="seclabel">同类组 · 首日破发率</div>
+    <div style="display:flex;align-items:flex-end;gap:12px;"><span class="hero-num">38</span><span class="hero-unit" style="margin-bottom:22px;">%</span></div>
+    <div class="statbar" style="margin-top:8px;"><span style="width:38%;"></span></div>
+    <div style="margin-top:40px;"><span class="seclabel">关键因子</span><div class="hair" style="margin:12px 0 14px;"></div>
+      <div class="moat"><div class="li">基石占比<span>52%</span></div><div class="li">孖展超购<span>8.3×</span></div><div class="li">保荐人近 12 月<span>6 / 8 未破</span></div></div></div>
+    <div class="risk" style="margin-top:40px;"><div class="k">提示</div><div class="t">对客只呈现发行结构与统计，不含申购建议 / 档位方案</div></div>
+    <div class="spacer"></div>
+  </div>
+  <div class="footer"><div class="rule"></div><div class="bar"><span>统计参考 · 不含申购建议</span><span>来源 招股书 · 统计截至 2026-07-10</span></div></div>
+</div>
 
 </body>
 </html>
