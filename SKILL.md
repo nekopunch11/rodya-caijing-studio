@@ -46,7 +46,7 @@ description: 财经内容台——给券商投顾/客户经理的财经内容生
 
 ## 通用工作流（七步，所有模块共用）
 
-1. **定模块与口径**：识别单模块/组合；确认听众（**默认只出专业版**；客户版卡片+文案按需，仅用户要转客户或明确要客户版时才出）。
+1. **定模块、场景与口径**：识别单模块/组合；先按 [references/research-safety-gate.md](references/research-safety-gate.md) 判断个人自用 / 机构内部研究 / 对客材料，再确认听众（**默认只出专业版**；客户版卡片+文案按需，仅用户要转客户或明确要客户版时才出）。
 2. **取数**：按 [references/data-sourcing.md](references/data-sourcing.md)；取数前先过 [references/freshness-gate.md](references/freshness-gate.md) 时效核验（财报是否最新期、招股是否在期内、孖展/统计/费率是否超窗），超窗先重取，不可得再按 [references/data-fallback.md](references/data-fallback.md) 标注数据档次、结论边界和补充要求。
 3. **产内核**：生成该模块的「结构化分析内核」（通用 schema 见 [references/output-spec.md](references/output-spec.md)，各模块字段见其 SKILL.md）。
    ⚠️ **一份内核、三形态渲染**：docx/卡片/PPT 全部从这一份内核渲染，绝不各写各的分析——否则三处不一致、改一处漏两处。
@@ -77,6 +77,7 @@ description: 财经内容台——给券商投顾/客户经理的财经内容生
 | [data-fallback.md](references/data-fallback.md) | 数据档次与补充提示规则：缺关键材料时不硬出强结论，但不降档交付物 |
 | [freshness-gate.md](references/freshness-gate.md) | 时效核验 gate：财报最新期/招股期状态/孖展/统计/费率时间窗，超窗提示并限制结论强度 |
 | [research-methods.md](references/research-methods.md) | 研究方法论库：三情景、逻辑支柱、同业四分位、行业关键指标、利润池、竞争分类、瓶颈点、证伪链、排雷恶化因子 |
+| [research-safety-gate.md](references/research-safety-gate.md) | 研究与投顾安全 gate：自用/内部/对客场景、具体资金建议前置条件、模型边界与机构复核 |
 | [formulas-and-thresholds.md](references/formulas-and-thresholds.md) | 公式、阈值、评分与 IPO 分档的统一口径 |
 | [sector-adapters.md](references/sector-adapters.md) | 银行/保险/地产/周期/未盈利科技等行业适配规则 |
 | [card-components.md](references/card-components.md) | 客户卡片唯一视觉事实源：墨账本 Swiss、数据台密度、七模块签名图形与 HTML+截图交付规则 |

@@ -6,11 +6,12 @@
 
 1. 先读根目录 `SKILL.md`——父 skill，含模块路由表、七步通用工作流、默认产出规则。
 2. 按用户问题路由到七个子模块之一（`caijing-fundamental/` 基本面、`caijing-earnings/` 财报、`caijing-valuation/` 估值、`caijing-risk/` 排雷、`caijing-industry/` 产业链、`caijing-ipo-a/` A股打新、`caijing-ipo-hk/` 港股打新），读其 `SKILL.md` 照做。用户输入稳定命令 `/caijing:{模块名}`（如 `/caijing:ipo-hk`）→ 跳过路由判断直达该模块。
-3. 所有模块共用 `references/` 共享层；**执行任何模块前必读 `references/compliance.md`**。遇到客户版渲染、数据缺口、公式评分、行业特殊口径时，按下方硬约束读取对应文件。
+3. 所有模块共用 `references/` 共享层；**执行任何模块前必读 `references/research-safety-gate.md` 与 `references/compliance.md`**。遇到客户版渲染、数据缺口、公式评分、行业特殊口径时，按下方硬约束读取对应文件。
 
 ## 不可破的硬约束（合规灵魂，破了整套工具就失效）
 
 - 对客内容只做客观数据体检，不荐股：任何对客输出禁止买卖建议、目标价、收益承诺、操作指令。唯一例外：`caijing-ipo-hk` 的自用计算模式（2026-07-09 经用户批准）可对使用者本人给申购方案，其客户版输出仍按本条执行。
+- 输出前按 `references/research-safety-gate.md` 区分个人自用、机构内部研究与对客材料；涉及具体资金或杠杆时，前置输入不齐只给条件性方案和补充清单。
 - 客户版（供转发客户的内容）逐句过 `references/compliance.md` 的发布前 checklist，并按 `references/compliance-rendering.md` 将评级、档位、受益标的、打新表述降级为客观信息。
 - 一份内核、三形态渲染：docx / 卡片 / PPT 必须从同一份「结构化分析内核」渲染（schema 见 `references/output-spec.md`），绝不各写各的分析。
 - 关键数字必标来源与数据截至日，区分"已核实/估算"（分级见 `references/data-sourcing.md`）；数据不足时按 `references/data-fallback.md` 标注数据档次、结论边界和补充要求，宁缺不编但不降档交付物。
@@ -18,7 +19,7 @@
 - 三情景、逻辑支柱、同业四分位、行业关键指标、利润池、竞争分类、瓶颈点、证伪链、排雷恶化因子按 `references/research-methods.md`；客户版只能降级为客观变量、公开信息提示和后续关注指标。
 - 公式、评分、分档必须按 `references/formulas-and-thresholds.md`；不满足参数或样本数要求时不硬算。
 - 银行、保险、券商、地产、周期、18A/18C、平台型公司等先按 `references/sector-adapters.md` 选指标，禁用不适用指标。
-- 单模块不出 PPT，多模块组合才出。
+- PPT 仅在用户明确要求汇报/PPT/deck/幻灯时生成；单模块和多模块均不自动出。
 
 ## 在 Codex 中安装
 

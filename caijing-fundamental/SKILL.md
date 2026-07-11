@@ -9,7 +9,7 @@ description: 财经·基本面——只回答"这公司好不好"。对 A股/港
 
 **边界（接力关系）**：估值只做简版（贵不贵深挖 → `caijing-valuation`）；风险只做红旗速扫（排雷深挖 → `caijing-risk`）。不越界重复劳动。
 
-执行前先读共享层：`../references/compliance.md`、`../references/compliance-rendering.md`、`../references/output-spec.md`、`../references/data-sourcing.md`、`../references/data-fallback.md`、`../references/sector-adapters.md`、`../references/research-methods.md`。涉及 ROIC/WACC 时读 `../references/formulas-and-thresholds.md`。
+执行前先读共享层：`../references/research-safety-gate.md`、`../references/compliance.md`、`../references/compliance-rendering.md`、`../references/output-spec.md`、`../references/data-sourcing.md`、`../references/data-fallback.md`、`../references/sector-adapters.md`、`../references/research-methods.md`。涉及 ROIC/WACC 时读 `../references/formulas-and-thresholds.md`。
 
 **执行硬约束**：本模块是重型基本面体检，不是聊天短评。用户未明确要求“只在聊天里回答”时，必须生成专业版 `.docx`。近 3 年年报 + 最新一期财报不足时，仍按九个分析块输出专业版文件，但受影响结论必须按 `data-fallback.md` 标为“待核实判断/条件性判断”并列出补充材料；不得用 3–5 段结论冒充研报。
 
@@ -101,7 +101,7 @@ description: 财经·基本面——只回答"这公司好不好"。对 A股/港
 
 ## 五、输出
 
-### 专业版 docx（研报级，默认 5000 字以上）
+### 专业版 docx（研报级完整版本）
 
 1. 一页概要（客观概括 + 专业判断 + 关键数字表 + 多空关键变量）
 2. 公司与商业模式
@@ -116,7 +116,7 @@ description: 财经·基本面——只回答"这公司好不好"。对 A股/港
 交付要求：
 
 - 正文必须覆盖上述 9 个章节；缺任何章节都要在“数据缺口/未完成项”中明示。
-- 自用专业版默认不少于 5000 字；为避免凑字数、幻觉或证据不足可适当压缩，但仍不得低于 4000 字。只有用户明确要求短版时可低于该底线。
+- 篇幅服从信息密度与证据充分度；按 output-spec.md 的分析块覆盖、证据覆盖、来源占比、公式透明、证伪闭环和数据缺口六项完成标准验收，不为凑字数重复扩写。
 - 财务体检至少包含近 5 年收入、归母净利、经营现金流、毛利率、资产负债表要项；不能取得则写明数据档次、缺口和替代观察指标，不硬算。
 - 护城河五源评分必须逐项给证据；无证据不得给分。
 - 估值简版拿不到当前 PE/PB 或历史分位时，只写“估值数据缺口”，不得给贵/不贵判断。

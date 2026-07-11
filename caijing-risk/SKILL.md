@@ -9,7 +9,7 @@ description: 财经·排雷——只回答"有没有雷"。学术模型打底（
 
 **边界（接力关系）**：基本面全面体检 → `caijing-fundamental`；估值风险（贵）不算雷 → `caijing-valuation`。
 
-执行前先读共享层：`../references/compliance.md`、`../references/compliance-rendering.md`、`../references/output-spec.md`、`../references/data-sourcing.md`、`../references/data-fallback.md`、`../references/formulas-and-thresholds.md`、`../references/research-methods.md`。
+执行前先读共享层：`../references/research-safety-gate.md`、`../references/compliance.md`、`../references/compliance-rendering.md`、`../references/output-spec.md`、`../references/data-sourcing.md`、`../references/data-fallback.md`、`../references/formulas-and-thresholds.md`、`../references/research-methods.md`。
 
 ## 一、四类雷分类（内核的组织骨架）
 
@@ -92,7 +92,7 @@ description: 财经·排雷——只回答"有没有雷"。学术模型打底（
 
 ## 六、输出
 
-### 专业版 docx（默认 5000 字以上）
+### 专业版 docx（完整版本）
 
 1. 一页概要（总评灯 + 一票否决核查结果 + 关键数字表）
 2. 学术模型体检
@@ -113,6 +113,6 @@ description: 财经·排雷——只回答"有没有雷"。学术模型打底（
 
 1. 一票否决项先查（快速止损）→ 全量取数；缺少年报附注、审计意见或公告证据时按 data-fallback.md 标注数据档次、结论边界和补充要求。
 2. 模型 + 双库 + 恶化因子扫描，产出结构化内核（每旗带证据）；模型公式与阈值按 formulas-and-thresholds.md，恶化因子按 research-methods.md。
-3. 渲染专业版 docx（自用专业版默认不少于 5000 字，证据不足或防止凑字数时仍不得低于 4000 字）；**客户版卡片文案按需**——仅用户要转客户或明确要客户版时才出，否则交付专业版并提醒使用者可另出客户版。
+3. 渲染专业版 docx（篇幅服从信息密度与证据充分度，按 output-spec.md 六项完成标准验收）；**客户版卡片文案按需**——仅用户要转客户或明确要客户版时才出，否则交付专业版并提醒使用者可另出客户版。
 4. 合规检查（措辞从严，客户版按 compliance-rendering.md 降级后逐句过）。
 5. 交付，标数据截至日 + 确定性分级 + 待核实线索。

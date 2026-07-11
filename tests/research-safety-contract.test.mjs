@@ -47,6 +47,9 @@ test("professional completion uses evidence rather than word floors", () => {
 test("shared research safety gate is mandatory", () => {
   assert.ok(fs.existsSync(path.join(ROOT, "references/research-safety-gate.md")));
   assert.match(read("SKILL.md"), /research-safety-gate\.md/);
+  for (const rel of productionFiles.filter((rel) => rel.startsWith("caijing-"))) {
+    assert.match(read(rel), /research-safety-gate\.md/, `${rel} must load the safety gate directly`);
+  }
   const gate = read("references/research-safety-gate.md");
   assert.match(gate, /个人自用/);
   assert.match(gate, /机构内部研究/);
