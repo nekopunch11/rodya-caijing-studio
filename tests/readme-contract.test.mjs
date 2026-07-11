@@ -43,3 +43,11 @@ test('README places the WeChat callout after the audience section', async () => 
   assert.ok(wechat >= 0, 'missing WeChat callout');
   assert.ok(audience < wechat, 'WeChat callout must follow the audience section');
 });
+
+test('README explains why fundamental conclusions are reproducible', async () => {
+  const readme = await readFile(readmeUrl, 'utf8');
+
+  assert.match(readme, /原始数据.*口径.*计算.*历史.*同业.*反面证据.*证伪/s);
+  assert.match(readme, /推导链.*断裂.*停止.*定性/s);
+  assert.match(readme, /十个分析块.*最低覆盖|框架外扫描/s);
+});
