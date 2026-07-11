@@ -73,5 +73,5 @@
 - [x] 更新契约测试并运行 `node --test tests/*.test.mjs`。
 - [x] 全文检索身份降级、客户版丢弃判断和自动 PPT 旧规则。
 - [x] 运行 Skill 基础校验（官方脚本缺 PyYAML，改用 8 个 SKILL frontmatter 无依赖检查）。
-- [ ] 提交项目变更并同步 Codex 运行副本。
-- [ ] 更新 Current_Status，将队列条目归档为已完成。
+- [x] 提交项目变更并同步 Codex 运行副本。
+- [x] 更新 Current_Status，将队列条目归档为已完成。
