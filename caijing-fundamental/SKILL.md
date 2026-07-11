@@ -11,7 +11,7 @@ description: 财经·基本面——只回答"这公司好不好"。对 A股/港
 
 执行前先读共享层：`../references/research-safety-gate.md`、`../references/compliance.md`、`../references/compliance-rendering.md`、`../references/output-spec.md`、`../references/data-sourcing.md`、`../references/data-fallback.md`、`../references/sector-adapters.md`、`../references/research-methods.md`。执行任何判断性结论前必须读 `../references/fundamental-proof-chain.md`；该文件是结论推导、框架外扫描与断链 Gate 的唯一事实源。涉及 ROIC/WACC 时读 `../references/formulas-and-thresholds.md`。
 
-**执行硬约束**：本模块是重型基本面体检，不是聊天短评。用户未明确要求“只在聊天里回答”时，必须生成专业版 `.docx`。近 3 年年报 + 最新一期财报不足时，仍按十个分析块输出专业版文件并列出补充材料；但判断性结论必须执行 `fundamental-proof-chain.md`，证明链断裂时停止对受影响事项定性，不得用“待核实偏强/条件性偏弱”维持结论完整感。不得用 3–5 段结论冒充研报。
+**执行硬约束**：本模块是重型基本面体检，不是聊天短评。用户未明确要求“只在聊天里回答”时，必须生成专业版 `.docx`。近 3 年年报 + 最新一期财报不足时，仍按十个分析块输出专业版文件并列出补充材料；但判断性结论必须执行 `fundamental-proof-chain.md`，证明链断裂时停止对受影响事项定性，不得用待核实的强弱定性维持结论完整感。不得用 3–5 段结论冒充研报。
 
 ## 一、三问主线（分析的叙事脊柱，docx 和文案都沿这条线讲）
 
