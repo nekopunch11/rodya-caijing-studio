@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { access, readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 const readmeUrl = new URL('../README.md', import.meta.url);
@@ -50,4 +50,17 @@ test('README explains why fundamental conclusions are reproducible', async () =>
   assert.match(readme, /原始数据.*口径.*计算.*历史.*同业.*反面证据.*证伪/s);
   assert.match(readme, /推导链.*断裂.*停止.*定性/s);
   assert.match(readme, /十个分析块.*最低覆盖|框架外扫描/s);
+});
+
+test('README publishes only author-approved samples', async () => {
+  const readme = await readFile(readmeUrl, 'utf8');
+  const cmbPreview = new URL('../docs/samples/cmb/招商银行_估值客户合规卡.png', import.meta.url);
+  const xiaomiPreview = new URL('../docs/samples/xiaomi/小米集团_研究样张预览.png', import.meta.url);
+
+  assert.match(readme, /招商银行.*docs\/samples\/cmb/s);
+  assert.match(readme, /小米集团.*docs\/samples\/xiaomi/s);
+  assert.match(readme, /宁德时代.*V2.*待审核/s);
+  await access(cmbPreview);
+  await access(xiaomiPreview);
+  assert.doesNotMatch(readme, /宁德时代_基本面研究样张\.docx/);
 });

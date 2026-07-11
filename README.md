@@ -57,15 +57,29 @@ npx skills add nekopunch11/rodya-caijing-studio
 
 [skills CLI](https://github.com/vercel-labs/skills) 会检测 Claude Code、Codex、Cursor 等兼容运行器，并安装到对应目录。使用 `-g` 可全局安装。
 
-## 🖼️ 真实成果样张（审核中）
+## 🖼️ 真实成果样张
 
-首批样张使用真实上市公司与公开数据，均标注数据截至日和“演示样张，不构成投资建议”：
+以下样张均使用真实上市公司与公开数据，并已通过作者内容审核。
 
-- **宁德时代**：基本面专业 DOCX。
-- **招商银行**：估值客户合规卡。
-- **小米集团**：基本面 + 估值 + 排雷组合 PPT。
+### 招商银行｜估值客户合规卡
 
-三组样张将先在仓库外生成并提交作者审核。只有明确批准的完整样张和截图才会加入 README；审核完成前，本仓库不会发布占位图或未确认版本。
+![招商银行估值客户合规卡](docs/samples/cmb/招商银行_估值客户合规卡.png)
+
+[HTML 卡片](docs/samples/cmb/招商银行_估值客户合规卡.html) · [PNG 预览](docs/samples/cmb/招商银行_估值客户合规卡.png) · [配套文案](docs/samples/cmb/招商银行_估值客户文案.md) · [来源台账](docs/samples/cmb/sources.md)
+
+行情截至 2026-07-10，财务截至 2026-03-31。演示样张，不构成投资建议。
+
+### 小米集团｜基本面 + 估值 + 排雷 PPT
+
+![小米集团七页研究样张预览](docs/samples/xiaomi/小米集团_研究样张预览.png)
+
+[PPTX](docs/samples/xiaomi/小米集团_基本面估值排雷研究样张.pptx) · [七页预览](docs/samples/xiaomi/小米集团_研究样张预览.png) · [来源台账](docs/samples/xiaomi/sources.md)
+
+财务截至 2026-03-31，经营与可复核公开信息截至 2026-07-10。演示样张，不构成投资建议。
+
+### 宁德时代｜基本面专业研报
+
+V2 正按完整证明链重做，待审核后再公开；不使用当前 V1 占位。
 
 ## 🧩 七个模块，各咬一个问题
 
