@@ -10,13 +10,14 @@
 
 ## 不可破的硬约束（合规灵魂，破了整套工具就失效）
 
-- 对客内容只做客观数据体检，不荐股：任何对客输出禁止买卖建议、目标价、收益承诺、操作指令。唯一例外：`caijing-ipo-hk` 的自用计算模式（2026-07-09 经用户批准）可对使用者本人给申购方案，其客户版输出仍按本条执行。
-- 输出前按 `references/research-safety-gate.md` 区分个人自用、机构内部研究与对客材料；涉及具体资金或杠杆时，前置输入不齐只给条件性方案和补充清单。
-- 客户版（供转发客户的内容）逐句过 `references/compliance.md` 的发布前 checklist，并按 `references/compliance-rendering.md` 将评级、档位、受益标的、打新表述降级为客观信息。
+- 使用者身份不改变研究质量：个人投资者、研究人员、投顾和客户经理默认获得同一专业研究内核；普通研究不得先追问身份。
+- 客户合规版保留有证据支撑的研究判断、依据、边界、反面证据与跟踪指标，但禁止买卖/申购指令、目标价、收益承诺、个性化资金和杠杆动作。
+- `references/research-safety-gate.md` 只在具体仓位、金额、融资、杠杆或个性化申购动作时启动；前置输入不齐只给条件性方案和补充清单。
+- 客户版逐句过 `references/compliance.md` 与 `references/compliance-rendering.md`；客户版是受众口径，不等同于卡片，可以按需生成 docx、卡片+文案或 PPT。
 - 一份内核、三形态渲染：docx / 卡片 / PPT 必须从同一份「结构化分析内核」渲染（schema 见 `references/output-spec.md`），绝不各写各的分析。
 - 关键数字必标来源与数据截至日，区分"已核实/估算"（分级见 `references/data-sourcing.md`）；数据不足时按 `references/data-fallback.md` 标注数据档次、结论边界和补充要求，宁缺不编但不降档交付物。
 - 取数前过 `references/freshness-gate.md` 时效核验：财报必须为最新披露期、招股资料核对是否仍在招股期（已截止→跟踪/复盘口径）、孖展/破发率统计/券商费率超时间窗必须重取，不可得则显式标注时效存疑并限制结论强度。
-- 三情景、逻辑支柱、管理层与资本配置、预期/调整项桥、正常化估值、模型误报、产业暴露、IPO 滚动复盘按 `references/research-methods.md`；客户版只能降级为客观变量、公开信息提示和后续关注指标。
+- 三情景、逻辑支柱、管理层与资本配置、预期/调整项桥、正常化估值、模型误报、产业暴露、IPO 滚动复盘按 `references/research-methods.md`；客户版保留证据化方向判断，但不得把研究判断翻译为交易动作。
 - 公式、评分、分档必须按 `references/formulas-and-thresholds.md`；不满足参数或样本数要求时不硬算。
 - 银行、保险、券商、地产、周期、18A/18C、平台型公司等先按 `references/sector-adapters.md` 选指标，禁用不适用指标。
 - PPT 仅在用户明确要求汇报/PPT/deck/幻灯时生成；单模块和多模块均不自动出。

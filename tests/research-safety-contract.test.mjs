@@ -51,8 +51,8 @@ test("shared research safety gate is mandatory", () => {
     assert.match(read(rel), /research-safety-gate\.md/, `${rel} must load the safety gate directly`);
   }
   const gate = read("references/research-safety-gate.md");
-  assert.match(gate, /个人自用/);
-  assert.match(gate, /机构内部研究/);
-  assert.match(gate, /对客材料/);
+  assert.match(gate, /不决定研究质量/);
+  assert.match(gate, /普通研究不询问使用者身份/);
+  assert.match(gate, /具体资金、仓位、杠杆或个性化操作建议/);
   assert.match(gate, /免责声明.*不能替代.*合规审查/s);
 });

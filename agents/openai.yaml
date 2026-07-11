@@ -1,10 +1,10 @@
 interface:
   display_name: "财经内容台"
-  short_description: "A股港股客观体检与合规内容生产"
+  short_description: "A股港股统一专业研究与客户合规内容"
   brand_color: "#111111"
   icon_small: "assets/logo.svg"
   icon_large: "assets/logo.svg"
-  default_prompt: "Use $rodya-caijing-studio to produce an A股/港股 objective company, earnings, valuation, risk, industry, or IPO analysis."
+  default_prompt: "Use $rodya-caijing-studio to produce one professional A股/港股 research core, then render professional or client-compliant documents, cards, copy, or PPT as requested."
 
 policy:
   allow_implicit_invocation: true
