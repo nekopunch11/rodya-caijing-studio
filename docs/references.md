@@ -14,8 +14,8 @@
 | `freshness-gate.md` | 时效核验 gate：财报最新期、招股期状态、孖展/统计/费率时间窗，超窗重取或提示时效存疑 | 每次取数前必读（earnings/ipo-a/ipo-hk 有模块专属 gate） |
 | `output-spec.md` | 结构化分析内核、docx/卡片/PPT 渲染、专业版六项证据完整度验收、客户版按需规则 | 产出内核和交付物时必读 |
 | `docx-visual-spec.md` | docx 专业版视觉规范（唯一视觉事实源）：炭黑金配色、思源宋体/MiSans 字体、首页版式、数字四件套、编号图表来源纪律、风险章节渲染要求 | 渲染专业版 docx 时必读 |
-| `research-methods.md` | A股/港股研究方法论：三情景、逻辑支柱、同业四分位、行业关键指标、利润池五因子、竞争分类、瓶颈点、证伪链、排雷恶化因子 | 涉及基本面、财报、估值、产业链、排雷、打新方法论时读 |
-| `formulas-and-thresholds.md` | ROIC/WACC、反向 DCF、M-Score、Z-Score、红黄绿扫描、IPO 分档等公式阈值 | 涉及计算、评分、分档时必读 |
+| `research-methods.md` | A股/港股研究方法论：逻辑支柱、管理层与资本配置、预期/调整项桥、正常化估值、模型误报控制、产业暴露、IPO 滚动复盘等 | 涉及基本面、财报、估值、产业链、排雷、打新方法论时读 |
+| `formulas-and-thresholds.md` | ROIC/WACC、反向 DCF、M-Score、Z-Score、Wilson 置信区间、红黄绿扫描、IPO 分档等公式阈值 | 涉及计算、评分、分档时必读 |
 | `sector-adapters.md` | 银行、保险、券商、地产、周期、18A/18C、平台型公司等行业适配 | 个股基本面或估值分析前必读 |
 | `card-components.md` | 客户版卡片视觉规范（定稿）：墨账本 Swiss、墨黑招牌带、红绿只给涨跌数据、3:4、模块签名图形 | 生成客户版卡片时读 |
 

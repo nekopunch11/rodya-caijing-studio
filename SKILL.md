@@ -50,7 +50,7 @@ description: 财经内容台——给券商投顾/客户经理的财经内容生
 2. **取数**：按 [references/data-sourcing.md](references/data-sourcing.md)；取数前先过 [references/freshness-gate.md](references/freshness-gate.md) 时效核验（财报是否最新期、招股是否在期内、孖展/统计/费率是否超窗），超窗先重取，不可得再按 [references/data-fallback.md](references/data-fallback.md) 标注数据档次、结论边界和补充要求。
 3. **产内核**：生成该模块的「结构化分析内核」（通用 schema 见 [references/output-spec.md](references/output-spec.md)，各模块字段见其 SKILL.md）。
    ⚠️ **一份内核、三形态渲染**：docx/卡片/PPT 全部从这一份内核渲染，绝不各写各的分析——否则三处不一致、改一处漏两处。
-4. **计算与适配**：涉及公式、评分、分档时按 [references/formulas-and-thresholds.md](references/formulas-and-thresholds.md)；涉及行业特殊口径时按 [references/sector-adapters.md](references/sector-adapters.md)；涉及三情景、逻辑支柱、同业四分位、利润池、竞争分类、瓶颈点、证伪链、排雷恶化因子时按 [references/research-methods.md](references/research-methods.md)。
+4. **计算与适配**：涉及公式、评分、分档时按 [references/formulas-and-thresholds.md](references/formulas-and-thresholds.md)；涉及行业特殊口径时按 [references/sector-adapters.md](references/sector-adapters.md)；涉及三情景、逻辑支柱、管理层与资本配置、预期/调整项桥、正常化估值、模型误报、产业暴露、IPO 滚动复盘时按 [references/research-methods.md](references/research-methods.md)。
 5. **渲染**：按下方默认产出规则；单模块专业版默认生成 `.docx`（按 [references/docx-visual-spec.md](references/docx-visual-spec.md)）。**客户版仅在用户要求时渲染**；三形态视觉均已定稿（docx→docx-visual-spec.md、卡片→card-components.md、PPT→[ppt-visual-spec.md](references/ppt-visual-spec.md)）；不得因数据档次把专业版降成短评。PPT 默认面向投顾内部研究，颜色自适应；Codex 可生图增强，Claude 无图时使用完整纯排版回退。
 6. **合规检查**：对照 compliance.md 过一遍；客户版再按 [references/compliance-rendering.md](references/compliance-rendering.md) 降级逐句检查。
 7. **交付**：每份输出标注数据截至日 + 确定性分级 + 免责声明。**交付专业版后主动提醒使用者：如需转客户，可再让我出客户版（卡片图+文案）。**
@@ -76,7 +76,7 @@ description: 财经内容台——给券商投顾/客户经理的财经内容生
 | [data-sourcing.md](references/data-sourcing.md) | 取数规范：数据源优先级、口径纪律、确定性分级 |
 | [data-fallback.md](references/data-fallback.md) | 数据档次与补充提示规则：缺关键材料时不硬出强结论，但不降档交付物 |
 | [freshness-gate.md](references/freshness-gate.md) | 时效核验 gate：财报最新期/招股期状态/孖展/统计/费率时间窗，超窗提示并限制结论强度 |
-| [research-methods.md](references/research-methods.md) | 研究方法论库：三情景、逻辑支柱、同业四分位、行业关键指标、利润池、竞争分类、瓶颈点、证伪链、排雷恶化因子 |
+| [research-methods.md](references/research-methods.md) | 研究方法论库：逻辑支柱、管理层与资本配置、预期/调整项桥、正常化估值、模型误报、产业暴露、IPO 滚动复盘等 |
 | [research-safety-gate.md](references/research-safety-gate.md) | 研究与投顾安全 gate：自用/内部/对客场景、具体资金建议前置条件、模型边界与机构复核 |
 | [formulas-and-thresholds.md](references/formulas-and-thresholds.md) | 公式、阈值、评分与 IPO 分档的统一口径 |
 | [sector-adapters.md](references/sector-adapters.md) | 银行/保险/地产/周期/未盈利科技等行业适配规则 |
