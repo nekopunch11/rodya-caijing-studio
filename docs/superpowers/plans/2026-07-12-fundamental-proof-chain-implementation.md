@@ -33,6 +33,8 @@
 - Modify: `references/docx-visual-spec.md` — 规定正文关键推导和附录底稿分工。
 - Modify: `docs/modules/caijing-fundamental.md` — 同步面向人的能力说明。
 - Modify: `docs/references.md` — 登记新共享事实源及优先级。
+- Modify: `README.md` — 把完整推导、断链 Gate 与框架外扫描写入权威证据区和基本面模块说明。
+- Modify: `tests/readme-contract.test.mjs` — 防止 README 后续退回只展示框架名称、没有证明机制。
 - Sync: `C:\Users\Administrator.DESKTOP-OPKAITA\.codex\skills\rodya-caijing-studio\` — 验证通过后覆盖唯一运行副本。
 
 ---
@@ -445,7 +447,72 @@ git commit -m "docs: expose fundamental derivation and flexibility rules"
 
 ---
 
-### Task 7: Full Regression, Skill Validation, and Runtime Sync
+### Task 7: Expose the New Authority Signals in the Root README
+
+**Files:**
+- Modify: `README.md`
+- Modify: `tests/readme-contract.test.mjs`
+
+**Interfaces:**
+- Consumes: production proof-chain rules already implemented and tested.
+- Produces: user-facing authority claims that are true, specific and contract-protected.
+
+- [ ] **Step 1: Extend the README contract test first**
+
+Add:
+
+```js
+test("README explains why fundamental conclusions are reproducible", () => {
+  const readme = read("README.md");
+  assert.match(readme, /原始数据.*口径.*计算.*历史.*同业.*反面证据.*证伪/s);
+  assert.match(readme, /推导链.*断裂.*停止.*定性/s);
+  assert.match(readme, /十个分析块.*最低覆盖|框架外扫描/s);
+});
+```
+
+- [ ] **Step 2: Run the README test and verify RED**
+
+Run: `node --test tests/readme-contract.test.mjs`
+
+Expected: the new test fails because the proof-chain language is not yet in README.
+
+- [ ] **Step 3: Add an authority-evidence bullet**
+
+Under `## 🧱 专业不是靠语气，是靠约束`, add:
+
+```markdown
+- **基本面结论可复算**：判断必须经过“原始数据 → 口径调整 → 计算/拆解 → 历史与同业坐标 → 反面证据 → 证伪条件”；推导链断裂时停止对受影响事项定性，不用结果表冒充研究过程。
+- **框架保底但不封顶**：十个分析块只是最低覆盖，完成后仍执行框架外扫描；遇到特殊资产、交易结构、会计口径或重大事项时，可以新增研究问题并说明适配器覆盖理由。
+```
+
+- [ ] **Step 4: Strengthen the fundamental module description**
+
+Under the `caijing-fundamental` module, add:
+
+```markdown
+专业版默认展示决定结论的关键推导，计算底稿进入附录；每个首页判断都能反查到证据链。
+```
+
+- [ ] **Step 5: Run README and proof-chain tests**
+
+Run:
+
+```powershell
+node --test tests/readme-contract.test.mjs tests/fundamental-proof-chain-contract.test.mjs
+```
+
+Expected: both suites pass.
+
+- [ ] **Step 6: Commit**
+
+```powershell
+git add README.md tests/readme-contract.test.mjs
+git commit -m "docs: explain reproducible fundamental conclusions"
+```
+
+---
+
+### Task 8: Full Regression, Skill Validation, and Runtime Sync
 
 **Files:**
 - Verify: all source files above.
@@ -462,7 +529,7 @@ $tests = Get-ChildItem -LiteralPath '.\tests' -Filter '*.test.mjs' | Sort-Object
 node --test $tests
 ```
 
-Expected: all existing 20 tests plus 7 new proof-chain tests pass; 0 failures.
+Expected: all existing 20 tests plus 7 new proof-chain tests and 1 new README authority test pass; 28 tests, 0 failures.
 
 - [ ] **Step 2: Run Skill structural validation**
 
@@ -496,6 +563,7 @@ references/formulas-and-thresholds.md
 references/docx-visual-spec.md
 docs/modules/caijing-fundamental.md
 docs/references.md
+README.md
 ```
 
 Use `Copy-Item -Force` with the destination directory created only when missing. Do not create a backup under `~/.codex/skills/`.
@@ -512,7 +580,8 @@ $rels = @(
   'references\formulas-and-thresholds.md',
   'references\docx-visual-spec.md',
   'docs\modules\caijing-fundamental.md',
-  'docs\references.md'
+  'docs\references.md',
+  'README.md'
 )
 $src = (Get-Location).Path
 $dst = 'C:\Users\Administrator.DESKTOP-OPKAITA\.codex\skills\rodya-caijing-studio'
@@ -530,13 +599,13 @@ Expected: command exits without error.
 If no adjustment was required, do not create an empty commit. Otherwise:
 
 ```powershell
-git add caijing-fundamental/SKILL.md references/fundamental-proof-chain.md references/output-spec.md references/data-fallback.md references/sector-adapters.md references/formulas-and-thresholds.md references/docx-visual-spec.md docs/modules/caijing-fundamental.md docs/references.md tests/fundamental-proof-chain-contract.test.mjs
+git add caijing-fundamental/SKILL.md references/fundamental-proof-chain.md references/output-spec.md references/data-fallback.md references/sector-adapters.md references/formulas-and-thresholds.md references/docx-visual-spec.md docs/modules/caijing-fundamental.md docs/references.md README.md tests/readme-contract.test.mjs tests/fundamental-proof-chain-contract.test.mjs
 git commit -m "test: finalize fundamental proof-chain validation"
 ```
 
 ---
 
-### Task 8: Update Vault State After Production Validation
+### Task 9: Update Vault State After Production Validation
 
 **Files:**
 - Modify: `D:\AI\RodyaVault\00_System\Current_Status.md`
