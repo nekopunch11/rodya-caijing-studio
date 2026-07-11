@@ -1,122 +1,644 @@
-// 财经内容台 · 汇报 PPT 生成器（墨账本 Swiss · pptxgenjs）参考母版 v0.2
-// 规范：references/output-spec.md §三③ ；视觉参照：assets/template-deck.html
-// PPT 为按需件（仅用户明确要"汇报/PPT/deck"时才出）。默认 .pptx（本文件）；用户要浏览器演示/PDF 用 template-deck.html。
-// 用法：把下方示例数据换成真实内核 → `npm i pptxgenjs && node deck-template.mjs` → 用 pptx skill 的 rezip.py 重压 → 出 deck.pptx。
-// 铁律：配色只用 P 常量；红/绿只标涨跌方向数据、不进招牌带；排雷/统计一律墨色；对客口径去「专业判断/三情景」。
-import pptxgen from "pptxgenjs";
-const P={ink:"111111",paper:"FFFFFF",muted:"888888",hair:"EDEDED",empty:"DCDCDC",up:"C0392B",down:"1E9E5A",dg:"6B6B6B",lg:"BDBDBD"};
-const SANS="Microsoft YaHei", MONO="Courier New";
-const pres=new pptxgen(); pres.layout="LAYOUT_16x9"; pres.author="财经内容台"; pres.title="宁德时代 综合体检";
+// 财经内容台 · 投顾内部研究汇报 renderer v1.0
+// 唯一执行视觉事实源：references/ppt-visual-spec.md
+// 用法：node assets/deck-template.mjs --input deck-data.json --output report.pptx
+// 依赖：pptxgenjs。renderer 不依赖 imagegen；visual_asset 只接受已存在的本地图片路径。
 
-// 招牌带（功能性页眉，非装饰条：承载标的/代码/模块/数据截至）
-function header(s,name,code,module,meta){
-  s.addShape(pres.shapes.RECTANGLE,{x:0,y:0,w:10,h:0.82,fill:{color:P.ink},line:{type:"none"}});
-  s.addText(name,{x:0.4,y:0.12,w:3,h:0.42,fontFace:SANS,fontSize:20,bold:true,color:"FFFFFF",valign:"middle",margin:0});
-  if(code) s.addText(code,{x:2.35,y:0.16,w:1.6,h:0.36,fontFace:MONO,fontSize:12,color:P.lg,valign:"middle",margin:0});
-  s.addText(module,{x:5.4,y:0.12,w:4.2,h:0.42,fontFace:SANS,fontSize:13,color:"FFFFFF",align:"right",valign:"middle",charSpacing:3,margin:0});
-  s.addText(meta,{x:0.4,y:0.5,w:6,h:0.26,fontFace:MONO,fontSize:9.5,color:P.muted,valign:"middle",margin:0});
-}
-// footer 固定件（slogan + 来源，纯文本无装饰线）
-function footer(s,src,dark){
-  const c=dark?"777777":P.muted;
-  s.addText("客观体检 · 不含买卖建议",{x:0.4,y:5.28,w:5,h:0.25,fontFace:MONO,fontSize:8,color:c,valign:"middle",margin:0});
-  s.addText(src,{x:5,y:5.28,w:4.6,h:0.25,fontFace:MONO,fontSize:8,color:c,align:"right",valign:"middle",margin:0});
-}
-function stat(s,x,y,w,label,val,valColor){
-  s.addText(label,{x,y,w,h:0.28,fontFace:SANS,fontSize:10,color:P.muted,margin:0});
-  s.addText(val,{x,y:y+0.26,w,h:0.5,fontFace:MONO,fontSize:26,color:valColor||P.ink,margin:0});
-}
+import fs from "node:fs";
+import path from "node:path";
+import process from "node:process";
+import { createRequire } from "node:module";
+import { fileURLToPath } from "node:url";
 
-// 1 封面（深底，标题/结论页用深色）
-let s1=pres.addSlide(); s1.background={color:P.ink};
-s1.addShape(pres.shapes.RECTANGLE,{x:0.55,y:0.55,w:0.09,h:0.5,fill:{color:P.up},line:{type:"none"}});
-s1.addShape(pres.shapes.RECTANGLE,{x:0.72,y:0.62,w:0.09,h:0.38,fill:{color:P.lg},line:{type:"none"}});
-s1.addShape(pres.shapes.RECTANGLE,{x:0.89,y:0.5,w:0.09,h:0.58,fill:{color:P.down},line:{type:"none"}});
-s1.addText("财经内容台",{x:1.15,y:0.6,w:3,h:0.35,fontFace:MONO,fontSize:11,color:P.muted,charSpacing:3,valign:"middle",margin:0});
-s1.addText("宁德时代 综合体检",{x:0.55,y:2.15,w:9,h:0.9,fontFace:SANS,fontSize:42,bold:true,color:"FFFFFF",margin:0});
-s1.addText("基本面 · 估值 · 排雷",{x:0.57,y:3.15,w:8,h:0.5,fontFace:SANS,fontSize:20,color:"CFCFCF",charSpacing:2,margin:0});
-s1.addText("300750 · A股 · 数据截至 2026-07-10",{x:0.57,y:3.75,w:8,h:0.35,fontFace:MONO,fontSize:12,color:P.muted,margin:0});
-footer(s1,"汇报 PPT · 专业口径",true);
+export const CANONICAL_LAYOUTS = Object.freeze([
+  "cover",
+  "overview",
+  "thesis",
+  "fundamental",
+  "valuation",
+  "risk",
+  "disclaimer",
+]);
+export const OPTIONAL_LAYOUTS = Object.freeze(["pipeline"]);
 
-// 2 总览（账本表）
-let s2=pres.addSlide(); s2.background={color:P.paper};
-header(s2,"综合结论总览","","汇报总览","A股 · 数据截至 2026-07-10");
-const hd=(t,a)=>({text:t,options:{fill:{color:P.ink},color:"FFFFFF",bold:true,fontFace:MONO,fontSize:12,align:a||"left",valign:"middle"}});
-s2.addTable([
- [hd("模块"),hd("客观概括"),hd("关键数字","right"),hd("确定性","center")],
- [{text:"基本面",options:{bold:true,fontFace:SANS,fontSize:13}},{text:"护城河 7/10，现金流扎实",options:{fontFace:SANS,fontSize:12,color:"444444"}},{text:"ROE 18.5%",options:{fontFace:MONO,fontSize:12,align:"right"}},{text:"B",options:{fontFace:MONO,fontSize:12,align:"center"}}],
- [{text:"估值",options:{bold:true,fontFace:SANS,fontSize:13}},{text:"PE 处近 5 年 78% 分位",options:{fontFace:SANS,fontSize:12,color:"444444"}},{text:"PE 27.3×",options:{fontFace:MONO,fontSize:12,align:"right"}},{text:"B",options:{fontFace:MONO,fontSize:12,align:"center"}}],
- [{text:"排雷",options:{bold:true,fontFace:SANS,fontSize:13}},{text:"财务维度 1 项重点关注",options:{fontFace:SANS,fontSize:12,color:"444444"}},{text:"商誉/净资 32%",options:{fontFace:MONO,fontSize:12,align:"right"}},{text:"B",options:{fontFace:MONO,fontSize:12,align:"center"}}],
-],{x:0.4,y:1.2,w:9.2,colW:[1.5,4.5,2.2,1.0],rowH:[0.5,0.62,0.62,0.62],border:{type:"solid",pt:0.5,color:P.hair},valign:"middle",margin:4});
-s2.addText("来源：Wind、公司年报，截至 2026-07-10",{x:0.4,y:3.9,w:9,h:0.3,fontFace:MONO,fontSize:9,color:P.muted,margin:0});
-footer(s2,"财经内容台 · 2 / 7");
+const ALL_LAYOUTS = new Set([...CANONICAL_LAYOUTS, ...OPTIONAL_LAYOUTS]);
+const SANS = "MiSans";
+const MONO = "IBM Plex Mono";
+const W = 13.333;
+const H = 7.5;
+const M = 0.72;
 
-// 3 模块页 · 基本面（左大数+五源 / 右概括+关键数字+风险）
-let s3=pres.addSlide(); s3.background={color:P.paper};
-header(s3,"宁德时代","300750","基本面体检","A股 · 数据截至 2026-07-10");
-s3.addText("近 5 年平均 ROE",{x:0.4,y:1.1,w:4,h:0.3,fontFace:SANS,fontSize:11,color:P.muted,charSpacing:2,margin:0});
-s3.addText([{text:"18.5",options:{fontFace:"Arial",fontSize:60}},{text:"%",options:{fontFace:"Arial",fontSize:26}}],{x:0.38,y:1.35,w:4,h:1.0,color:P.ink,margin:0});
-s3.addText("护城河五源  7 / 10",{x:0.4,y:2.55,w:4,h:0.3,fontFace:SANS,fontSize:11,color:P.muted,margin:0});
-s3.addText([
- {text:"无形资产            ■■",options:{breakLine:true}},
- {text:"成本优势            ■■",options:{breakLine:true}},
- {text:"规模效应            ■□",options:{breakLine:true}},
- {text:"网络效应            □□"},
-],{x:0.4,y:2.85,w:4.2,h:1.8,fontFace:MONO,fontSize:14,color:P.ink,lineSpacingMultiple:1.4,margin:0});
-s3.addText("客观概括",{x:5.2,y:1.1,w:4.4,h:0.3,fontFace:SANS,fontSize:11,color:P.muted,charSpacing:2,margin:0});
-s3.addText("近五年平均 ROE 18.5%，经营现金流对净利润覆盖 1.15 倍，护城河评分 7/10。",{x:5.2,y:1.4,w:4.4,h:0.9,fontFace:SANS,fontSize:14,color:"333333",lineSpacingMultiple:1.3,margin:0});
-stat(s3,5.2,2.55,2.1,"现金流/净利","1.15×");
-stat(s3,7.5,2.55,2.1,"营收 5Y CAGR","32% ▲",P.up); // 涨=红，唯一用红处
-stat(s3,5.2,3.5,2.1,"ROIC−WACC","+6.2pt");
-stat(s3,7.5,3.5,2.1,"毛利率","20.1%");
-s3.addText("风险",{x:5.2,y:4.45,w:4.4,h:0.26,fontFace:SANS,fontSize:11,color:P.muted,margin:0});
-s3.addText("商誉占比偏高、近期解禁；公开信息提示 2 项，重点关注 1 项",{x:5.2,y:4.68,w:4.4,h:0.4,fontFace:SANS,fontSize:12,color:P.ink,margin:0});
-footer(s3,"来源 Wind · 公司年报 · 3 / 7");
-
-// 4 数据大字报 · 估值（hero + 分位 band，当前点墨色非涨跌）
-let s4=pres.addSlide(); s4.background={color:P.paper};
-header(s4,"宁德时代","300750","估值体检","A股 · 数据截至 2026-07-10");
-s4.addText("当前 PE-TTM · 近 5 年分位",{x:0.4,y:1.1,w:6,h:0.3,fontFace:SANS,fontSize:11,color:P.muted,charSpacing:2,margin:0});
-s4.addText([{text:"78",options:{fontFace:"Arial",fontSize:72}},{text:"%",options:{fontFace:"Arial",fontSize:30}}],{x:0.38,y:1.35,w:5,h:1.2,color:P.ink,margin:0});
-s4.addShape(pres.shapes.RECTANGLE,{x:0.4,y:3.0,w:9.2,h:0.14,fill:{color:P.hair},line:{type:"none"}});
-s4.addShape(pres.shapes.RECTANGLE,{x:0.4,y:3.0,w:7.18,h:0.14,fill:{color:P.ink},line:{type:"none"}});
-s4.addShape(pres.shapes.OVAL,{x:7.44,y:2.92,w:0.3,h:0.3,fill:{color:P.ink},line:{type:"none"}});
-[0.27,0.5,0.73].forEach(f=>s4.addShape(pres.shapes.RECTANGLE,{x:0.4+9.2*f,y:2.94,w:0.02,h:0.26,fill:{color:P.empty},line:{type:"none"}}));
-s4.addText([{text:"P25",options:{align:"left"}},{text:"中位",options:{align:"center"}},{text:"P75",options:{align:"right"}}],{x:0.4,y:3.25,w:9.2,h:0.3,fontFace:MONO,fontSize:10,color:P.muted,margin:0});
-stat(s4,0.4,3.6,2.1,"PE-TTM","27.3×"); stat(s4,2.7,3.6,2.1,"PB","8.1×"); stat(s4,5.0,3.6,2.1,"股息率","2.1%"); stat(s4,7.3,3.6,2.1,"隐含增速","11%");
-s4.addText("当前估值处近 5 年偏高区间。（客观呈现，非买卖信号）",{x:0.4,y:4.62,w:9.2,h:0.4,fontFace:SANS,fontSize:13,color:"444444",margin:0});
-footer(s4,"来源 Wind · 4 / 7");
-
-// 5 Pipeline · 产业链（利润池墨阶）
-let s5=pres.addSlide(); s5.background={color:P.paper};
-header(s5,"固态电池","题材","产业链图谱","A股 · 数据截至 2026-07-10");
-s5.addText("利润池图谱 · 上中下游",{x:0.4,y:1.1,w:6,h:0.3,fontFace:SANS,fontSize:11,color:P.muted,charSpacing:2,margin:0});
-const seg=[["上游 · 材料","25%",P.lg,1.1],["中游 · 电芯","45%",P.ink,1.7],["下游 · 应用","30%",P.dg,1.4]];
-seg.forEach((g,idx)=>{const [lab,pc,col,h]=g; const bx=0.9+idx*2.9;
-  s5.addShape(pres.shapes.RECTANGLE,{x:bx,y:3.5-h,w:2.2,h:h,fill:{color:col},line:{type:"none"}});
-  s5.addText(lab,{x:bx-0.2,y:3.6,w:2.6,h:0.3,fontFace:MONO,fontSize:13,color:P.ink,align:"center",margin:0});
-  s5.addText(pc,{x:bx-0.2,y:3.9,w:2.6,h:0.4,fontFace:"Arial",fontSize:22,color:P.ink,align:"center",margin:0});
-  if(idx<2) s5.addText("→",{x:bx+2.15,y:2.85,w:0.55,h:0.5,fontFace:SANS,fontSize:24,color:P.lg,align:"center",margin:0});
+const THEME_PRESETS = Object.freeze({
+  light: {
+    mode: "light",
+    surface: "F4F2EE",
+    surface_alt: "E8E4DC",
+    ink: "171717",
+    muted: "6C6A66",
+    hairline: "CEC9BF",
+    accent: "8B6F47",
+    up: "B23A32",
+    down: "1F7A5A",
+    scrim: "111111",
+  },
+  dark: {
+    mode: "dark",
+    surface: "121517",
+    surface_alt: "20262A",
+    ink: "F4F1EA",
+    muted: "A5ADB0",
+    hairline: "384146",
+    accent: "C19A6B",
+    up: "E06A5F",
+    down: "52A987",
+    scrim: "0B0D0E",
+  },
+  "media-led": {
+    mode: "media-led",
+    surface: "EDEBE6",
+    surface_alt: "DDD9D1",
+    ink: "151719",
+    muted: "666B6E",
+    hairline: "C5C1B9",
+    accent: "58717E",
+    up: "B23A32",
+    down: "1F7A5A",
+    scrim: "101416",
+  },
 });
-s5.addText("墨色越深＝利润池越集中（中游电芯）。代表公司按相关度客观列示，不构成推荐。",{x:0.4,y:4.5,w:9.2,h:0.35,fontFace:MONO,fontSize:10,color:P.muted,margin:0});
-footer(s5,"来源 行业公开资料 · 5 / 7");
 
-// 6 风险汇总（账本表）
-let s6=pres.addSlide(); s6.background={color:P.paper};
-header(s6,"风险汇总","","重点关注","公开信息提示 · 数据截至 2026-07-10");
-s6.addTable([
- [hd("模块"),hd("公开信息提示 / 重点关注")],
- [{text:"基本面",options:{bold:true,fontFace:SANS,fontSize:13}},{text:"风险速扫 2 项：商誉占比、近期解禁；重点 1 项。",options:{fontFace:SANS,fontSize:12,color:"444444"}}],
- [{text:"估值",options:{bold:true,fontFace:SANS,fontSize:13}},{text:"估值处近 5 年偏高区间，回撤敏感度上升。",options:{fontFace:SANS,fontSize:12,color:"444444"}}],
- [{text:"排雷",options:{bold:true,fontFace:SANS,fontSize:13}},{text:"财务维度重点关注 1 项：商誉/净资产 32%，关注减值测试。",options:{fontFace:SANS,fontSize:12,color:"444444"}}],
-],{x:0.4,y:1.25,w:9.2,colW:[1.65,7.55],rowH:[0.5,0.7,0.7,0.7],border:{type:"solid",pt:0.5,color:P.hair},valign:"middle",margin:5});
-s6.addText("以上为公开信息提示，不构成风险定性或买卖建议。",{x:0.4,y:4.2,w:9.2,h:0.3,fontFace:MONO,fontSize:9,color:P.muted,margin:0});
-footer(s6,"财经内容台 · 6 / 7");
+function cleanHex(value, fallback) {
+  const normalized = String(value ?? "").trim().replace(/^#/, "").toUpperCase();
+  return /^[0-9A-F]{6}$/.test(normalized) ? normalized : fallback;
+}
 
-// 7 免责（深底）
-let s7=pres.addSlide(); s7.background={color:P.ink};
-s7.addText("免责声明",{x:0.6,y:1.7,w:8,h:0.4,fontFace:SANS,fontSize:16,color:P.lg,charSpacing:3,margin:0});
-s7.addText("本材料由「财经内容台」基于公开信息整理，仅作客观数据体检与信息呈现，不构成任何证券的买卖建议、目标价或收益承诺，判断权归投资者本人。数据截至 2026-07-10，来源见各页脚注。市场有风险，决策需谨慎。",{x:0.6,y:2.2,w:8.5,h:1.8,fontFace:SANS,fontSize:15,color:"DDDDDD",lineSpacingMultiple:1.5,margin:0});
-footer(s7,"财经内容台 · 7 / 7",true);
+export function resolveTheme(input = {}) {
+  const mode = Object.hasOwn(THEME_PRESETS, input.mode) ? input.mode : "light";
+  const base = THEME_PRESETS[mode];
+  const resolved = { mode };
+  for (const key of [
+    "surface",
+    "surface_alt",
+    "ink",
+    "muted",
+    "hairline",
+    "accent",
+    "up",
+    "down",
+    "scrim",
+  ]) {
+    resolved[key] = cleanHex(input[key], base[key]);
+  }
+  if (resolved.accent === resolved.up || resolved.accent === resolved.down) {
+    resolved.accent = base.accent;
+  }
+  return resolved;
+}
 
-pres.writeFile({fileName:"deck.pptx"}).then(()=>console.log("written deck.pptx"));
+function normalizeMetric(metric = {}) {
+  return {
+    label: String(metric.label ?? "").trim(),
+    value: String(metric.value ?? "").trim(),
+    context: String(metric.context ?? "").trim(),
+    direction: ["up", "down", "neutral"].includes(metric.direction)
+      ? metric.direction
+      : "neutral",
+  };
+}
+
+function normalizeEvidence(item = {}) {
+  return {
+    label: String(item.label ?? "").trim(),
+    value: String(item.value ?? "").trim(),
+    source: String(item.source ?? "").trim(),
+    as_of: String(item.as_of ?? "").trim(),
+    context: String(item.context ?? "").trim(),
+  };
+}
+
+export function chooseVisualVariant(slide = {}) {
+  const hasMedia = Boolean(
+    slide.visual_asset?.path && fs.existsSync(path.resolve(slide.visual_asset.path)),
+  );
+  return `${slide.type ?? "unknown"}-${hasMedia ? "media" : "no-media"}`;
+}
+
+export function normalizeDeck(input = {}) {
+  if (!String(input.title ?? "").trim()) throw new Error("deck.title / 研究命题不能为空");
+  if (!String(input.subject ?? "").trim()) throw new Error("deck.subject / 标的不能为空");
+  if (!String(input.as_of ?? "").trim()) throw new Error("deck.as_of / 数据截至日不能为空");
+  if (!Array.isArray(input.slides) || input.slides.length === 0) {
+    throw new Error("deck.slides 不能为空");
+  }
+
+  const slides = input.slides.map((raw, index) => {
+    const type = String(raw.type ?? "").trim();
+    if (!ALL_LAYOUTS.has(type)) throw new Error(`slides[${index}].type 不受支持：${type}`);
+    const conclusion = String(raw.conclusion ?? "").trim();
+    if (!conclusion) throw new Error(`slides[${index}].conclusion / 本页结论不能为空`);
+    const visualPath = raw.visual_asset?.path
+      ? path.resolve(String(raw.visual_asset.path))
+      : "";
+    const visual_asset = visualPath && fs.existsSync(visualPath)
+      ? {
+          path: visualPath,
+          alt: String(raw.visual_asset.alt ?? "主题视觉").trim(),
+          position: ["left", "right", "full"].includes(raw.visual_asset.position)
+            ? raw.visual_asset.position
+            : "right",
+        }
+      : undefined;
+
+    return {
+      ...raw,
+      type,
+      conclusion,
+      eyebrow: String(raw.eyebrow ?? "内部研究").trim(),
+      body: String(raw.body ?? "").trim(),
+      hero_metric: raw.hero_metric ? normalizeMetric(raw.hero_metric) : undefined,
+      support_metrics: Array.isArray(raw.support_metrics)
+        ? raw.support_metrics.slice(0, 3).map(normalizeMetric)
+        : [],
+      evidence: Array.isArray(raw.evidence) ? raw.evidence.map(normalizeEvidence) : [],
+      pillars: Array.isArray(raw.pillars) ? raw.pillars.slice(0, 4) : [],
+      watchlist: Array.isArray(raw.watchlist) ? raw.watchlist.slice(0, 5) : [],
+      rows: Array.isArray(raw.rows) ? raw.rows.slice(0, 5) : [],
+      visual_asset,
+    };
+  });
+
+  return {
+    title: String(input.title).trim(),
+    subject: String(input.subject).trim(),
+    as_of: String(input.as_of).trim(),
+    market: String(input.market ?? "").trim(),
+    author: String(input.author ?? "财经内容台").trim(),
+    disclaimer: String(
+      input.disclaimer
+        ?? "本材料基于公开信息整理，仅供内部研究讨论，不构成任何证券的买卖建议、目标价或收益承诺。市场有风险，决策需谨慎。",
+    ).trim(),
+    theme: resolveTheme(input.theme),
+    slides,
+  };
+}
+
+function metricColor(metric, theme) {
+  if (metric?.direction === "up") return theme.up;
+  if (metric?.direction === "down") return theme.down;
+  return theme.ink;
+}
+
+function sourceLine(slide, deck) {
+  const sources = [...new Set(slide.evidence.map((item) => item.source).filter(Boolean))];
+  return `${sources.length ? `来源 ${sources.join(" / ")} · ` : ""}截至 ${deck.as_of}`;
+}
+
+function addRect(slide, shapes, x, y, w, h, color, transparency = 0) {
+  slide.addShape(shapes.RECTANGLE, {
+    x,
+    y,
+    w,
+    h,
+    fill: { color, transparency },
+    line: { type: "none" },
+  });
+}
+
+function addRule(slide, shapes, x, y, w, color, width = 0.7) {
+  slide.addShape(shapes.LINE, {
+    x,
+    y,
+    w,
+    h: 0,
+    line: { color, width },
+  });
+}
+
+function addVerticalRule(slide, shapes, x, y, h, color, width = 0.7) {
+  slide.addShape(shapes.LINE, {
+    x,
+    y,
+    w: 0,
+    h,
+    line: { color, width },
+  });
+}
+
+function addText(slide, text, options = {}) {
+  slide.addText(String(text ?? ""), {
+    margin: 0,
+    breakLine: false,
+    fit: "shrink",
+    valign: "mid",
+    fontFace: SANS,
+    color: options.color,
+    ...options,
+  });
+}
+
+function addHeader(slide, shapes, deck, item, page) {
+  addText(slide, item.eyebrow || "内部研究", {
+    x: M,
+    y: 0.38,
+    w: 2.2,
+    h: 0.26,
+    fontFace: MONO,
+    fontSize: 9.5,
+    bold: true,
+    color: deck.theme.accent,
+    charSpacing: 1.4,
+  });
+  addText(slide, deck.subject, {
+    x: 3.15,
+    y: 0.38,
+    w: 6.2,
+    h: 0.26,
+    fontFace: MONO,
+    fontSize: 9,
+    align: "center",
+    color: deck.theme.muted,
+  });
+  addText(slide, `${String(page).padStart(2, "0")} / ${String(deck.slides.length).padStart(2, "0")}`, {
+    x: 11.55,
+    y: 0.38,
+    w: 1.05,
+    h: 0.26,
+    fontFace: MONO,
+    fontSize: 9,
+    align: "right",
+    color: deck.theme.muted,
+  });
+  addRule(slide, shapes, M, 0.82, W - M * 2, deck.theme.hairline, 0.6);
+}
+
+function addFooter(slide, shapes, deck, item) {
+  addRule(slide, shapes, M, 6.91, W - M * 2, deck.theme.hairline, 0.6);
+  addText(slide, "财经内容台 · 投顾内部研究", {
+    x: M,
+    y: 7.04,
+    w: 4.0,
+    h: 0.19,
+    fontFace: MONO,
+    fontSize: 8,
+    color: deck.theme.muted,
+  });
+  addText(slide, sourceLine(item, deck), {
+    x: 6.0,
+    y: 7.04,
+    w: 6.6,
+    h: 0.19,
+    fontFace: MONO,
+    fontSize: 8,
+    align: "right",
+    color: deck.theme.muted,
+  });
+}
+
+function addMetric(slide, metric, x, y, w, theme, primary = false) {
+  if (!metric) return;
+  addText(slide, metric.label, {
+    x,
+    y,
+    w,
+    h: 0.25,
+    fontSize: 10,
+    color: theme.muted,
+  });
+  addText(slide, metric.value, {
+    x,
+    y: y + 0.28,
+    w,
+    h: primary ? 0.88 : 0.54,
+    fontFace: MONO,
+    fontSize: primary ? 48 : 25,
+    bold: primary,
+    color: metricColor(metric, theme),
+  });
+  if (metric.context) {
+    addText(slide, metric.context, {
+      x,
+      y: y + (primary ? 1.12 : 0.86),
+      w,
+      h: 0.27,
+      fontSize: 9.5,
+      color: theme.muted,
+    });
+  }
+}
+
+function renderCover(pres, slide, deck, item, page, shapes) {
+  slide.background = { color: deck.theme.surface };
+  const hasMedia = Boolean(item.visual_asset);
+  if (hasMedia) {
+    slide.addImage({
+      path: item.visual_asset.path,
+      x: 7.75,
+      y: 0,
+      w: W - 7.75,
+      h: H,
+      sizing: { type: "cover", w: W - 7.75, h: H },
+      altText: item.visual_asset.alt,
+    });
+    addRect(slide, shapes, 7.75, 0, W - 7.75, H, deck.theme.scrim, 66);
+    addRect(slide, shapes, 7.62, 0, 0.13, H, deck.theme.accent);
+  } else {
+    addRect(slide, shapes, 0.72, 0.8, 0.1, 1.08, deck.theme.accent);
+    addRect(slide, shapes, 10.9, 0.82, 1.7, 0.1, deck.theme.accent);
+  }
+  const contentW = hasMedia ? 6.3 : 11.25;
+  addText(slide, item.eyebrow || "内部研究", {
+    x: 0.95,
+    y: 0.85,
+    w: 3.2,
+    h: 0.3,
+    fontFace: MONO,
+    fontSize: 10,
+    bold: true,
+    charSpacing: 1.8,
+    color: deck.theme.accent,
+  });
+  addText(slide, deck.subject, {
+    x: 0.95,
+    y: 1.42,
+    w: contentW,
+    h: 0.36,
+    fontFace: MONO,
+    fontSize: 13,
+    color: deck.theme.muted,
+  });
+  addText(slide, item.conclusion, {
+    x: 0.95,
+    y: 2.15,
+    w: contentW,
+    h: 1.5,
+    fontSize: hasMedia ? 38 : 46,
+    bold: true,
+    color: deck.theme.ink,
+    breakLine: true,
+    valign: "top",
+  });
+  addText(slide, item.body || deck.title, {
+    x: 0.95,
+    y: 4.08,
+    w: contentW,
+    h: 0.8,
+    fontSize: 17,
+    color: deck.theme.muted,
+    breakLine: true,
+    valign: "top",
+  });
+  addRule(slide, shapes, 0.95, 6.55, contentW, deck.theme.hairline, 0.7);
+  addText(slide, `${deck.market ? `${deck.market} · ` : ""}数据截至 ${deck.as_of}`, {
+    x: 0.95,
+    y: 6.72,
+    w: contentW,
+    h: 0.26,
+    fontFace: MONO,
+    fontSize: 9,
+    color: deck.theme.muted,
+  });
+  addText(slide, `${String(page).padStart(2, "0")} / ${String(deck.slides.length).padStart(2, "0")}`, {
+    x: 11.55,
+    y: 6.72,
+    w: 1.05,
+    h: 0.26,
+    fontFace: MONO,
+    fontSize: 9,
+    align: "right",
+    color: hasMedia ? "E9E5DE" : deck.theme.muted,
+  });
+}
+
+function renderOverview(pres, slide, deck, item, page, shapes) {
+  slide.background = { color: deck.theme.surface };
+  addHeader(slide, shapes, deck, item, page);
+  addText(slide, item.conclusion, {
+    x: M,
+    y: 1.12,
+    w: 11.9,
+    h: 0.62,
+    fontSize: 29,
+    bold: true,
+    color: deck.theme.ink,
+  });
+  const rows = item.rows.length
+    ? item.rows
+    : item.evidence.map((e) => ({ label: e.label, conclusion: e.context || e.value, metric: e.value, confidence: "" }));
+  const y0 = 2.05;
+  const widths = [1.55, 6.05, 2.55, 1.25];
+  const headers = ["模块", "结论", "主指标", "确定性"];
+  let x = M;
+  headers.forEach((header, index) => {
+    addText(slide, header, {
+      x,
+      y: y0,
+      w: widths[index],
+      h: 0.32,
+      fontFace: MONO,
+      fontSize: 9,
+      bold: true,
+      color: index === 0 ? deck.theme.accent : deck.theme.muted,
+      align: index >= 2 ? "right" : "left",
+    });
+    x += widths[index];
+  });
+  addRule(slide, shapes, M, y0 + 0.45, 11.9, deck.theme.ink, 1.0);
+  rows.slice(0, 4).forEach((row, index) => {
+    const y = y0 + 0.63 + index * 0.82;
+    addRule(slide, shapes, M, y + 0.61, 11.9, deck.theme.hairline, 0.6);
+    addText(slide, row.label || row.module || "—", { x: M, y, w: widths[0], h: 0.48, fontSize: 14, bold: true, color: deck.theme.ink });
+    addText(slide, row.conclusion || row.summary || "—", { x: M + widths[0], y, w: widths[1], h: 0.48, fontSize: 13, color: deck.theme.ink });
+    addText(slide, row.metric || row.value || "—", { x: M + widths[0] + widths[1], y, w: widths[2], h: 0.48, fontFace: MONO, fontSize: 14, align: "right", color: deck.theme.ink });
+    addText(slide, row.confidence || "—", { x: M + widths[0] + widths[1] + widths[2], y, w: widths[3], h: 0.48, fontFace: MONO, fontSize: 13, align: "right", color: deck.theme.muted });
+  });
+  addFooter(slide, shapes, deck, item);
+}
+
+function renderThesis(pres, slide, deck, item, page, shapes) {
+  slide.background = { color: deck.theme.surface };
+  addHeader(slide, shapes, deck, item, page);
+  const hasMedia = Boolean(item.visual_asset);
+  const contentW = hasMedia ? 8.15 : 11.9;
+  addText(slide, item.conclusion, { x: M, y: 1.1, w: contentW, h: 0.75, fontSize: 30, bold: true, color: deck.theme.ink, valign: "top" });
+  if (item.body) addText(slide, item.body, { x: M, y: 1.88, w: contentW, h: 0.58, fontSize: 15, color: deck.theme.muted, valign: "top" });
+  const pillars = item.pillars.length ? item.pillars : item.evidence.slice(0, 4);
+  const gap = 0.28;
+  const colW = (contentW - gap * (pillars.length - 1)) / Math.max(1, pillars.length);
+  pillars.forEach((pillar, index) => {
+    const x = M + index * (colW + gap);
+    if (index > 0) addVerticalRule(slide, shapes, x - gap / 2, 2.72, 3.02, deck.theme.hairline, 0.6);
+    addText(slide, String(index + 1).padStart(2, "0"), { x, y: 2.68, w: colW, h: 0.25, fontFace: MONO, fontSize: 9, color: deck.theme.accent });
+    addText(slide, pillar.title || pillar.label || "逻辑支柱", { x, y: 3.08, w: colW, h: 0.52, fontSize: 17, bold: true, color: deck.theme.ink, valign: "top" });
+    addText(slide, pillar.evidence || pillar.context || pillar.value || "", { x, y: 3.75, w: colW, h: 0.72, fontSize: 12, color: deck.theme.ink, valign: "top" });
+    addText(slide, `证伪：${pillar.falsifier || pillar.watch || "待跟踪"}`, { x, y: 5.02, w: colW, h: 0.55, fontSize: 10, color: deck.theme.muted, valign: "top" });
+  });
+  if (hasMedia) {
+    slide.addImage({ path: item.visual_asset.path, x: 9.55, y: 1.18, w: 3.06, h: 4.95, sizing: { type: "cover", w: 3.06, h: 4.95 }, altText: item.visual_asset.alt });
+    addRect(slide, shapes, 9.55, 1.18, 3.06, 4.95, deck.theme.scrim, 82);
+  }
+  addFooter(slide, shapes, deck, item);
+}
+
+function renderFundamental(pres, slide, deck, item, page, shapes) {
+  slide.background = { color: deck.theme.surface };
+  addHeader(slide, shapes, deck, item, page);
+  const hasMedia = Boolean(item.visual_asset);
+  addText(slide, item.conclusion, { x: M, y: 1.08, w: 11.9, h: 0.78, fontSize: 29, bold: true, color: deck.theme.ink, valign: "top" });
+  addMetric(slide, item.hero_metric, M, 2.2, 3.55, deck.theme, true);
+  addVerticalRule(slide, shapes, 4.55, 2.18, 3.38, deck.theme.hairline, 0.7);
+  const rightW = hasMedia ? 4.65 : 7.4;
+  addText(slide, item.body || "本页判断由主指标与三个辅助指标共同支撑。", { x: 4.88, y: 2.18, w: rightW, h: 0.78, fontSize: 15, color: deck.theme.ink, valign: "top" });
+  item.support_metrics.forEach((metric, index) => addMetric(slide, metric, 4.88 + index * (rightW / 3), 3.28, rightW / 3 - 0.22, deck.theme));
+  const watch = item.watchlist[0];
+  if (watch) addText(slide, `跟踪重点：${watch.indicator || watch.risk || watch.status}`, { x: 4.88, y: 5.02, w: rightW, h: 0.5, fontSize: 12, color: deck.theme.muted, valign: "top" });
+  if (hasMedia) {
+    slide.addImage({ path: item.visual_asset.path, x: 9.85, y: 3.0, w: 2.76, h: 2.42, sizing: { type: "cover", w: 2.76, h: 2.42 }, altText: item.visual_asset.alt });
+    addRect(slide, shapes, 9.85, 3.0, 2.76, 2.42, deck.theme.scrim, 86);
+  }
+  addFooter(slide, shapes, deck, item);
+}
+
+function renderValuation(pres, slide, deck, item, page, shapes) {
+  slide.background = { color: deck.theme.surface };
+  addHeader(slide, shapes, deck, item, page);
+  addText(slide, item.conclusion, { x: M, y: 1.08, w: 11.9, h: 0.78, fontSize: 29, bold: true, color: deck.theme.ink, valign: "top" });
+  addMetric(slide, item.hero_metric, M, 2.1, 4.2, deck.theme, true);
+  const percent = Math.max(0, Math.min(100, Number(item.hero_metric?.percentile ?? String(item.hero_metric?.value ?? "").replace(/[^0-9.]/g, "")) || 50));
+  addRect(slide, shapes, 5.2, 2.68, 7.4, 0.1, deck.theme.hairline);
+  addRect(slide, shapes, 5.2, 2.68, 7.4 * (percent / 100), 0.1, deck.theme.accent);
+  [0.25, 0.5, 0.75].forEach((tick) => addRect(slide, shapes, 5.2 + 7.4 * tick, 2.56, 0.02, 0.34, deck.theme.muted));
+  addRect(slide, shapes, 5.2 + 7.4 * (percent / 100) - 0.09, 2.57, 0.18, 0.32, deck.theme.ink);
+  addText(slide, "P25", { x: 5.2, y: 3.02, w: 1.0, h: 0.25, fontFace: MONO, fontSize: 9, color: deck.theme.muted });
+  addText(slide, "中位", { x: 8.42, y: 3.02, w: 1.0, h: 0.25, fontFace: MONO, fontSize: 9, align: "center", color: deck.theme.muted });
+  addText(slide, "P75", { x: 11.6, y: 3.02, w: 1.0, h: 0.25, fontFace: MONO, fontSize: 9, align: "right", color: deck.theme.muted });
+  item.support_metrics.forEach((metric, index) => addMetric(slide, metric, 5.2 + index * 2.5, 3.75, 2.2, deck.theme));
+  if (item.body) addText(slide, item.body, { x: M, y: 5.58, w: 11.9, h: 0.52, fontSize: 13, color: deck.theme.muted, valign: "top" });
+  addFooter(slide, shapes, deck, item);
+}
+
+function renderRisk(pres, slide, deck, item, page, shapes) {
+  slide.background = { color: deck.theme.surface };
+  addHeader(slide, shapes, deck, item, page);
+  addText(slide, item.conclusion, { x: M, y: 1.08, w: 11.9, h: 0.72, fontSize: 29, bold: true, color: deck.theme.ink, valign: "top" });
+  const widths = [2.35, 2.15, 3.35, 4.05];
+  const headers = ["风险", "当前状态", "缓释因子", "可观测指标"];
+  let x = M;
+  headers.forEach((header, index) => {
+    addText(slide, header, { x, y: 2.05, w: widths[index], h: 0.28, fontFace: MONO, fontSize: 9, bold: true, color: index === 0 ? deck.theme.accent : deck.theme.muted });
+    x += widths[index];
+  });
+  addRule(slide, shapes, M, 2.48, 11.9, deck.theme.ink, 1.0);
+  item.watchlist.slice(0, 4).forEach((row, index) => {
+    const y = 2.7 + index * 0.84;
+    addRule(slide, shapes, M, y + 0.62, 11.9, deck.theme.hairline, 0.6);
+    let cx = M;
+    [row.risk, row.status, row.mitigant, row.indicator].forEach((value, col) => {
+      addText(slide, value || "—", { x: cx, y, w: widths[col] - 0.18, h: 0.5, fontSize: col === 0 ? 13 : 11, bold: col === 0, color: deck.theme.ink, valign: "top" });
+      cx += widths[col];
+    });
+  });
+  addFooter(slide, shapes, deck, item);
+}
+
+function renderDisclaimer(pres, slide, deck, item, page, shapes) {
+  const dark = deck.theme.mode === "dark";
+  const surface = dark ? deck.theme.surface : deck.theme.surface_alt;
+  slide.background = { color: surface };
+  addText(slide, item.eyebrow || "内部研究", { x: M, y: 0.62, w: 2.4, h: 0.28, fontFace: MONO, fontSize: 10, bold: true, color: deck.theme.accent, charSpacing: 1.6 });
+  addText(slide, item.conclusion, { x: M, y: 1.45, w: 5.4, h: 0.62, fontSize: 31, bold: true, color: deck.theme.ink });
+  addRule(slide, shapes, M, 2.34, 11.9, deck.theme.accent, 1.1);
+  addText(slide, item.body || deck.disclaimer, { x: M, y: 2.75, w: 10.65, h: 2.1, fontSize: 16, color: deck.theme.ink, breakLine: true, valign: "top", paraSpaceAfterPt: 8 });
+  addText(slide, `数据截至 ${deck.as_of} · 来源口径见各页页脚`, { x: M, y: 5.45, w: 7.0, h: 0.3, fontFace: MONO, fontSize: 9.5, color: deck.theme.muted });
+  addText(slide, `${String(page).padStart(2, "0")} / ${String(deck.slides.length).padStart(2, "0")}`, { x: 11.55, y: 6.72, w: 1.05, h: 0.26, fontFace: MONO, fontSize: 9, align: "right", color: deck.theme.muted });
+}
+
+function renderPipeline(pres, slide, deck, item, page, shapes) {
+  slide.background = { color: deck.theme.surface };
+  addHeader(slide, shapes, deck, item, page);
+  addText(slide, item.conclusion, { x: M, y: 1.08, w: 11.9, h: 0.72, fontSize: 29, bold: true, color: deck.theme.ink, valign: "top" });
+  const stages = item.rows.length ? item.rows.slice(0, 4) : item.evidence.slice(0, 4);
+  const w = 2.55;
+  stages.forEach((stage, index) => {
+    const x = M + index * 3.02;
+    const weight = Math.max(0.7, Math.min(2.2, Number(stage.weight ?? stage.value ?? 1)));
+    addRect(slide, shapes, x, 5.25 - weight, w, weight, index === 1 ? deck.theme.accent : deck.theme.surface_alt);
+    addText(slide, stage.label || stage.title || `环节 ${index + 1}`, { x, y: 5.46, w, h: 0.34, fontSize: 15, bold: true, align: "center", color: deck.theme.ink });
+    addText(slide, stage.context || stage.conclusion || "", { x, y: 5.86, w, h: 0.5, fontSize: 10, align: "center", color: deck.theme.muted, valign: "top" });
+    if (index < stages.length - 1) addText(slide, "→", { x: x + w + 0.12, y: 4.35, w: 0.26, h: 0.3, fontSize: 19, align: "center", color: deck.theme.muted });
+  });
+  addFooter(slide, shapes, deck, item);
+}
+
+const RENDERERS = {
+  cover: renderCover,
+  overview: renderOverview,
+  thesis: renderThesis,
+  fundamental: renderFundamental,
+  valuation: renderValuation,
+  risk: renderRisk,
+  disclaimer: renderDisclaimer,
+  pipeline: renderPipeline,
+};
+
+export function buildPresentation(input, PptxGenJS) {
+  const deck = normalizeDeck(input);
+  const pres = new PptxGenJS();
+  pres.layout = "LAYOUT_WIDE";
+  pres.author = deck.author;
+  pres.subject = deck.subject;
+  pres.title = deck.title;
+  pres.company = "财经内容台";
+  pres.lang = "zh-CN";
+  pres.theme = {
+    headFontFace: SANS,
+    bodyFontFace: SANS,
+    lang: "zh-CN",
+  };
+  pres.defineSlideMaster({
+    title: "RODYA_BLANK",
+    background: { color: deck.theme.surface },
+    objects: [],
+  });
+
+  deck.slides.forEach((item, index) => {
+    const slide = pres.addSlide("RODYA_BLANK");
+    RENDERERS[item.type](pres, slide, deck, item, index + 1, pres.shapes);
+  });
+  return pres;
+}
+
+export async function writePresentation({ inputPath, outputPath }) {
+  const input = JSON.parse(fs.readFileSync(path.resolve(inputPath), "utf8"));
+  const require = createRequire(import.meta.url);
+  const PptxGenJS = require("pptxgenjs");
+  const pres = buildPresentation(input, PptxGenJS);
+  await pres.writeFile({ fileName: path.resolve(outputPath) });
+}
+
+function parseArgs(argv) {
+  const result = {};
+  for (let index = 0; index < argv.length; index += 1) {
+    if (argv[index] === "--input") result.inputPath = argv[index + 1];
+    if (argv[index] === "--output") result.outputPath = argv[index + 1];
+  }
+  return result;
+}
+
+async function main() {
+  const args = parseArgs(process.argv.slice(2));
+  if (!args.inputPath || !args.outputPath) {
+    console.error("用法：node assets/deck-template.mjs --input deck-data.json --output report.pptx");
+    process.exitCode = 1;
+    return;
+  }
+  await writePresentation(args);
+  console.log(`written ${path.resolve(args.outputPath)}`);
+}
+
+const isDirect = process.argv[1]
+  && path.resolve(process.argv[1]) === path.resolve(fileURLToPath(import.meta.url));
+if (isDirect) {
+  main().catch((error) => {
+    console.error(error.stack || error.message);
+    process.exitCode = 1;
+  });
+}

@@ -74,11 +74,13 @@ meta:
 ### ③ 汇报 PPT（按需件：仅用户明确要"汇报/PPT/deck/幻灯"时才出）
 
 - **触发**：PPT **不随多模块组合自动产出**；只在用户明确要求时生成。多模块组合默认仍是逐模块专业版 docx（或合并摘要）。
-- **默认形态 = 真 .pptx（可在 PowerPoint/WPS 编辑）**，用 pptxgenjs 按墨账本渲染：参考生成器 `assets/deck-template.mjs`，视觉参照 `assets/template-deck.html`。招牌带作功能性页眉、墨黑账本底、红绿只给涨跌方向数据（不进招牌带）；封面 / 免责用深底。生成后用 pptx skill 的 `scripts/rezip.py` 重压。
+- **视觉规范唯一事实源见 [ppt-visual-spec.md](ppt-visual-spec.md)**；生成 PPT 前必读，不得从 `docs/` 读取执行规则或另起一套视觉。
+- **默认形态 = 真 .pptx（可在 PowerPoint/WPS 编辑）**：使用 `assets/deck-template.mjs` 的 pptxgenjs renderer，默认受众为投顾内部研究汇报。renderer 接受结构化 deck JSON，自适应主题、七类固定版式和可选 Pipeline；生成后用 PPT 工具链重压并逐页渲染 QA。
 - **零依赖备选 = HTML 翻页 deck** `assets/template-deck.html`（← → / 圆点 / 滚轮 / 触屏翻页，`Ctrl/Cmd+P` 存 PDF）：用户没装 PowerPoint、或只要浏览器演示/PDF 时用。
-- 结构（版式库）：封面 → 总览页（各模块结论汇总表）→ 每模块页（数据大字报 / 左右分栏，套卡片签名图形）→ Pipeline（产业链）/ 对比页按需 → 风险汇总页 → 免责页。
+- 真 `.pptx` 与 HTML deck 必须消费同一份结构化内核；不得各写一份分析。固定版式为研究命题封面、综合结论、投资逻辑与核心矛盾、基本面/财报、估值坐标、风险证伪、免责声明；产业链可插入 Pipeline。
+- 图片为可选叙事资产：Codex 可用 imagegen 增强，Claude 使用用户供图或完整无图版式。图片不可得、质量不足或挤压重要信息时必须无图降级，不保留空槽。
 - 默认专业口径；客户口径按口径切换规则降级（去「专业判断 / 三情景」等）。
-- 说明：.pptx 保真略低于 HTML（pptxgenjs 用形状重搭），换来可编辑；二者同一套墨账本设计语言。
+- 颜色不固定；同一 deck 仅一个 `accent`，`up/down` 只用于真实方向数据。详细字体、网格、留白、密度、图片比例、主题令牌与 QA 见 PPT 视觉事实源。
 
 ## 四、口径切换规则（渲染时执行，不改内核）
 
@@ -94,11 +96,11 @@ meta:
 
 - **docx 视觉已定稿（2026-07-10）**：规范见 [docx-visual-spec.md](docx-visual-spec.md)，渲染专业版 docx 时按其执行。
 - **卡片视觉已定稿并落地（2026-07-10）**：见 [card-components.md](card-components.md)「墨账本 Swiss」——墨黑招牌带 + 冷白账本底 + 红绿只给涨跌数据；模板 `assets/template-card.html`（七模块完整卡片）已建。**默认交付填好数据的 HTML + 提醒截图，不出 PNG**。
-- **PPT 视觉已定稿（2026-07-10）**：**按需件**，默认真 .pptx（pptxgenjs 墨账本，参考 `assets/deck-template.mjs`），零依赖备选 HTML 翻页 deck `assets/template-deck.html`；见 §三③。
+- **PPT 视觉已定稿并升级为通用自适应系统（2026-07-10）**：**按需件**，默认真 .pptx（pptxgenjs，参考 `assets/deck-template.mjs`），零依赖备选 HTML 翻页 deck `assets/template-deck.html`；唯一执行事实源见 [ppt-visual-spec.md](ppt-visual-spec.md)。
 
 **各形态交付规则（三形态视觉均已定稿）：**
 
 - 单模块默认交付：专业版 `.docx`（按 docx-visual-spec.md 渲染）+ 结构化内核摘要 +（按需）客户版文案。文档生成工具不可用或文件写入失败时，必须列为“文件生成阻塞”，提醒使用者补齐工具/权限；只有用户明确不要文件时，才改为结构化内核 YAML + Markdown 专业稿，且必须保留完整专业内容和篇幅底线。
 - 客户版卡片（按需）交付「填好数据的 HTML 卡片（复制 template-card.html 对应 .card 填内核）+ 文案 + 提醒截图」，不出 PNG。
-- PPT 为**按需件**（仅用户点名"汇报/PPT/deck"才出，多模块不自动出）：默认真 .pptx（pptxgenjs 墨账本，见 §三③）；用户没装 PowerPoint 或只要 PDF 时给 HTML 翻页 deck。
+- PPT 为**按需件**（仅用户点名"汇报/PPT/deck"才出，多模块不自动出）：默认真 .pptx（pptxgenjs 自适应内部研究版，见 §三③与 ppt-visual-spec.md）；用户没装 PowerPoint 或只要 PDF 时给 HTML 翻页 deck。
 - 若环境无法写文件，先说明阻塞，再按现有素材产最小可用版。

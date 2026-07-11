@@ -1,204 +1,284 @@
 <!--
-  财经内容台 · 汇报 PPT 模板（墨账本 Swiss · HTML 翻页 deck）v0.1
-  规范：references/card-components.md（视觉）+ references/output-spec.md §三③（结构）
-  单文件、零依赖：浏览器直接打开演示（← → / 圆点 / 滚轮 / 触屏翻页），Ctrl/Cmd+P 打印成 PDF。
-  版式库：封面 / 总览 / 模块页 / 数据大字报 / Pipeline / 风险汇总 / 免责。复制 .slide 改数即可。
-  配色只走 :root 变量；红/绿只给涨跌数据、不进招牌带；对客口径去掉「专业判断/三情景」。
+  财经内容台 · 投顾内部研究 HTML deck renderer v1.0
+  唯一执行视觉事实源：references/ppt-visual-spec.md
+  单文件、零依赖：替换 #deck-data JSON 后直接打开；支持键盘、圆点、滚轮、触屏与打印 PDF。
+  图片加载失败时自动移除媒体区域并切换 no-media 完整排版。
 -->
-<!DOCTYPE html>
-<html lang="zh">
+<!doctype html>
+<html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>财经内容台 · 汇报</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>财经内容台 · 投顾内部研究汇报</title>
 <style>
   :root{
-    --ink:#111111;--paper:#FFFFFF;--muted:#888888;--hair:#EDEDED;--empty:#DCDCDC;
-    --up:#C0392B;--down:#1E9E5A;
-    --sans:"Source Han Sans SC","Noto Sans SC","MiSans","Microsoft YaHei",sans-serif;
-    --mono:"SF Mono","JetBrains Mono","Consolas",monospace;
+    --deck-surface:#f4f2ee;
+    --deck-surface_alt:#e8e4dc;
+    --deck-ink:#171717;
+    --deck-muted:#6c6a66;
+    --deck-hairline:#cec9bf;
+    --deck-accent:#8b6f47;
+    --deck-up:#b23a32;
+    --deck-down:#1f7a5a;
+    --deck-scrim:#111111;
+    --deck-sans:"MiSans","Microsoft YaHei","PingFang SC",sans-serif;
+    --deck-mono:"IBM Plex Mono","JetBrains Mono","Consolas","Courier New",monospace;
   }
-  *{margin:0;padding:0;box-sizing:border-box;}
-  body{background:#3a3a3a;font-family:var(--sans);overflow:hidden;}
-  .stage{position:fixed;inset:0;overflow:hidden;}
-  .track{display:flex;height:100%;transition:transform .35s ease;}
-  .slide{min-width:100%;height:100%;display:flex;align-items:center;justify-content:center;}
-  .canvas{width:1280px;height:720px;background:var(--paper);color:var(--ink);position:relative;flex:none;transform-origin:center;overflow:hidden;}
-  /* 招牌带 */
-  .bar{background:var(--ink);color:#fff;height:74px;display:flex;align-items:center;gap:16px;padding:0 56px;}
-  .bar .n{font-size:26px;font-weight:600;letter-spacing:1px;}
-  .bar .cd{font-family:var(--mono);font-size:17px;color:#bcbcbc;}
-  .bar .m{margin-left:auto;font-size:15px;letter-spacing:4px;}
-  .body{padding:44px 56px;height:calc(720px - 74px - 56px);}
-  .foot{position:absolute;left:56px;right:56px;bottom:22px;border-top:2px solid var(--hair);padding-top:10px;display:flex;justify-content:space-between;font-family:var(--mono);font-size:14px;color:var(--muted);}
-  .sl{font-size:18px;letter-spacing:4px;color:var(--muted);}
-  .mono{font-family:var(--mono);} .up{color:var(--up);} .down{color:var(--down);}
-  .rule{height:2px;background:var(--ink);} .hair{height:2px;background:var(--hair);}
-  table.led{width:100%;border-collapse:collapse;}
-  table.led td{padding:15px 6px;font-size:22px;}
-  table.led tr.hd td{font-family:var(--mono);font-size:16px;color:var(--muted);border-bottom:2px solid var(--ink);padding:8px 6px;}
-  table.led tr.row td{border-bottom:1px solid var(--hair);}
-  /* 导航 */
-  .nav{position:fixed;left:0;right:0;bottom:16px;display:flex;align-items:center;justify-content:center;gap:10px;z-index:5;}
-  .dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.35);cursor:pointer;transition:.2s;}
-  .dot.on{background:#fff;transform:scale(1.25);}
-  .pg{position:fixed;right:20px;bottom:14px;font-family:var(--mono);font-size:12px;color:rgba(255,255,255,.6);z-index:5;}
+  *{box-sizing:border-box}
+  html,body{width:100%;height:100%;margin:0}
+  body{overflow:hidden;background:#282a2c;color:var(--deck-ink);font-family:var(--deck-sans)}
+  .stage{position:fixed;inset:0;overflow:hidden}
+  .track{display:flex;width:100%;height:100%;transition:transform .28s cubic-bezier(.22,.61,.36,1)}
+  .slide{min-width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+  .canvas{position:relative;width:1280px;height:720px;flex:none;overflow:hidden;background:var(--deck-surface);color:var(--deck-ink);transform-origin:center}
+  .mono{font-family:var(--deck-mono);font-variant-numeric:tabular-nums}
+  .eyebrow{font-family:var(--deck-mono);font-size:13px;font-weight:700;letter-spacing:1.6px;color:var(--deck-accent)}
+  .header{position:absolute;top:36px;left:69px;right:69px;height:45px;border-bottom:1px solid var(--deck-hairline);display:grid;grid-template-columns:1fr 3fr 1fr;align-items:start}
+  .header .subject{font-family:var(--deck-mono);font-size:12px;text-align:center;color:var(--deck-muted)}
+  .header .page{font-family:var(--deck-mono);font-size:12px;text-align:right;color:var(--deck-muted)}
+  .footer{position:absolute;left:69px;right:69px;bottom:25px;height:31px;border-top:1px solid var(--deck-hairline);padding-top:12px;display:flex;justify-content:space-between;font-family:var(--deck-mono);font-size:11px;color:var(--deck-muted)}
+  .slide-title{font-size:42px;line-height:1.18;font-weight:700;letter-spacing:-1.1px}
+  .body-copy{font-size:20px;line-height:1.55;color:var(--deck-muted)}
+  .hair-v{width:1px;background:var(--deck-hairline)}
+  .metric-label{font-size:14px;color:var(--deck-muted)}
+  .metric-value{margin-top:5px;font-family:var(--deck-mono);font-size:37px;line-height:1;font-weight:600;font-variant-numeric:tabular-nums}
+  .metric-context{margin-top:8px;font-size:13px;line-height:1.35;color:var(--deck-muted)}
+  .metric.up .metric-value{color:var(--deck-up)}
+  .metric.down .metric-value{color:var(--deck-down)}
+  .nav{position:fixed;left:0;right:0;bottom:15px;display:flex;justify-content:center;gap:9px;z-index:5}
+  .dot{width:8px;height:8px;border:0;border-radius:50%;background:rgba(255,255,255,.35);cursor:pointer;padding:0}
+  .dot.on{background:#fff;transform:scale(1.25)}
+  .pg{position:fixed;right:18px;bottom:12px;z-index:5;font:12px var(--deck-mono);color:rgba(255,255,255,.65)}
+
+  /* cover */
+  .cover .content{position:absolute;left:91px;top:82px;bottom:62px;width:610px;display:flex;flex-direction:column;justify-content:center}
+  .cover .subject{margin-top:36px;font:17px var(--deck-mono);color:var(--deck-muted)}
+  .cover h1{margin:40px 0 0;font-size:61px;line-height:1.08;letter-spacing:-2px;max-height:210px;overflow:hidden}
+  .cover .summary{margin-top:34px;font-size:23px;line-height:1.48;color:var(--deck-muted)}
+  .cover .meta{margin-top:auto;padding-top:16px;border-top:1px solid var(--deck-hairline);font:13px var(--deck-mono);color:var(--deck-muted)}
+  .cover .media{position:absolute;right:0;top:0;width:42%;height:100%;overflow:hidden}
+  .cover .media img{width:100%;height:100%;object-fit:cover;display:block}
+  .cover .media::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--deck-scrim),transparent 70%);opacity:.42}
+  .cover .accent-rail{position:absolute;left:58%;top:0;width:12px;height:100%;background:var(--deck-accent)}
+  .cover.no-media .content{width:1090px}
+  .cover.no-media h1{font-size:70px;max-width:1050px}
+  .cover.no-media .media,.cover.no-media .accent-rail{display:none}
+  .cover.no-media::before{content:"";position:absolute;left:69px;top:78px;width:10px;height:110px;background:var(--deck-accent)}
+  .cover.no-media::after{content:"";position:absolute;right:69px;top:78px;width:164px;height:9px;background:var(--deck-accent)}
+
+  /* common content */
+  .main{position:absolute;left:69px;right:69px;top:106px;bottom:66px}
+  .main>.slide-title{max-width:1120px}
+
+  /* overview */
+  .ledger{margin-top:27px;border-top:2px solid var(--deck-ink)}
+  .ledger-row{display:grid;grid-template-columns:150px 1fr 235px 95px;align-items:center;min-height:72px;border-bottom:1px solid var(--deck-hairline);column-gap:20px}
+  .ledger-row.head{min-height:43px;font:12px var(--deck-mono);color:var(--deck-muted)}
+  .ledger-row .module{font-size:18px;font-weight:700}
+  .ledger-row .conclusion{font-size:17px}
+  .ledger-row .value,.ledger-row .confidence{text-align:right;font:17px var(--deck-mono)}
+
+  /* thesis */
+  .thesis .intro{margin-top:15px;max-width:900px}
+  .pillars{display:grid;gap:24px;margin-top:35px;height:315px}
+  .pillar{padding-right:22px;border-right:1px solid var(--deck-hairline);display:flex;flex-direction:column}
+  .pillar:last-child{border-right:0}
+  .pillar .num{font:12px var(--deck-mono);color:var(--deck-accent)}
+  .pillar h3{font-size:23px;line-height:1.25;margin:18px 0 0}
+  .pillar p{font-size:16px;line-height:1.45;margin:20px 0 0}
+  .pillar .falsifier{margin-top:auto;font-size:13px;line-height:1.4;color:var(--deck-muted)}
+  .thesis.has-media .main{right:380px}
+  .thesis .side-media{position:absolute;right:69px;top:112px;width:280px;height:475px;overflow:hidden}
+  .thesis .side-media img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.78) contrast(.96)}
+  .thesis .side-media::after{content:"";position:absolute;inset:0;background:var(--deck-scrim);opacity:.12}
+  .thesis.no-media .side-media{display:none}
+
+  /* fundamental */
+  .fund-grid{display:grid;grid-template-columns:350px 1px 1fr;gap:31px;margin-top:28px;height:365px}
+  .hero .metric-value{font-size:72px;margin-top:14px}
+  .hero .metric-context{font-size:15px;margin-top:18px}
+  .fund-right{display:grid;grid-template-rows:auto 1fr auto;gap:24px}
+  .fund-right .judgement{font-size:20px;line-height:1.48;max-width:735px}
+  .metric-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;border-top:1px solid var(--deck-hairline);padding-top:22px}
+  .watch{font-size:15px;color:var(--deck-muted);border-left:5px solid var(--deck-accent);padding-left:15px}
+  .fundamental.has-media .fund-right{grid-template-columns:1fr 255px;grid-template-rows:auto 1fr auto}
+  .fundamental.has-media .fund-right .judgement,.fundamental.has-media .metric-strip,.fundamental.has-media .watch{grid-column:1}
+  .fundamental .mini-media{grid-column:2;grid-row:1/4;width:255px;height:250px;align-self:center;object-fit:cover;filter:saturate(.78)}
+  .fundamental.no-media .mini-media{display:none}
+
+  /* valuation */
+  .valuation-grid{display:grid;grid-template-columns:355px 1fr;gap:54px;margin-top:31px}
+  .band{margin-top:38px}
+  .band-track{position:relative;height:10px;background:var(--deck-hairline)}
+  .band-fill{height:10px;background:var(--deck-accent)}
+  .band-point{position:absolute;top:-9px;width:16px;height:28px;background:var(--deck-ink);transform:translateX(-50%)}
+  .band-tick{position:absolute;top:-7px;width:2px;height:24px;background:var(--deck-muted)}
+  .band-labels{display:flex;justify-content:space-between;margin-top:18px;font:12px var(--deck-mono);color:var(--deck-muted)}
+  .valuation .metric-strip{margin-top:43px}
+
+  /* risk */
+  .risk-table{margin-top:29px;border-top:2px solid var(--deck-ink)}
+  .risk-row{display:grid;grid-template-columns:220px 200px 305px 1fr;gap:21px;align-items:center;min-height:74px;border-bottom:1px solid var(--deck-hairline)}
+  .risk-row.head{min-height:42px;font:12px var(--deck-mono);color:var(--deck-muted)}
+  .risk-row .risk-name{font-size:17px;font-weight:700}
+  .risk-row>div:not(.risk-name){font-size:15px;line-height:1.38}
+
+  /* pipeline */
+  .pipeline-grid{height:345px;margin-top:38px;display:flex;align-items:flex-end;gap:26px;text-align:center}
+  .stage-block{flex:1;display:flex;flex-direction:column;justify-content:flex-end;min-width:0}
+  .stage-bar{background:var(--deck-surface_alt);border-top:7px solid var(--deck-accent)}
+  .stage-block:nth-child(2) .stage-bar{background:var(--deck-accent)}
+  .stage-block h3{margin:15px 0 0;font-size:19px}
+  .stage-block p{font-size:14px;line-height:1.4;color:var(--deck-muted)}
+
+  /* disclaimer */
+  .disclaimer{background:var(--deck-surface_alt)}
+  .disclaimer .content{position:absolute;left:69px;right:69px;top:72px;bottom:56px;display:flex;flex-direction:column;justify-content:center}
+  .disclaimer h1{font-size:45px;margin:31px 0 0}
+  .disclaimer .rule{width:100%;height:2px;background:var(--deck-accent);margin:28px 0 34px}
+  .disclaimer .copy{max-width:1030px;font-size:22px;line-height:1.65}
+  .disclaimer .meta{margin-top:42px;font:13px var(--deck-mono);color:var(--deck-muted)}
+
   @media print{
-    body{overflow:visible;background:#fff;}
-    .stage{position:static;} .track{display:block;transform:none!important;}
-    .slide{min-width:0;height:auto;page-break-after:always;}
-    .canvas{transform:none!important;width:100%;height:auto;aspect-ratio:16/9;box-shadow:none;}
-    .nav,.pg{display:none;}
-    @page{size:landscape;margin:0;}
+    body{overflow:visible;background:#fff}
+    .stage{position:static}.track{display:block;transform:none!important}
+    .slide{min-width:0;height:auto;page-break-after:always}
+    .canvas{width:100%;height:auto;aspect-ratio:16/9;transform:none!important}
+    .nav,.pg{display:none}
+    @page{size:landscape;margin:0}
   }
 </style>
 </head>
 <body>
-<div class="stage"><div class="track" id="track">
+<script id="deck-data" type="application/json">
+{
+  "title":"研究命题",
+  "subject":"标的 / 代码 / 市场",
+  "as_of":"YYYY-MM-DD",
+  "market":"市场",
+  "theme":{"mode":"light"},
+  "slides":[
+    {"type":"cover","eyebrow":"内部研究","conclusion":"用一句研究命题概括这套汇报","body":"一句核心判断，说明为什么值得继续看。"},
+    {"type":"overview","eyebrow":"结论总览","conclusion":"先给结论，再展开证据","rows":[{"label":"模块","conclusion":"核心结论","metric":"主指标","confidence":"B"}]},
+    {"type":"thesis","eyebrow":"投资逻辑","conclusion":"核心矛盾决定后续验证顺序","body":"用两到四个逻辑支柱组织证据。","pillars":[{"title":"逻辑支柱","evidence":"当前证据","falsifier":"证伪条件"}]},
+    {"type":"fundamental","eyebrow":"基本面 / 财报","conclusion":"主指标与质量指标共同决定判断","hero_metric":{"label":"主指标","value":"—","context":"对照坐标","direction":"neutral"},"support_metrics":[{"label":"辅助指标","value":"—","context":"来源 / 口径"}]},
+    {"type":"valuation","eyebrow":"估值坐标","conclusion":"估值结论必须放回历史和同业坐标","hero_metric":{"label":"当前分位","value":"50%","context":"历史区间","direction":"neutral","percentile":50},"support_metrics":[{"label":"估值指标","value":"—","context":"对照"}]},
+    {"type":"risk","eyebrow":"风险与证伪","conclusion":"风险要对应可观察的验证指标","watchlist":[{"risk":"风险点","status":"当前状态","mitigant":"缓释因子","indicator":"可观测指标"}]},
+    {"type":"disclaimer","eyebrow":"内部研究","conclusion":"免责声明","body":"本材料基于公开信息整理，仅供内部研究讨论，不构成任何证券的买卖建议、目标价或收益承诺。市场有风险，决策需谨慎。"}
+  ]
+}
+</script>
 
-  <!-- 1 封面 -->
-  <div class="slide"><div class="canvas" style="display:flex;flex-direction:column;justify-content:space-between;padding:60px 64px;">
-    <div style="display:flex;align-items:center;gap:12px;">
-      <svg width="34" height="34" viewBox="0 0 512 512"><rect x="24" y="24" width="464" height="464" rx="112" fill="#111"/><rect x="112" y="150" width="288" height="24" rx="6" fill="#fff"/><line x1="172" y1="210" x2="172" y2="400" stroke="#C0392B" stroke-width="10"/><rect x="150" y="250" width="44" height="110" fill="#C0392B"/><line x1="256" y1="225" x2="256" y2="395" stroke="#EDEDED" stroke-width="10"/><rect x="234" y="265" width="44" height="90" fill="#EDEDED"/><line x1="340" y1="215" x2="340" y2="405" stroke="#1E9E5A" stroke-width="10"/><rect x="318" y="245" width="44" height="125" fill="#1E9E5A"/></svg>
-      <span class="mono" style="font-size:16px;letter-spacing:3px;color:#888;">财经内容台</span>
-    </div>
-    <div>
-      <div style="font-size:72px;font-weight:600;letter-spacing:1px;">宁德时代 综合体检</div>
-      <div style="width:64px;height:5px;background:#111;margin:22px 0;"></div>
-      <div style="font-size:26px;color:#444;letter-spacing:3px;">基本面 · 估值 · 排雷</div>
-      <div class="mono" style="font-size:17px;color:#888;margin-top:16px;">300750 · A股 · 数据截至 2026-07-10</div>
-    </div>
-    <div class="mono" style="display:flex;justify-content:space-between;font-size:14px;color:#999;border-top:2px solid var(--hair);padding-top:12px;"><span>客观体检 · 不含买卖建议</span><span>汇报 PPT · 专业口径</span></div>
-  </div></div>
-
-  <!-- 2 总览 -->
-  <div class="slide"><div class="canvas">
-    <div class="bar"><span class="n">综合结论总览</span><span class="m">01</span></div>
-    <div class="body">
-      <table class="led">
-        <tr class="hd"><td>模块</td><td>客观概括</td><td style="text-align:right;">关键数字</td><td style="text-align:center;width:90px;">确定性</td></tr>
-        <tr class="row"><td style="font-weight:600;">基本面</td><td style="color:#444;">护城河 7/10，现金流扎实</td><td class="mono" style="text-align:right;">ROE 18.5%</td><td class="mono" style="text-align:center;">B</td></tr>
-        <tr class="row"><td style="font-weight:600;">估值</td><td style="color:#444;">PE 处近 5 年 78% 分位</td><td class="mono" style="text-align:right;">PE 27.3×</td><td class="mono" style="text-align:center;">B</td></tr>
-        <tr class="row"><td style="font-weight:600;">排雷</td><td style="color:#444;">财务维度 1 项重点关注</td><td class="mono" style="text-align:right;">商誉/净资 32%</td><td class="mono" style="text-align:center;">B</td></tr>
-      </table>
-      <div class="mono" style="font-size:14px;color:#999;margin-top:20px;">来源：Wind、公司年报，截至 2026-07-10</div>
-    </div>
-    <div class="foot"><span>客观体检 · 不含买卖建议</span><span>财经内容台 · 2 / 7</span></div>
-  </div></div>
-
-  <!-- 3 模块页 · 基本面 -->
-  <div class="slide"><div class="canvas">
-    <div class="bar"><span class="n">宁德时代</span><span class="cd">300750</span><span class="m">基本面体检 · 02</span></div>
-    <div class="body" style="display:grid;grid-template-columns:1fr 1fr;gap:44px;">
-      <div>
-        <div class="sl">近 5 年平均 ROE</div>
-        <div style="font-size:118px;font-weight:200;line-height:.9;font-variant-numeric:tabular-nums;">18.5<span style="font-size:44px;">%</span></div>
-        <div style="display:flex;justify-content:space-between;font-size:16px;color:#888;margin-top:30px;"><span>护城河五源</span><span>7 / 10</span></div>
-        <div class="mono" style="font-size:22px;line-height:1.8;margin-top:6px;">
-          <div style="display:flex;justify-content:space-between;">无形资产<span>■■</span></div>
-          <div style="display:flex;justify-content:space-between;">成本优势<span>■■</span></div>
-          <div style="display:flex;justify-content:space-between;">规模效应<span>■□</span></div>
-        </div>
-      </div>
-      <div>
-        <div class="sl">客观概括</div>
-        <div style="font-size:23px;line-height:1.6;margin-top:6px;">近五年平均 ROE 18.5%，经营现金流对净利润覆盖 1.15 倍，护城河评分 7/10。</div>
-        <div style="border-top:2px solid #111;margin-top:20px;display:grid;grid-template-columns:1fr 1fr;">
-          <div style="padding:13px 16px 13px 0;border-right:1px solid var(--hair);border-bottom:1px solid var(--hair);"><div style="font-size:15px;color:#888;">现金流/净利</div><div class="mono" style="font-size:34px;font-weight:300;">1.15×</div></div>
-          <div style="padding:13px 0 13px 18px;border-bottom:1px solid var(--hair);"><div style="font-size:15px;color:#888;">营收 5Y CAGR</div><div class="mono" style="font-size:34px;font-weight:300;">32% <span class="up" style="font-size:20px;">▲</span></div></div>
-          <div style="padding:13px 16px 13px 0;border-right:1px solid var(--hair);"><div style="font-size:15px;color:#888;">ROIC−WACC</div><div class="mono" style="font-size:34px;font-weight:300;">+6.2pt</div></div>
-          <div style="padding:13px 0 13px 18px;"><div style="font-size:15px;color:#888;">毛利率</div><div class="mono" style="font-size:34px;font-weight:300;">20.1%</div></div>
-        </div>
-        <div style="border-left:5px solid #111;padding-left:14px;margin-top:18px;"><div style="font-size:15px;color:#888;">风险</div><div style="font-size:21px;">商誉占比偏高、近期解禁；公开信息提示 2 项，重点关注 1 项</div></div>
-      </div>
-    </div>
-    <div class="foot"><span>客观体检 · 不含买卖建议</span><span>来源 Wind · 公司年报 · 3 / 7</span></div>
-  </div></div>
-
-  <!-- 4 数据大字报 · 估值 -->
-  <div class="slide"><div class="canvas">
-    <div class="bar"><span class="n">宁德时代</span><span class="cd">300750</span><span class="m">估值体检 · 03</span></div>
-    <div class="body">
-      <div class="sl">当前 PE-TTM · 近 5 年分位</div>
-      <div style="display:flex;align-items:flex-end;gap:14px;"><span style="font-size:150px;font-weight:200;line-height:.85;font-variant-numeric:tabular-nums;">78</span><span style="font-size:52px;margin-bottom:24px;">%</span></div>
-      <div style="position:relative;height:12px;background:var(--hair);margin-top:26px;">
-        <div style="position:absolute;left:25%;top:-6px;width:2px;height:24px;background:var(--empty);"></div>
-        <div style="position:absolute;left:50%;top:-6px;width:2px;height:24px;background:var(--empty);"></div>
-        <div style="position:absolute;left:75%;top:-6px;width:2px;height:24px;background:var(--empty);"></div>
-        <div style="position:absolute;left:0;top:0;height:12px;width:78%;background:var(--ink);"></div>
-        <div style="position:absolute;left:78%;top:-7px;width:26px;height:26px;border-radius:50%;background:var(--ink);transform:translateX(-50%);"></div>
-      </div>
-      <div class="mono" style="display:flex;justify-content:space-between;font-size:15px;color:#888;margin-top:14px;"><span>P25</span><span>中位</span><span>P75</span></div>
-      <div style="font-size:22px;color:#444;margin-top:34px;">当前估值处近 5 年偏高区间；PE-TTM 27.3×、股息率 2.1%。（客观呈现，非买卖信号）</div>
-    </div>
-    <div class="foot"><span>客观体检 · 不含买卖建议</span><span>来源 Wind · 4 / 7</span></div>
-  </div></div>
-
-  <!-- 5 Pipeline · 产业链 -->
-  <div class="slide"><div class="canvas">
-    <div class="bar"><span class="n">固态电池</span><span class="cd">题材</span><span class="m">产业链图谱 · 04</span></div>
-    <div class="body">
-      <div class="sl">利润池图谱 · 上中下游</div>
-      <div style="display:flex;align-items:flex-end;gap:20px;margin-top:34px;text-align:center;">
-        <div style="flex:1;"><div style="height:120px;background:#bdbdbd;"></div><div class="mono" style="font-size:22px;margin-top:14px;">上游 · 材料</div><div style="font-size:40px;font-weight:200;">25%</div></div>
-        <div style="font-size:34px;color:#bbb;margin-bottom:70px;">→</div>
-        <div style="flex:1;"><div style="height:180px;background:#111;"></div><div class="mono" style="font-size:22px;margin-top:14px;">中游 · 电芯</div><div style="font-size:40px;font-weight:200;">45%</div></div>
-        <div style="font-size:34px;color:#bbb;margin-bottom:70px;">→</div>
-        <div style="flex:1;"><div style="height:145px;background:#6b6b6b;"></div><div class="mono" style="font-size:22px;margin-top:14px;">下游 · 应用</div><div style="font-size:40px;font-weight:200;">30%</div></div>
-      </div>
-      <div class="mono" style="font-size:15px;color:#888;margin-top:26px;">墨色越深＝利润池越集中（中游电芯）。代表公司按相关度客观列示，不构成推荐。</div>
-    </div>
-    <div class="foot"><span>客观图谱 · 不含买卖建议</span><span>来源 行业公开资料 · 5 / 7</span></div>
-  </div></div>
-
-  <!-- 6 风险汇总 -->
-  <div class="slide"><div class="canvas">
-    <div class="bar"><span class="n">风险汇总</span><span class="m">05</span></div>
-    <div class="body">
-      <table class="led">
-        <tr class="hd"><td style="width:120px;">模块</td><td>公开信息提示 / 重点关注</td></tr>
-        <tr class="row"><td style="font-weight:600;">基本面</td><td style="color:#444;font-size:21px;">风险速扫 2 项：商誉占比、近期解禁；重点 1 项。</td></tr>
-        <tr class="row"><td style="font-weight:600;">估值</td><td style="color:#444;font-size:21px;">估值处近 5 年偏高区间，回撤敏感度上升。</td></tr>
-        <tr class="row"><td style="font-weight:600;">排雷</td><td style="color:#444;font-size:21px;">财务维度重点关注 1 项：商誉/净资产 32%，关注减值测试。</td></tr>
-      </table>
-      <div class="mono" style="font-size:14px;color:#999;margin-top:22px;">以上为公开信息提示，不构成风险定性或买卖建议。</div>
-    </div>
-    <div class="foot"><span>客观体检 · 不含买卖建议</span><span>财经内容台 · 6 / 7</span></div>
-  </div></div>
-
-  <!-- 7 免责 -->
-  <div class="slide"><div class="canvas" style="display:flex;flex-direction:column;justify-content:center;padding:0 64px;">
-    <div class="sl">免责声明</div>
-    <div style="font-size:20px;line-height:1.9;color:#333;margin-top:18px;max-width:1000px;">本材料由「财经内容台」基于公开信息整理，仅作客观数据体检与信息呈现，不构成任何证券的买卖建议、目标价或收益承诺，判断权归投资者本人。数据截至 2026-07-10，来源见各页脚注。市场有风险，决策需谨慎。</div>
-    <div class="mono" style="font-size:15px;color:#999;margin-top:40px;border-top:2px solid var(--hair);padding-top:14px;">客观体检 · 不含买卖建议　|　财经内容台 · 7 / 7</div>
-  </div></div>
-
-</div></div>
-
+<div class="stage"><div class="track" id="track"></div></div>
 <div class="nav" id="nav"></div>
 <div class="pg" id="pg"></div>
 
 <script>
 (function(){
-  var track=document.getElementById('track');
-  var slides=track.children, N=slides.length, i=0;
-  var nav=document.getElementById('nav'), pg=document.getElementById('pg');
-  for(var k=0;k<N;k++){var d=document.createElement('div');d.className='dot';d.dataset.i=k;nav.appendChild(d);}
-  var dots=nav.children;
-  function fit(){var s=Math.min(innerWidth*0.96/1280,(innerHeight-70)*0.98/720);
-    for(var k=0;k<N;k++){slides[k].firstElementChild.style.transform='scale('+s+')';}}
-  function go(n){i=Math.max(0,Math.min(N-1,n));track.style.transform='translateX(-'+(i*100)+'%)';
-    for(var k=0;k<N;k++){dots[k].className='dot'+(k===i?' on':'');}
-    pg.textContent=(i+1)+' / '+N;}
-  addEventListener('keydown',function(e){if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' ')go(i+1);
-    else if(e.key==='ArrowLeft'||e.key==='PageUp')go(i-1);
-    else if(e.key==='Home')go(0);else if(e.key==='End')go(N-1);});
-  var wt=0;addEventListener('wheel',function(e){var now=Date.now();if(now-wt<400)return;
-    if(Math.abs(e.deltaY)>20||Math.abs(e.deltaX)>20){wt=now;go(i+((e.deltaY+e.deltaX)>0?1:-1));}},{passive:true});
-  nav.addEventListener('click',function(e){if(e.target.dataset.i)go(+e.target.dataset.i);});
-  var tx=0;addEventListener('touchstart',function(e){tx=e.touches[0].clientX;},{passive:true});
-  addEventListener('touchend',function(e){var dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>50)go(i+(dx<0?1:-1));},{passive:true});
-  addEventListener('resize',fit);fit();go(0);
+  "use strict";
+  var presets={
+    light:{surface:"F4F2EE",surface_alt:"E8E4DC",ink:"171717",muted:"6C6A66",hairline:"CEC9BF",accent:"8B6F47",up:"B23A32",down:"1F7A5A",scrim:"111111"},
+    dark:{surface:"121517",surface_alt:"20262A",ink:"F4F1EA",muted:"A5ADB0",hairline:"384146",accent:"C19A6B",up:"E06A5F",down:"52A987",scrim:"0B0D0E"},
+    "media-led":{surface:"EDEBE6",surface_alt:"DDD9D1",ink:"151719",muted:"666B6E",hairline:"C5C1B9",accent:"58717E",up:"B23A32",down:"1F7A5A",scrim:"101416"}
+  };
+  var tokenNames=["surface","surface_alt","ink","muted","hairline","accent","up","down","scrim"];
+  var data=JSON.parse(document.getElementById("deck-data").textContent);
+  var mode=presets[data.theme&&data.theme.mode]?data.theme.mode:"light";
+  var theme=Object.assign({},presets[mode],data.theme||{});
+  tokenNames.forEach(function(name){
+    var value=String(theme[name]||presets[mode][name]).replace(/^#/,"");
+    document.documentElement.style.setProperty("--deck-"+name,"#"+value);
+  });
+
+  function esc(value){return String(value==null?"":value).replace(/[&<>"']/g,function(ch){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch];});}
+  function metricClass(metric){return metric&&metric.direction==="up"?"up":metric&&metric.direction==="down"?"down":"neutral";}
+  function assetUrl(value){var raw=String(value||"");return /^[A-Za-z]:[\\/]/.test(raw)?"file:///"+raw.replace(/\\/g,"/"):raw;}
+  function mediaAvailable(slide){return Boolean(slide&&slide.visual_asset&&slide.visual_asset.path);}
+  function sourceLine(slide){
+    var sources=(slide.evidence||[]).map(function(item){return item.source;}).filter(Boolean);
+    return (sources.length?"来源 "+Array.from(new Set(sources)).join(" / ")+" · ":"")+"截至 "+esc(data.as_of);
+  }
+  function header(slide,index){return '<div class="header"><div class="eyebrow">'+esc(slide.eyebrow||"内部研究")+'</div><div class="subject">'+esc(data.subject)+'</div><div class="page">'+String(index+1).padStart(2,"0")+' / '+String(data.slides.length).padStart(2,"0")+'</div></div>';}
+  function footer(slide){return '<div class="footer"><span>财经内容台 · 投顾内部研究</span><span>'+sourceLine(slide)+'</span></div>';}
+  function metric(metric,hero){
+    if(!metric)return "";
+    return '<div class="metric '+metricClass(metric)+(hero?' hero':'')+'"><div class="metric-label">'+esc(metric.label)+'</div><div class="metric-value">'+esc(metric.value)+'</div><div class="metric-context">'+esc(metric.context||"")+'</div></div>';
+  }
+  function media(slide,className){
+    if(!mediaAvailable(slide))return "";
+    return '<div class="'+className+'"><img src="'+esc(assetUrl(slide.visual_asset.path))+'" alt="'+esc(slide.visual_asset.alt||"主题视觉")+'" onerror="window.__deckMediaError(this)"></div>';
+  }
+  function createSlide(type,slide,index,body,hasMedia){
+    var el=document.createElement("section");
+    el.className="slide";
+    el.dataset.layout=type;
+    el.innerHTML='<div class="canvas '+type+' '+(hasMedia?'has-media':'no-media')+'">'+body+'</div>';
+    return el;
+  }
+  function rows(slide){return slide.rows&&slide.rows.length?slide.rows:(slide.evidence||[]).map(function(e){return {label:e.label,conclusion:e.context||e.value,metric:e.value,confidence:""};});}
+
+  var renderers={
+    cover:function(slide,index){
+      var has=mediaAvailable(slide);
+      var body='<div class="content"><div class="eyebrow">'+esc(slide.eyebrow||"内部研究")+'</div><div class="subject">'+esc(data.subject)+'</div><h1>'+esc(slide.conclusion)+'</h1><div class="summary">'+esc(slide.body||data.title)+'</div><div class="meta">'+esc(data.market||"")+(data.market?' · ':'')+'数据截至 '+esc(data.as_of)+'</div></div>'+(has?media(slide,"media")+'<div class="accent-rail"></div>':'');
+      return createSlide("cover",slide,index,body,has);
+    },
+    overview:function(slide,index){
+      var lines=rows(slide).slice(0,4).map(function(row){return '<div class="ledger-row"><div class="module">'+esc(row.label||row.module||"—")+'</div><div class="conclusion">'+esc(row.conclusion||row.summary||"—")+'</div><div class="value">'+esc(row.metric||row.value||"—")+'</div><div class="confidence">'+esc(row.confidence||"—")+'</div></div>';}).join("");
+      var body=header(slide,index)+'<div class="main"><div class="slide-title">'+esc(slide.conclusion)+'</div><div class="ledger"><div class="ledger-row head"><div>模块</div><div>结论</div><div style="text-align:right">主指标</div><div style="text-align:right">确定性</div></div>'+lines+'</div></div>'+footer(slide);
+      return createSlide("overview",slide,index,body,false);
+    },
+    thesis:function(slide,index){
+      var has=mediaAvailable(slide);var list=(slide.pillars&&slide.pillars.length?slide.pillars:slide.evidence||[]).slice(0,4);var cols='repeat('+Math.max(1,list.length)+',1fr)';
+      var pillars='<div class="pillars" style="grid-template-columns:'+cols+'">'+list.map(function(p,i){return '<div class="pillar"><div class="num">'+String(i+1).padStart(2,"0")+'</div><h3>'+esc(p.title||p.label||"逻辑支柱")+'</h3><p>'+esc(p.evidence||p.context||p.value||"")+'</p><div class="falsifier">证伪：'+esc(p.falsifier||p.watch||"待跟踪")+'</div></div>';}).join("")+'</div>';
+      var body=header(slide,index)+'<div class="main"><div class="slide-title">'+esc(slide.conclusion)+'</div><div class="body-copy intro">'+esc(slide.body||"")+'</div>'+pillars+'</div>'+(has?media(slide,"side-media"):"")+footer(slide);
+      return createSlide("thesis",slide,index,body,has);
+    },
+    fundamental:function(slide,index){
+      var has=mediaAvailable(slide);var metrics=(slide.support_metrics||[]).slice(0,3).map(function(m){return metric(m,false);}).join("");var watch=(slide.watchlist||[])[0]||{};
+      var image=has?'<img class="mini-media" src="'+esc(assetUrl(slide.visual_asset.path))+'" alt="'+esc(slide.visual_asset.alt||"主题视觉")+'" onerror="window.__deckMediaError(this)">':"";
+      var body=header(slide,index)+'<div class="main"><div class="slide-title">'+esc(slide.conclusion)+'</div><div class="fund-grid"><div>'+metric(slide.hero_metric,true)+'</div><div class="hair-v"></div><div class="fund-right"><div class="judgement">'+esc(slide.body||"本页判断由主指标与三个辅助指标共同支撑。")+'</div><div class="metric-strip">'+metrics+'</div><div class="watch">跟踪重点：'+esc(watch.indicator||watch.risk||watch.status||"待补充")+'</div>'+image+'</div></div></div>'+footer(slide);
+      return createSlide("fundamental",slide,index,body,has);
+    },
+    valuation:function(slide,index){
+      var raw=slide.hero_metric&&slide.hero_metric.percentile!=null?slide.hero_metric.percentile:parseFloat(String(slide.hero_metric&&slide.hero_metric.value||"50").replace(/[^0-9.]/g,""));var percent=Math.max(0,Math.min(100,isFinite(raw)?raw:50));
+      var metrics=(slide.support_metrics||[]).slice(0,3).map(function(m){return metric(m,false);}).join("");
+      var band='<div class="band"><div class="band-track"><div class="band-fill" style="width:'+percent+'%"></div><i class="band-tick" style="left:25%"></i><i class="band-tick" style="left:50%"></i><i class="band-tick" style="left:75%"></i><i class="band-point" style="left:'+percent+'%"></i></div><div class="band-labels"><span>P25</span><span>中位</span><span>P75</span></div><div class="metric-strip">'+metrics+'</div></div>';
+      var body=header(slide,index)+'<div class="main"><div class="slide-title">'+esc(slide.conclusion)+'</div><div class="valuation-grid"><div>'+metric(slide.hero_metric,true)+'</div><div>'+band+'</div></div><div class="body-copy" style="margin-top:30px">'+esc(slide.body||"")+'</div></div>'+footer(slide);
+      return createSlide("valuation",slide,index,body,false);
+    },
+    risk:function(slide,index){
+      var lines=(slide.watchlist||[]).slice(0,4).map(function(row){return '<div class="risk-row"><div class="risk-name">'+esc(row.risk||"—")+'</div><div>'+esc(row.status||"—")+'</div><div>'+esc(row.mitigant||"—")+'</div><div>'+esc(row.indicator||"—")+'</div></div>';}).join("");
+      var body=header(slide,index)+'<div class="main"><div class="slide-title">'+esc(slide.conclusion)+'</div><div class="risk-table"><div class="risk-row head"><div>风险</div><div>当前状态</div><div>缓释因子</div><div>可观测指标</div></div>'+lines+'</div></div>'+footer(slide);
+      return createSlide("risk",slide,index,body,false);
+    },
+    pipeline:function(slide,index){
+      var list=(slide.rows&&slide.rows.length?slide.rows:slide.evidence||[]).slice(0,4);var blocks='<div class="pipeline-grid">'+list.map(function(stage,i){var weight=Math.max(.7,Math.min(2.2,Number(stage.weight||stage.value||1)));return '<div class="stage-block"><div class="stage-bar" style="height:'+(weight*95)+'px"></div><h3>'+esc(stage.label||stage.title||("环节 "+(i+1)))+'</h3><p>'+esc(stage.context||stage.conclusion||"")+'</p></div>';}).join("")+'</div>';
+      var body=header(slide,index)+'<div class="main"><div class="slide-title">'+esc(slide.conclusion)+'</div>'+blocks+'</div>'+footer(slide);
+      return createSlide("pipeline",slide,index,body,false);
+    },
+    disclaimer:function(slide,index){
+      var body='<div class="content"><div class="eyebrow">'+esc(slide.eyebrow||"内部研究")+'</div><h1>'+esc(slide.conclusion)+'</h1><div class="rule"></div><div class="copy">'+esc(slide.body||data.disclaimer||"")+'</div><div class="meta">数据截至 '+esc(data.as_of)+' · 来源口径见各页页脚</div><div class="page mono" style="position:absolute;right:0;bottom:0;color:var(--deck-muted)">'+String(index+1).padStart(2,"0")+' / '+String(data.slides.length).padStart(2,"0")+'</div></div>';
+      return createSlide("disclaimer",slide,index,body,false);
+    }
+  };
+
+  var track=document.getElementById("track");
+  data.slides.forEach(function(slide,index){
+    if(!renderers[slide.type])throw new Error("不支持的版式："+slide.type);
+    track.appendChild(renderers[slide.type](slide,index));
+  });
+  window.__deckMediaError=function(img){var canvas=img.closest(".canvas");var holder=img.parentElement;if(holder&&holder!==canvas)holder.remove();else img.remove();canvas.classList.remove("has-media");canvas.classList.add("no-media");};
+
+  var slides=track.children,N=slides.length,current=0,nav=document.getElementById("nav"),pg=document.getElementById("pg");
+  for(var k=0;k<N;k++){var dot=document.createElement("button");dot.className="dot";dot.type="button";dot.setAttribute("aria-label","第 "+(k+1)+" 页");dot.dataset.i=k;nav.appendChild(dot);}
+  function fit(){var scale=Math.min(innerWidth*.965/1280,(innerHeight-58)*.985/720);for(var j=0;j<N;j++)slides[j].firstElementChild.style.transform="scale("+scale+")";}
+  function go(next){current=Math.max(0,Math.min(N-1,next));track.style.transform="translateX(-"+(current*100)+"%)";for(var j=0;j<N;j++)nav.children[j].classList.toggle("on",j===current);pg.textContent=(current+1)+" / "+N;}
+  addEventListener("keydown",function(event){if(["ArrowRight","PageDown"," "].includes(event.key))go(current+1);else if(["ArrowLeft","PageUp"].includes(event.key))go(current-1);else if(event.key==="Home")go(0);else if(event.key==="End")go(N-1);});
+  var wheelAt=0;addEventListener("wheel",function(event){var now=Date.now();if(now-wheelAt<380)return;if(Math.abs(event.deltaY)>20||Math.abs(event.deltaX)>20){wheelAt=now;go(current+((event.deltaY+event.deltaX)>0?1:-1));}},{passive:true});
+  nav.addEventListener("click",function(event){if(event.target.dataset.i!==undefined)go(Number(event.target.dataset.i));});
+  var touchX=0;addEventListener("touchstart",function(event){touchX=event.touches[0].clientX;},{passive:true});addEventListener("touchend",function(event){var dx=event.changedTouches[0].clientX-touchX;if(Math.abs(dx)>50)go(current+(dx<0?1:-1));},{passive:true});
+  addEventListener("resize",fit);fit();go(0);
 })();
 </script>
 </body>

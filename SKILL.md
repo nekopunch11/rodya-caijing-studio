@@ -51,7 +51,7 @@ description: 财经内容台——给券商投顾/客户经理的财经内容生
 3. **产内核**：生成该模块的「结构化分析内核」（通用 schema 见 [references/output-spec.md](references/output-spec.md)，各模块字段见其 SKILL.md）。
    ⚠️ **一份内核、三形态渲染**：docx/卡片/PPT 全部从这一份内核渲染，绝不各写各的分析——否则三处不一致、改一处漏两处。
 4. **计算与适配**：涉及公式、评分、分档时按 [references/formulas-and-thresholds.md](references/formulas-and-thresholds.md)；涉及行业特殊口径时按 [references/sector-adapters.md](references/sector-adapters.md)；涉及三情景、逻辑支柱、同业四分位、利润池、竞争分类、瓶颈点、证伪链、排雷恶化因子时按 [references/research-methods.md](references/research-methods.md)。
-5. **渲染**：按下方默认产出规则；单模块专业版默认生成 `.docx`（按 [references/docx-visual-spec.md](references/docx-visual-spec.md)）。**客户版仅在用户要求时渲染**；三形态视觉均已定稿（docx→docx-visual-spec.md、卡片→card-components.md、PPT→output-spec §三③）；不得因数据档次把专业版降成短评。
+5. **渲染**：按下方默认产出规则；单模块专业版默认生成 `.docx`（按 [references/docx-visual-spec.md](references/docx-visual-spec.md)）。**客户版仅在用户要求时渲染**；三形态视觉均已定稿（docx→docx-visual-spec.md、卡片→card-components.md、PPT→[ppt-visual-spec.md](references/ppt-visual-spec.md)）；不得因数据档次把专业版降成短评。PPT 默认面向投顾内部研究，颜色自适应；Codex 可生图增强，Claude 无图时使用完整纯排版回退。
 6. **合规检查**：对照 compliance.md 过一遍；客户版再按 [references/compliance-rendering.md](references/compliance-rendering.md) 降级逐句检查。
 7. **交付**：每份输出标注数据截至日 + 确定性分级 + 免责声明。**交付专业版后主动提醒使用者：如需转客户，可再让我出客户版（卡片图+文案）。**
 
@@ -72,6 +72,7 @@ description: 财经内容台——给券商投顾/客户经理的财经内容生
 | [compliance-rendering.md](references/compliance-rendering.md) | 客户版渲染降级：评级/档位/受益标的/打新表述统一降级 |
 | [output-spec.md](references/output-spec.md) | 双版本输出层：内核 schema、docx/卡片/PPT 三形态规范、口径切换 |
 | [docx-visual-spec.md](references/docx-visual-spec.md) | docx 专业版视觉规范（唯一视觉事实源）：配色/字体/首页版式/编号图表来源纪律；渲染 docx 时必读 |
+| [ppt-visual-spec.md](references/ppt-visual-spec.md) | PPT 唯一执行视觉事实源：投顾内部研究口径、自适应主题、七类版式、图片比例、有图/无图双路径与 QA；生成 PPT 时必读 |
 | [data-sourcing.md](references/data-sourcing.md) | 取数规范：数据源优先级、口径纪律、确定性分级 |
 | [data-fallback.md](references/data-fallback.md) | 数据档次与补充提示规则：缺关键材料时不硬出强结论，但不降档交付物 |
 | [freshness-gate.md](references/freshness-gate.md) | 时效核验 gate：财报最新期/招股期状态/孖展/统计/费率时间窗，超窗提示并限制结论强度 |
