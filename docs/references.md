@@ -7,6 +7,7 @@
 | 文件 | 作用 | 什么时候读 |
 |---|---|---|
 | `research-safety-gate.md` | 行动安全 gate：只约束具体资金、仓位、杠杆、个性化申购、模型概率与机构复核 | 涉及具体动作时必读；普通研究不做身份分流 |
+| `fundamental-proof-chain.md` | 基本面结论证明协议：判断识别、完整推导、断链 Gate、框架外扫描、重要性 Gate 和正文/附录分工 | 执行 `caijing-fundamental` 时必读 |
 | `compliance.md` | 合规底线：研究判断与交易动作边界、免责声明、客户版 checklist | 每次输出前必读 |
 | `compliance-rendering.md` | 客户合规渲染：保留证据化研究判断，删除交易动作和个性化资金内容 | 生成任一客户版形态时必读 |
 | `data-sourcing.md` | 数据源优先级、来源标注、确定性分级、口径纪律 | 取数时必读 |
@@ -36,10 +37,11 @@
 4. `data-fallback.md`
 5. `freshness-gate.md`
 6. `data-sourcing.md`
-7. `formulas-and-thresholds.md`
-8. `research-methods.md`
-9. `sector-adapters.md`
-10. 各模块 `SKILL.md`
+7. `fundamental-proof-chain.md`（仅基本面场景强制）
+8. `formulas-and-thresholds.md`
+9. `research-methods.md`
+10. `sector-adapters.md`
+11. 各模块 `SKILL.md`
 
 这个顺序的意思是：先确认场景与授权边界，再做合规、证据和方法判断。宁可标注受限结论，也不要输出伪精确概率或无证据资金指令；专业版仍需完成规定分析块，但不设机械字数下限。
 
