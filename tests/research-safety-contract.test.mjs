@@ -36,12 +36,17 @@ test("HK IPO estimates require observable allocation evidence", () => {
   assert.match(hk, /18C.*不得.*机制 B/s);
 });
 
-test("professional completion uses evidence rather than word floors", () => {
+test("professional completion uses structural completeness rather than word floors", () => {
+  // 不复活字数下限（坏代理）
   assert.doesNotMatch(production, /不得低于\s*4000\s*字/);
   assert.doesNotMatch(production, /默认不少于\s*5000\s*字/);
   const output = read("references/output-spec.md");
   assert.match(output, /分析块覆盖率/);
   assert.match(output, /关键结论证据覆盖率/);
+  // 正向：详实靠结构，"薄=未完成"必须明确，防止"短也没关系"退化
+  assert.match(output, /全面、详细、完备/);
+  assert.match(output, /薄＝未完成|薄=未完成/);
+  assert.match(output, /子项覆盖率/);
 });
 
 test("shared research safety gate is mandatory", () => {

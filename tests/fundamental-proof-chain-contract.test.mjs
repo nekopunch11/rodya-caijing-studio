@@ -21,12 +21,18 @@ test("proof chain exposes every reproducible field", () => {
   ]) assert.match(proof, new RegExp(field), field);
 });
 
-test("broken fundamental chains stop qualitative judgments", () => {
+test("broken fundamental chains estimate with ranges, not silence", () => {
   const proof = read("references/fundamental-proof-chain.md");
   const fallback = read("references/data-fallback.md");
-  assert.match(proof, /推导链.*断裂.*停止.*定性/s);
-  assert.match(fallback, /基本面.*结论证明链.*断裂.*停止.*定性/s);
-  assert.doesNotMatch(proof, /断裂.*仍可.*条件性.*偏强/s);
+  // 断裂 → 三角测算 + 区间 + 置信度，不沉默
+  assert.match(proof, /断裂.*不得沉默.*估算/s);
+  assert.match(proof, /三角测算/);
+  assert.match(proof, /置信度/);
+  assert.match(fallback, /断裂.*不得沉默.*估算/s);
+  // 旧的"断裂即停止定性"必须已废除
+  assert.doesNotMatch(proof, /断裂时.*停止对受影响事项下定性结论/);
+  // 但仍禁止把估算伪装成已核实
+  assert.match(proof, /把估算伪装成已核实/);
 });
 
 test("ten blocks are a floor and framework-outside scanning is mandatory", () => {
