@@ -51,8 +51,17 @@ test("sector adapters may be overridden with a recorded reason", () => {
   assert.match(adapters, /失真原因.*替代指标.*局限/s);
 });
 
-test("docx separates decisive derivation from calculation workpapers", () => {
+test("docx keeps proof-chain apparatus out of the body and in the appendix", () => {
   const visual = read("references/docx-visual-spec.md");
-  assert.match(visual, /正文.*决定结论.*关键推导/s);
+  const proof = read("references/fundamental-proof-chain.md");
+  // 正文是研报叙事，禁止摆证明链字段/装置词
+  assert.match(visual, /正文不得出现证明链结构词/);
+  assert.match(proof, /正文严禁出现证明链结构词/);
+  // 完整证明链集中进附录
+  assert.match(visual, /完整证明链集中进附录/);
   assert.match(visual, /附录.*原始数据.*完整同业池.*重复计算/s);
+  // 不设自述方法论章节；章节只用中文编号
+  assert.match(visual, /不设自述方法论章节/);
+  assert.match(visual, /只用中文.*编号.*不加英文 kicker/s);
+  assert.match(proof, /不写自述方法论/);
 });
