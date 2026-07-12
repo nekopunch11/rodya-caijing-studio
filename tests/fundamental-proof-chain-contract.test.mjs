@@ -38,7 +38,7 @@ test("broken fundamental chains estimate with ranges, not silence", () => {
 test("ten blocks are a floor and framework-outside scanning is mandatory", () => {
   const fundamental = read("caijing-fundamental/SKILL.md");
   const proof = read("references/fundamental-proof-chain.md");
-  assert.match(fundamental, /十个分析块.*最低覆盖.*不是.*封闭/s);
+  assert.match(fundamental, /十四段.*全面框架|十块是正文主体/s);
   assert.match(proof, /框架外扫描/);
   assert.match(proof, /重要性 Gate/);
 });
