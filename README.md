@@ -60,11 +60,17 @@ npx skills add nekopunch11/rodya-caijing-studio
 ## 🖼️ 真实成果样张
 
 <details>
-<summary><b>▸ 展开查看两份经作者审核的真实上市公司样张</b>（招商银行估值卡 · 小米组合 PPT）</summary>
+<summary><b>▸ 展开查看三份经作者审核的真实上市公司样张</b>（宁德时代深度研报 · 招商银行估值卡 · 小米组合 PPT）</summary>
 
 <br>
 
 均使用真实上市公司与公开数据、已通过作者内容审核；演示样张，不构成投资建议。
+
+**宁德时代｜基本面深度研究（旗舰样张）** · 财务截至 2026-03-31、行情截至 2026-07  
+论点驱动 + 前瞻情景 + 估值矩阵 + 多投资哲学对撞 + Pre-Mortem 的十四段深度研究型研报。
+[深度研报 DOCX](docs/samples/catl/宁德时代_基本面深度研究样张.docx) · [页面预览](docs/samples/catl/宁德时代_研究样张预览.png) · [来源台账](docs/samples/catl/sources.md)
+
+![宁德时代基本面深度研究样张预览](docs/samples/catl/宁德时代_研究样张预览.png)
 
 **招商银行｜估值客户合规卡** · 行情截至 2026-07-10、财务截至 2026-03-31  
 [HTML 卡片](docs/samples/cmb/招商银行_估值客户合规卡.html) · [PNG 预览](docs/samples/cmb/招商银行_估值客户合规卡.png) · [配套文案](docs/samples/cmb/招商银行_估值客户文案.md) · [来源台账](docs/samples/cmb/sources.md)
