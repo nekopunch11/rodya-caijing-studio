@@ -48,8 +48,8 @@ test('README explains why fundamental conclusions are reproducible', async () =>
   const readme = await readFile(readmeUrl, 'utf8');
 
   assert.match(readme, /原始数据.*口径.*计算.*历史.*同业.*反面证据.*证伪/s);
-  assert.match(readme, /推导链.*断裂.*停止.*定性/s);
-  assert.match(readme, /十个分析块.*最低覆盖|框架外扫描/s);
+  assert.match(readme, /断裂.*三角测算.*估算区间|估算区间.*绝不留空/s);
+  assert.match(readme, /十四段.*全面框架|框架外扫描/s);
 });
 
 test('README publishes only author-approved samples', async () => {
@@ -59,7 +59,7 @@ test('README publishes only author-approved samples', async () => {
 
   assert.match(readme, /招商银行.*docs\/samples\/cmb/s);
   assert.match(readme, /小米集团.*docs\/samples\/xiaomi/s);
-  assert.match(readme, /宁德时代.*V2.*待审核/s);
+  assert.match(readme, /宁德时代.*深度研究/s);
   await access(cmbPreview);
   await access(xiaomiPreview);
   assert.doesNotMatch(readme, /宁德时代_基本面研究样张\.docx/);
