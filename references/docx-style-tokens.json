@@ -1,0 +1,55 @@
+{
+  "version": "1.0.0",
+  "page": {
+    "width_dxa": 11906,
+    "height_dxa": 16838,
+    "top_margin_dxa": 1417,
+    "bottom_margin_dxa": 1417,
+    "left_margin_dxa": 1587,
+    "right_margin_dxa": 1587,
+    "usable_width_dxa": 8732,
+    "table_indent_dxa": 120
+  },
+  "fonts": {
+    "heading": "MiSans",
+    "heading_fallback": "Microsoft YaHei",
+    "body": "Source Han Serif SC",
+    "body_fallback": "SimSun",
+    "source": "Source Han Serif SC"
+  },
+  "colors": {
+    "paper": "FDFDFB",
+    "ink": "1A1A1A",
+    "gold": "A8894F",
+    "gold_on_dark": "C8A55E",
+    "gold_on_light": "8A6D1F",
+    "muted": "6B7280",
+    "rule": "E6E6E6",
+    "zebra": "F6F5F1",
+    "estimate_fill": "F0E6CE",
+    "up": "C0392B",
+    "down": "1E9E5A",
+    "white": "FFFFFF"
+  },
+  "sizes_pt": {
+    "title": 19,
+    "h1": 13,
+    "h2": 11.5,
+    "h3": 10.5,
+    "body": 10.5,
+    "table": 10.5,
+    "source": 9,
+    "meta": 9
+  },
+  "body": {
+    "line_spacing": 1.9,
+    "first_line_indent_pt": 21,
+    "alignment": "justify"
+  },
+  "table": {
+    "header_fill": "1A1A1A",
+    "header_text": "FFFFFF",
+    "zebra_fill": "F6F5F1",
+    "cell_margin_dxa": 120
+  }
+}

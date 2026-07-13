@@ -124,5 +124,7 @@
 
 ## 十四、生成实现
 
+- 唯一执行链：`scripts/docx_renderer.py` 从 `assets/docx-template.docx` 起稿，读取 `references/docx-style-tokens.json`，各模块只提供结构化内容块；禁止模块自行创建 `Document()` 或硬编码另一套颜色/字号/页边距。
+- 每次生成后先运行 `scripts/audit_docx_visual.py`，再按文档 skill 执行 render → PNG → 逐页检查；审计失败或渲染未完成均不得声称视觉规范通过。
 - 用 docx skill / python-docx 生成，字体走上表回退链；对外分发需嵌入时只嵌思源宋体 + MiSans。
 - 本文件是 docx 视觉唯一事实源；卡片视觉见 card-components.md，PPT 视觉见 output-spec.md §三③及 assets/deck-template.mjs。
