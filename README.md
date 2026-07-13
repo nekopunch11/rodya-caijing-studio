@@ -58,6 +58,17 @@ npx skills add nekopunch11/rodya-caijing-studio
 
 [skills CLI](https://github.com/vercel-labs/skills) 会检测 Claude Code、Codex、Cursor 等兼容运行器，并安装到对应目录。使用 `-g` 可全局安装。
 
+### 方式三：ZIP 安装包（Claude 桌面版）
+
+不想用命令行时，可在 Claude 桌面版里直接上传 ZIP 安装包：
+
+1. 先到 **Settings → Capabilities**，打开 **Code execution（代码执行）** 与 **File creation（文件创建）**——两者关闭时 Skill 无法运行。
+2. 从 [Releases](https://github.com/nekopunch11/rodya-caijing-studio/releases) 下载 `rodya-caijing-studio.zip`（或把本仓库打包为 ZIP）。ZIP 内需包含带 `SKILL.md` 的 `rodya-caijing-studio/` 目录。
+3. 打开 **Customize（自定义）→ Skills → +**，选择该 ZIP 上传。
+4. 上传后 Skill 会出现在列表中，可随时开关；上传的自定义 Skill 仅对你个人账号可见。
+
+装好后让 Claude 列出七个财经模块，名称与下文一致即安装成功。
+
 ## 🖼️ 真实成果样张
 
 <details>
