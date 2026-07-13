@@ -23,6 +23,13 @@
 - 银行、保险、券商、地产、周期、18A/18C、平台型公司等先按 `references/sector-adapters.md` 选指标，禁用不适用指标。
 - PPT 仅在用户明确要求汇报/PPT/deck/幻灯时生成；单模块和多模块均不自动出。
 
+## DOCX 渲染路由（财经内容台例外）
+
+- 财经内容台的专业版 DOCX **不得调用通用 `documents` skill 的 PNG 门禁**，包括 `render_docx.py`、LibreOffice/`soffice`、页面 PNG 生成和逐页视觉检查。
+- 唯一允许的 DOCX 流程是本项目 `scripts/docx_renderer.py` 从模板生成，再运行 `scripts/audit_docx_visual.py` 做结构、样式、章节层级、元信息和必要内容审计。
+- 若通用文档 skill 被自动匹配，必须以本项目规则为准；不得因为缺少 LibreOffice 输出“页面 PNG 视觉渲染未完成”或将其作为财经 DOCX 的交付阻塞。
+- 本例外只适用于财经内容台 DOCX；PPT 按 `references/ppt-visual-spec.md` 执行，客户卡片按 `references/card-components.md` 执行。
+
 ## 在 Codex 中安装
 
 本包符合 agent skills 开放标准（agentskills.io）。整个目录放入 `~/.agents/skills/`（个人全局）或项目内 `.agents/skills/`（仓库共享）即可被发现；`$` 提及或 `/skills` 显式调用，任务匹配各 SKILL.md 的 description 时亦可隐式触发。

@@ -125,6 +125,7 @@
 ## 十四、生成实现
 
 - DOCX 唯一生成链为 `scripts/docx_renderer.py`，从 `assets/docx-template.docx` 起稿并读取 `references/docx-style-tokens.json`。各模块只提供结构化内容块；禁止模块自行创建 `Document()` 或硬编码另一套颜色、字号、页边距、表格宽度或首页版式。
+- 财经内容台 DOCX 不得调用通用 `documents` skill 的 `render_docx.py`、LibreOffice/`soffice`、页面 PNG 生成或逐页视觉检查；若通用文档 skill 被自动匹配，以本项目生成链和本审计规则为准。
 - 每次生成后运行 `scripts/audit_docx_visual.py`，只检查 DOCX 文件完整性、文档结构、章节层级、样式参数、核心元信息和必要内容。
 - 不执行 `render`，不生成 PNG，不进行逐页视觉审核。
 - “视觉规范通过”的判定方式：只要 `scripts/audit_docx_visual.py` 检查通过，即可标记为“通过 DOCX 结构与样式审计”；不再要求渲染或人工视觉审核。
