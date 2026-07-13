@@ -108,6 +108,21 @@ def audit(path: Path, tokens_path: Path):
         require(tbl_w is not None, f"table {index} missing tblW")
         require(int(tbl_w.get("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}w")) == page["usable_width_dxa"], f"table {index} width")
         require(tbl_ind is not None and int(tbl_ind.get("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}w")) == page["table_indent_dxa"], f"table {index} indent")
+        if not table.rows:
+            continue
+        first_row = table.rows[0]
+        fills = []
+        for cell in first_row.cells:
+            shd = cell._tc.get_or_add_tcPr().find("w:shd", NS)
+            fills.append(None if shd is None else shd.get("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}fill"))
+        expected_header_color = colors["gold_on_dark"] if index == 0 else colors["white"] if colors["ink"] in fills else None
+        if expected_header_color:
+            for cell in first_row.cells:
+                visible_runs = [run for paragraph in cell.paragraphs for run in paragraph.runs if run.text]
+                require(visible_runs, f"table {index} header cell has no visible text run")
+                for run in visible_runs:
+                    actual = str(run.font.color.rgb or "").upper()
+                    require(actual == expected_header_color, f"table {index} header text color={actual}, expected {expected_header_color}")
 
     text_parts = [p.text for p in doc.paragraphs]
     for table in doc.tables:

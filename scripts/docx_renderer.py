@@ -285,13 +285,14 @@ def set_header_footer(section, metadata: dict, tokens: dict):
     set_paragraph_border(fp, "top", colors["rule"], 4, 2)
 
 
-def add_text(paragraph, text: str, tokens: dict, role: str = "body", bold: bool = False):
+def add_text(paragraph, text: str, tokens: dict, role: str = "body", bold: bool = False,
+             color: str | None = None):
     fonts, colors, sizes = tokens["fonts"], tokens["colors"], tokens["sizes_pt"]
     font = fonts["heading"] if role in ("heading", "meta") else fonts["body"]
     fallback = fonts["heading_fallback"] if role in ("heading", "meta") else fonts["body_fallback"]
     size = sizes[{"heading": "h2", "meta": "meta", "body": "body", "table": "table", "source": "source", "title": "title"}[role]]
     run = paragraph.add_run(normalize_docx_text(text))
-    set_run_font(run, font, fallback, size, colors["ink"], bold=bold)
+    set_run_font(run, font, fallback, size, color or colors["ink"], bold=bold)
     return run
 
 
@@ -356,8 +357,7 @@ def add_table(doc, rows: list[list[str]], tokens: dict, header: bool = True):
             p.alignment = WD_ALIGN_PARAGRAPH.LEFT if cidx == 0 else WD_ALIGN_PARAGRAPH.LEFT
             if ridx == 0 and header:
                 set_cell_shading(cell, tokens["colors"]["ink"])
-                add_text(p, value.strip(), tokens, "table", True)
-                p.runs[0].font.color.rgb = rgb(tokens["colors"]["white"])
+                add_text(p, value.strip(), tokens, "table", True, tokens["colors"]["white"])
             else:
                 if ridx % 2 == 0:
                     set_cell_shading(cell, tokens["colors"]["zebra"])
@@ -575,11 +575,9 @@ def create_template(path: Path = TEMPLATE_PATH):
         set_cell_shading(cell, colors["ink"])
         p = clear_cell(cell)
         p.paragraph_format.space_after = Pt(0)
-    add_text(band.cell(0, 0).paragraphs[0], "{{ORG}}", tokens, "meta", True)
-    band.cell(0, 0).paragraphs[0].runs[0].font.color.rgb = rgb(colors["gold_on_dark"])
+    add_text(band.cell(0, 0).paragraphs[0], "{{ORG}}", tokens, "meta", True, colors["gold_on_dark"])
     band.cell(0, 0).paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.LEFT
-    add_text(band.cell(0, 1).paragraphs[0], "{{BAND_LABEL}}", tokens, "meta")
-    band.cell(0, 1).paragraphs[0].runs[0].font.color.rgb = rgb(colors["gold_on_dark"])
+    add_text(band.cell(0, 1).paragraphs[0], "{{BAND_LABEL}}", tokens, "meta", color=colors["gold_on_dark"])
     band.cell(0, 1).paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.RIGHT
 
     title_table = doc.add_table(rows=1, cols=2)
