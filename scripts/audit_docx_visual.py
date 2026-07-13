@@ -11,6 +11,8 @@ from docx.shared import Twips
 
 
 NS = {"w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main"}
+HEADING_STYLE_RE = re.compile(r"^Heading ([1-3])$")
+CHAPTER_TITLE_RE = re.compile(r"^[零一二三四五六七八九十百千万]+、")
 
 
 def read_tokens(path: Path) -> dict:
@@ -20,6 +22,37 @@ def read_tokens(path: Path) -> dict:
 def require(condition: bool, message: str):
     if not condition:
         raise AssertionError(message)
+
+
+def audit_heading_hierarchy(doc):
+    headings = []
+    for paragraph in doc.paragraphs:
+        match = HEADING_STYLE_RE.fullmatch(paragraph.style.name or "")
+        if not match:
+            continue
+        level = int(match.group(1))
+        text = paragraph.text.strip()
+        require(text, f"Heading {level} is empty")
+        headings.append((level, text))
+
+    require(headings, "missing Heading 1-3 paragraphs")
+    require(any(level == 1 for level, _ in headings), "missing Heading 1 chapter")
+    require(any(level == 2 for level, _ in headings), "missing Heading 2 subsection")
+    require(headings[0][0] <= 2, f"document starts at Heading {headings[0][0]}")
+
+    previous_level = None
+    for level, text in headings:
+        if level == 1:
+            require(CHAPTER_TITLE_RE.match(text) is not None, f"Heading 1 is not a Chinese numbered chapter: {text}")
+        if previous_level is not None:
+            require(level <= previous_level + 1, f"heading level skips from {previous_level} to {level}: {text}")
+        previous_level = level
+
+    return {
+        "heading_1": sum(level == 1 for level, _ in headings),
+        "heading_2": sum(level == 2 for level, _ in headings),
+        "heading_3": sum(level == 3 for level, _ in headings),
+    }
 
 
 def audit(path: Path, tokens_path: Path):
@@ -48,6 +81,7 @@ def audit(path: Path, tokens_path: Path):
         require(style.font.size.pt == size, f"{name}.size={style.font.size.pt}")
         style_xml = style._element.xml
         require(font in style_xml, f"{name} missing font {font}")
+    heading_counts = audit_heading_hierarchy(doc)
 
     with zipfile.ZipFile(path) as archive:
         document_xml = archive.read("word/document.xml").decode("utf-8")
@@ -81,10 +115,25 @@ def audit(path: Path, tokens_path: Path):
             for cell in row.cells:
                 text_parts.extend(p.text for p in cell.paragraphs)
     text = "\n".join(text_parts)
+    properties = doc.core_properties
+    title = (properties.title or "").strip()
+    author = (properties.author or "").strip()
+    subject = (properties.subject or "").strip()
+    require(title, "missing document title metadata")
+    require(author == "财经内容台", f"document author={author!r}, expected '财经内容台'")
+    require(subject, "missing document subject metadata")
+    require(title in text, "document title metadata is not reflected in document content")
     require("财经内容台" in text, "missing cover organization")
     require("投资要点" in text, "missing investment callout")
     require("关键数字" in text, "missing key metrics label")
-    return {"status": "PASS", "paragraphs": len(doc.paragraphs), "tables": len(doc.tables), "sections": len(doc.sections)}
+    return {
+        "status": "PASS",
+        "paragraphs": len(doc.paragraphs),
+        "tables": len(doc.tables),
+        "sections": len(doc.sections),
+        "headings": heading_counts,
+        "metadata": {"title": title, "author": author, "subject": subject},
+    }
 
 
 def main():

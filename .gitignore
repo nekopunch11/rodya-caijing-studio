@@ -1,0 +1,8 @@
+# Python runtime caches
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Local project state; keep out of the GitHub skill repository
+STATUS.md
+DECISIONS.md
