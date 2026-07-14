@@ -25,13 +25,14 @@ test('README presents capability, evidence, and installation in the approved ord
   assert.ok(install < audience, 'installation must precede audience labels');
 });
 
-test('README keeps unapproved samples behind a review gate', async () => {
+test('README lists the three real company samples', async () => {
   const readme = await readFile(readmeUrl, 'utf8');
 
   assert.match(readme, /宁德时代/);
   assert.match(readme, /招商银行/);
   assert.match(readme, /小米集团/);
-  assert.match(readme, /样张[^\n]*审核|审核[^\n]*样张/);
+  assert.match(readme, /三份真实上市公司样张/);
+  assert.doesNotMatch(readme, /docs\/samples\/cmb\/.*\.png/);
   assert.doesNotMatch(readme, /assets\/samples\//);
 });
 
@@ -52,15 +53,15 @@ test('README explains why fundamental conclusions are reproducible', async () =>
   assert.match(readme, /十四段.*全面框架|框架外扫描/s);
 });
 
-test('README publishes only author-approved samples', async () => {
+test('README links to the listed sample artifacts', async () => {
   const readme = await readFile(readmeUrl, 'utf8');
-  const cmbPreview = new URL('../docs/samples/cmb/招商银行_估值客户合规卡.png', import.meta.url);
+  const cmbCard = new URL('../docs/samples/cmb/招商银行_估值客户合规卡.html', import.meta.url);
   const xiaomiPreview = new URL('../docs/samples/xiaomi/小米集团_研究样张预览.png', import.meta.url);
 
   assert.match(readme, /招商银行.*docs\/samples\/cmb/s);
   assert.match(readme, /小米集团.*docs\/samples\/xiaomi/s);
   assert.match(readme, /宁德时代.*深度研究/s);
-  await access(cmbPreview);
+  await access(cmbCard);
   await access(xiaomiPreview);
   assert.doesNotMatch(readme, /宁德时代_基本面研究样张\.docx/);
 });

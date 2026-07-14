@@ -72,7 +72,7 @@ npx skills add nekopunch11/rodya-caijing-studio
 ## 🖼️ 真实成果样张
 
 <details>
-<summary><b>▸ 展开查看三份经作者审核的真实上市公司样张</b>（宁德时代深度研报 · 招商银行估值卡 · 小米组合 PPT）</summary>
+<summary><b>▸ 展开查看三份真实上市公司样张</b>（宁德时代深度研报 · 招商银行估值卡 · 小米组合 PPT）</summary>
 
 <br>
 
@@ -84,10 +84,8 @@ npx skills add nekopunch11/rodya-caijing-studio
 
 ![宁德时代基本面深度研究样张预览](docs/samples/catl/宁德时代_研究样张预览.png)
 
-**招商银行｜估值客户合规卡** · 行情截至 2026-07-10、财务截至 2026-03-31  
-[HTML 卡片](docs/samples/cmb/招商银行_估值客户合规卡.html) · [PNG 预览](docs/samples/cmb/招商银行_估值客户合规卡.png) · [配套文案](docs/samples/cmb/招商银行_估值客户文案.md) · [来源台账](docs/samples/cmb/sources.md)
-
-![招商银行估值客户合规卡](docs/samples/cmb/招商银行_估值客户合规卡.png)
+**招商银行｜高密度估值客户卡** · 行情截至 2026-07-10、财务截至 2026-03-31
+[HTML 样张](docs/samples/cmb/招商银行_估值客户合规卡.html) · [配套文案](docs/samples/cmb/招商银行_估值客户文案.md) · [来源台账](docs/samples/cmb/sources.md)
 
 **小米集团｜基本面 + 估值 + 排雷 PPT** · 财务截至 2026-03-31、公开信息截至 2026-07-10  
 [PPTX](docs/samples/xiaomi/小米集团_基本面估值排雷研究样张.pptx) · [七页预览](docs/samples/xiaomi/小米集团_研究样张预览.png) · [来源台账](docs/samples/xiaomi/sources.md)

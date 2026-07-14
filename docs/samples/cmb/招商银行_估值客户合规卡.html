@@ -3,54 +3,56 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>招商银行估值客户合规卡｜公开样张</title>
+  <title>招商银行估值客户合规卡</title>
   <style>
-    :root{--ink:#111;--paper:#FFF;--muted:#888;--hair:#EDEDED;--empty:#DCDCDC;--up:#C0392B;--down:#1E9E5A;--sans:"Source Han Sans SC","Noto Sans SC","MiSans","Microsoft YaHei",sans-serif;--mono:"IBM Plex Mono","SF Mono","Consolas",monospace}
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{background:#5a5a5a;display:flex;justify-content:center;padding:0}
-    .card{width:1080px;height:1440px;background:var(--paper);color:var(--ink);font-family:var(--sans);display:flex;flex-direction:column;overflow:hidden}
-    .mast{background:var(--ink);color:#fff;padding:34px 64px 28px}
-    .mast .top{display:flex;align-items:baseline;gap:18px}.mast .n{font-size:44px;font-weight:600}.mast .cd{font:26px var(--mono);color:#bcbcbc}.mast .m{margin-left:auto;font-size:22px;letter-spacing:5px}.mast .meta{font:21px var(--mono);color:#aaa;margin-top:12px}
-    .body{flex:1;padding:38px 64px 0;display:flex;flex-direction:column;justify-content:space-between}.sl{font-size:20px;letter-spacing:4px;color:var(--muted)}.tab{font-variant-numeric:tabular-nums}.hero{display:flex;align-items:flex-end;justify-content:space-between;border-bottom:3px solid var(--ink);padding-bottom:18px}.heroN{font-size:104px;font-weight:300;line-height:.9}.heroU{font-size:40px;font-weight:300}.heroPB{text-align:right}.heroPB .v{font:48px var(--mono)}.heroPB .k{font-size:18px;color:var(--muted);margin-top:8px}
-    .band{position:relative;height:10px;background:var(--hair);margin-top:22px}.band .fl{position:absolute;height:10px;width:9%;background:var(--ink)}.band .dt{position:absolute;left:9%;top:-6px;width:22px;height:22px;border-radius:50%;background:var(--ink);transform:translateX(-50%)}.band .tk{position:absolute;top:-6px;width:2px;height:22px;background:var(--empty)}.ticks{display:flex;justify-content:space-between;font:18px var(--mono);color:var(--muted);margin-top:10px}
-    .g3{display:grid;grid-template-columns:repeat(3,1fr);border-top:3px solid var(--ink);border-left:2px solid var(--hair)}.cell{padding:17px 18px;border-right:2px solid var(--hair);border-bottom:2px solid var(--hair)}.cell .k{font-size:18px;color:var(--muted)}.cell .v{font-size:42px;font-weight:300;margin-top:5px}.cell small{font-size:20px;color:var(--muted)}
-    .judgment{border-top:3px solid var(--ink);padding-top:17px}.judgment .k,.risk .k{font-size:18px;letter-spacing:2px;color:var(--muted)}.judgment .t,.risk .t{font-size:25px;line-height:1.4;margin-top:5px}.risk{border-left:6px solid var(--ink);padding-left:20px}
-    .track{display:grid;grid-template-columns:repeat(3,1fr);border-top:3px solid var(--ink);border-bottom:2px solid var(--hair)}.track .it{padding:16px 18px;border-right:2px solid var(--hair)}.track .it:last-child{border-right:0}.track .k{font:17px var(--mono);color:var(--muted)}.track .v{font-size:24px;line-height:1.25;margin-top:6px}
-    .foot{padding:22px 64px 34px}.foot .rule{height:3px;background:var(--ink)}.foot .bar{display:flex;justify-content:space-between;font:18px var(--mono);color:var(--muted);margin-top:16px}.review{color:#fff;background:#555;padding:6px 12px;font:16px var(--mono)}
+    :root{--ink:#111111;--paper:#FFFFFF;--muted:#888888;--line:#EDEDED;--soft:#DCDCDC;--up:#C0392B;--down:#1E9E5A;--sans:"Source Han Sans SC","Noto Sans SC","MiSans","Microsoft YaHei",sans-serif;--mono:"IBM Plex Mono","SF Mono","Consolas",monospace}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:#5a5a5a;display:flex;justify-content:center}
+    .card{width:1080px;min-height:1440px;background:var(--paper);color:var(--ink);font-family:var(--sans);padding:0 64px 30px;overflow:hidden}
+    .mono,.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+    .mast{margin:0 -64px;padding:30px 64px 27px;background:var(--ink);color:#fff}
+    .mast-top{display:flex;align-items:baseline;gap:17px}.name{font-size:44px;font-weight:650;letter-spacing:1px}.code{font:25px var(--mono);color:#bfbfbf}.type{margin-left:auto;font-size:20px;letter-spacing:5px}
+    .meta{margin-top:11px;color:#b9b9b9;font:19px var(--mono);letter-spacing:.2px}
+    .hero{display:grid;grid-template-columns:1.15fr .85fr;border-bottom:3px solid var(--ink);padding:28px 0 20px;column-gap:38px}
+    .eyebrow{font-size:18px;letter-spacing:3px;color:var(--muted)}.headline{display:flex;align-items:flex-end;gap:15px;margin-top:8px}.rank{font:94px var(--mono);letter-spacing:-7px;line-height:.86}.state{align-self:center;border-left:4px solid var(--ink);padding-left:15px}.state strong{display:block;font-size:29px;letter-spacing:1px}.state span{display:block;margin-top:5px;color:var(--muted);font-size:18px}
+    .valuation{display:grid;grid-template-columns:repeat(3,1fr);align-self:end;border-top:2px solid var(--line);border-bottom:2px solid var(--line)}.valuation div{padding:13px 10px 11px;border-right:1px solid var(--line)}.valuation div:last-child{border:0}.valuation label{display:block;color:var(--muted);font-size:16px}.valuation b{display:block;margin-top:6px;font:28px var(--mono);font-weight:400;letter-spacing:-1px}
+    .band-wrap{padding:16px 0 20px;border-bottom:1px solid var(--line)}.band-head{display:flex;justify-content:space-between;align-items:baseline}.band-head p{color:var(--muted);font-size:17px}.band{position:relative;height:8px;background:var(--soft);margin:14px 0 10px}.band::before{content:"";position:absolute;left:0;top:0;height:8px;width:9%;background:var(--ink)}.point{position:absolute;left:9%;top:50%;width:20px;height:20px;border-radius:50%;transform:translate(-50%,-50%);background:var(--ink)}.tick{position:absolute;top:-5px;width:2px;height:18px;background:#bcbab5}.t25{left:25%}.t50{left:50%}.t75{left:75%}.band-labels{display:flex;justify-content:space-between;color:var(--muted);font:16px var(--mono)}
+    .metrics{display:grid;grid-template-columns:repeat(3,1fr);margin-top:20px;border-top:3px solid var(--ink);border-left:1px solid var(--line)}.metric{min-height:116px;padding:15px 17px 13px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.metric-k{font-size:17px;color:var(--muted)}.metric-v{margin-top:6px;font:36px var(--mono);letter-spacing:-2px}.metric-u{font-size:19px;color:var(--muted);letter-spacing:0}.metric-d{margin-top:6px;font-size:16px;color:var(--muted)}.negative{color:var(--down)}
+    .judgment{display:grid;grid-template-columns:172px 1fr;gap:22px;padding:20px 0 18px;border-bottom:3px solid var(--ink)}.judgment h2{font-size:18px;color:var(--muted);font-weight:400;letter-spacing:2px}.judgment p{font-size:27px;line-height:1.36;letter-spacing:.2px}.judgment strong{font-weight:650}
+    .evidence{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--line)}.evidence section{padding:17px 20px 17px 0}.evidence section+section{padding-left:24px;border-left:1px solid var(--line)}.evidence h3{font-size:18px;font-weight:400;letter-spacing:2px;color:var(--muted)}.evidence ul{margin-top:10px;list-style:none}.evidence li{font-size:20px;line-height:1.42;padding-left:15px;position:relative}.evidence li+li{margin-top:6px}.evidence li::before{content:"";position:absolute;left:0;top:.62em;width:6px;height:6px;background:var(--ink)}
+    .track{display:grid;grid-template-columns:150px repeat(3,1fr);border-bottom:3px solid var(--ink);padding:16px 0}.track-title{font-size:18px;letter-spacing:2px;color:var(--muted)}.track-item{padding:0 16px;border-left:1px solid var(--line)}.track-n{display:block;color:var(--muted);font:15px var(--mono)}.track-v{display:block;font-size:19px;margin-top:5px;line-height:1.25}
+    footer{display:flex;justify-content:space-between;align-items:flex-end;padding-top:15px;color:var(--muted);font:15px var(--mono);line-height:1.55}.disclaimer{max-width:480px}.source{text-align:right}
   </style>
 </head>
 <body>
-  <article class="card" aria-label="招商银行估值客户合规卡公开样张">
+  <article class="card" aria-label="招商银行估值客户合规卡">
     <header class="mast">
-      <div class="top"><span class="n">招商银行</span><span class="cd">600036</span><span class="m">估值体检</span></div>
-      <div class="meta">A股 · PB–ROE 口径 · 行情截至 2026-07-10 · 财务截至 2026-03-31</div>
+      <div class="mast-top"><span class="name">招商银行</span><span class="code">600036</span><span class="type">估值体检</span></div>
+      <div class="meta">A股 · PB-ROE口径 · 行情截至 2026-07-10 · 财务截至 2026-03-31</div>
     </header>
-    <main class="body">
-      <section>
-        <div class="hero">
-          <div><div class="sl">当前 PB · 近年历史分位</div><div><span class="heroN tab">9</span><span class="heroU">%</span></div></div>
-          <div class="heroPB"><div class="v tab">0.84×</div><div class="k">当前 PB｜B 级行情数据</div></div>
-        </div>
-        <div class="band"><span class="tk" style="left:25%"></span><span class="tk" style="left:50%"></span><span class="tk" style="left:75%"></span><span class="fl"></span><span class="dt"></span></div>
-        <div class="ticks"><span>P25</span><span>中位 0.95×</span><span>P75</span></div>
+    <main>
+      <section class="hero">
+        <div><div class="eyebrow">近年历史分位</div><div class="headline"><span class="rank">9%</span><div class="state"><strong>估值坐标偏低</strong><span>低分位仍待基本面验证</span></div></div></div>
+        <div class="valuation"><div><label>当前 PB</label><b>0.84×</b></div><div><label>历史中位</label><b>0.95×</b></div><div><label>较中位</label><b>-12%</b></div></div>
       </section>
-      <section class="g3">
-        <div class="cell"><div class="k">年化 ROE</div><div class="v tab">13.48<small>%</small></div></div>
-        <div class="cell"><div class="k">净息差</div><div class="v tab">1.83<small>%</small></div></div>
-        <div class="cell"><div class="k">净利同比</div><div class="v tab">+1.52<small>%</small></div></div>
-        <div class="cell"><div class="k">不良率</div><div class="v tab">0.94<small>%</small></div></div>
-        <div class="cell"><div class="k">拨备覆盖率</div><div class="v tab">387.76<small>%</small></div></div>
-        <div class="cell"><div class="k">核心一级资本</div><div class="v tab">13.70<small>%</small></div></div>
+      <section class="band-wrap" aria-label="PB历史分位尺">
+        <div class="band-head"><div class="eyebrow">PB 历史位置</div><p>当前值 0.84× · 近年序列约 9% 分位</p></div>
+        <div class="band"><span class="tick t25"></span><span class="tick t50"></span><span class="tick t75"></span><span class="point"></span></div>
+        <div class="band-labels"><span>低位</span><span>P25</span><span>中位 0.95×</span><span>P75</span><span>高位</span></div>
       </section>
-      <section class="judgment"><div class="k">研究判断</div><div class="t">当前 PB 位于近年较低分位，但 ROE 与净息差同比回落。估值坐标偏低不等于已确认低估，仍需结合盈利中枢和资产质量变化判断。</div></section>
-      <section class="risk"><div class="k">反面证据 / 风险</div><div class="t">净息差同比下降 8bp；零售贷款不良形成仍需跟踪。集团拨备覆盖率较年末下降 4.03 个百分点。</div></section>
-      <section class="track">
-        <div class="it"><div class="k">跟踪 01</div><div class="v">净息差与存款成本</div></div>
-        <div class="it"><div class="k">跟踪 02</div><div class="v">零售不良形成率</div></div>
-        <div class="it"><div class="k">跟踪 03</div><div class="v">PB–ROE 同业坐标</div></div>
+      <section class="metrics" aria-label="经营与风险关键数据">
+        <div class="metric"><div class="metric-k">年化 ROE</div><div class="metric-v">13.48<span class="metric-u">%</span></div><div class="metric-d negative">同比 -0.65 个百分点</div></div>
+        <div class="metric"><div class="metric-k">净息差</div><div class="metric-v">1.83<span class="metric-u">%</span></div><div class="metric-d negative">同比 -8bp</div></div>
+        <div class="metric"><div class="metric-k">净利同比</div><div class="metric-v">+1.52<span class="metric-u">%</span></div><div class="metric-d">盈利仍保持正增长</div></div>
+        <div class="metric"><div class="metric-k">不良率</div><div class="metric-v">0.94<span class="metric-u">%</span></div><div class="metric-d">资产质量待持续跟踪</div></div>
+        <div class="metric"><div class="metric-k">拨备覆盖率</div><div class="metric-v">387.76<span class="metric-u">%</span></div><div class="metric-d negative">较年末 -4.03 个百分点</div></div>
+        <div class="metric"><div class="metric-k">核心一级资本</div><div class="metric-v">13.70<span class="metric-u">%</span></div><div class="metric-d">资本缓冲仍具基础</div></div>
       </section>
+      <section class="judgment"><h2>研究判断</h2><p><strong>估值坐标偏低，不等于已确认低估。</strong> 关键在于 ROE 与净息差回落能否企稳，以及零售资产质量变化是否受控。</p></section>
+      <section class="evidence"><section><h3>支撑证据</h3><ul><li>PB 约 0.84×，低于近年中位 0.95×</li><li>净利润同比仍为正，年化 ROE 保持双位数</li></ul></section><section class="risk"><h3>反面证据 / 风险</h3><ul><li>净息差同比下降 8bp</li><li>零售贷款不良形成仍需跟踪</li><li>拨备覆盖率较年末下降 4.03 个百分点</li></ul></section></section>
+      <section class="track" aria-label="后续跟踪事项"><div class="track-title">后续跟踪</div><div class="track-item"><span class="track-n">01</span><span class="track-v">净息差与存款成本</span></div><div class="track-item"><span class="track-n">02</span><span class="track-v">零售不良形成率</span></div><div class="track-item"><span class="track-n">03</span><span class="track-v">PB-ROE 同业坐标</span></div></section>
     </main>
-    <footer class="foot"><div class="rule"></div><div class="bar"><span>客观体检 · 不含买卖建议</span><span>来源 招商银行 2026Q1 · 小乐财报</span></div><div class="bar"><span class="review">真实公司 · 作者已审核</span><span>演示样张，不构成投资建议</span></div></footer>
+    <footer><div class="disclaimer">客观体检 · 不含买卖建议<br>本材料基于公开信息整理，不构成投资建议。</div><div class="source">来源：招商银行 2026Q1 · 小乐财报<br>由 Rodya-caijing-studio 制作<br>样张演示，不构成投资建议</div></footer>
   </article>
 </body>
 </html>
