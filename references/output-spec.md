@@ -136,12 +136,12 @@ meta:
 ## 五、视觉模板进度与交付规则
 
 - **docx 视觉已定稿（2026-07-10）**：规范见 [docx-visual-spec.md](docx-visual-spec.md)，渲染专业版 docx 时按其执行。
-- **卡片视觉已定稿并落地（2026-07-10）**：见 [card-components.md](card-components.md)「墨账本 Swiss」——墨黑招牌带 + 冷白账本底 + 红绿只给涨跌数据；模板 `assets/template-card.html`（七模块完整卡片）已建。**默认交付填好数据的 HTML + 提醒截图，不出 PNG**。
+- **卡片视觉已定稿并落地（2026-07-15）**：见 [card-components.md](card-components.md)「墨账本 Swiss」——墨黑招牌带 + 冷白账本底 + 红绿只给涨跌数据；模板 `assets/template-card.html`（七模块完整卡片）已建。**ChatGPT Codex 默认交付由同一 HTML 实际捕获的 PNG + HTML + 文案；Claude 默认交付 HTML + 文案并提醒截图。**
 - **PPT 视觉已定稿并升级为通用自适应系统（2026-07-10）**：**按需件**，默认真 .pptx（pptxgenjs，参考 `assets/deck-template.mjs`），零依赖备选 HTML 翻页 deck `assets/template-deck.html`；唯一执行事实源见 [ppt-visual-spec.md](ppt-visual-spec.md)。
 
 **各形态交付规则（三形态视觉均已定稿）：**
 
 - 单模块默认交付：专业研究 `.docx`（按 docx-visual-spec.md 渲染）+ 结构化内核摘要。客户合规版按用户指定生成 docx、卡片+文案或 PPT；未指定形态时默认卡片+文案。文档生成工具不可用或文件写入失败时，必须列为“文件生成阻塞”；只有用户明确不要文件时才改为聊天或 Markdown 专业稿。
-- 客户版卡片（按需）交付「填好数据的 HTML 卡片（复制 template-card.html 对应 .card 填内核）+ 文案 + 提醒截图」，不出 PNG。
+- 客户版卡片（按需）先生成「填好数据的 HTML 卡片（复制 template-card.html 对应 `.card` 填内核）+ 文案」。执行端为 **ChatGPT Codex** 时，必须在同一 HTML、同一数据状态下捕获 1080×1440 PNG，并交付 PNG + HTML + 文案；执行端为 **Claude** 时，交付 HTML + 文案，并提醒“在浏览器打开后截图即可”。Codex 无法实际捕获时必须说明阻断、交付 HTML + 文案并提醒截图；不得用生成式图像、旧 PNG 或不同版本页面替代。
 - PPT 为**按需件**（仅用户点名"汇报/PPT/deck"才出，多模块不自动出）：默认真 .pptx（pptxgenjs 自适应内部研究版，见 §三③与 ppt-visual-spec.md）；用户没装 PowerPoint 或只要 PDF 时给 HTML 翻页 deck。
 - 若环境无法写文件，先说明阻塞，再按现有素材产最小可用版。

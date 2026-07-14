@@ -32,7 +32,7 @@ test('README lists the three real company samples', async () => {
   assert.match(readme, /招商银行/);
   assert.match(readme, /小米集团/);
   assert.match(readme, /三份真实上市公司样张/);
-  assert.doesNotMatch(readme, /docs\/samples\/cmb\/.*\.png/);
+  assert.match(readme, /docs\/samples\/cmb\/招商银行_估值客户合规卡\.png/);
   assert.doesNotMatch(readme, /assets\/samples\//);
 });
 
@@ -56,12 +56,15 @@ test('README explains why fundamental conclusions are reproducible', async () =>
 test('README links to the listed sample artifacts', async () => {
   const readme = await readFile(readmeUrl, 'utf8');
   const cmbCard = new URL('../docs/samples/cmb/招商银行_估值客户合规卡.html', import.meta.url);
+  const cmbPreview = new URL('../docs/samples/cmb/招商银行_估值客户合规卡.png', import.meta.url);
   const xiaomiPreview = new URL('../docs/samples/xiaomi/小米集团_研究样张预览.png', import.meta.url);
 
   assert.match(readme, /招商银行.*docs\/samples\/cmb/s);
+  assert.match(readme, /招商银行_估值客户合规卡\.png/);
   assert.match(readme, /小米集团.*docs\/samples\/xiaomi/s);
   assert.match(readme, /宁德时代.*深度研究/s);
   await access(cmbCard);
+  await access(cmbPreview);
   await access(xiaomiPreview);
   assert.doesNotMatch(readme, /宁德时代_基本面研究样张\.docx/);
 });

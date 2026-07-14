@@ -1,4 +1,4 @@
-# Design QA｜招商银行估值客户合规卡高密度草稿
+# Design QA｜招商银行估值客户合规卡高密度正式样张
 
 - Source visual truth：`docs/samples/cmb/招商银行_估值客户合规卡.png`
 - Implementation：`docs/samples/cmb/招商银行_估值客户合规卡.html`
@@ -7,8 +7,9 @@
 
 ## Evidence
 
-- 已确认高密度 HTML 已替换原正式样张，旧 PNG 已删除；README 与样张链接的静态合约检查通过。
-- 在受控浏览器中访问本地 `file://` 实现页时，被浏览器 URL 安全策略阻断；未绕过该策略，因此没有浏览器渲染截图。
+- 高密度 HTML 已替换原正式样张；用户已将当前正式样张实际截图保存为同名 PNG，README 嵌入该 PNG 并保留 HTML 源文件入口。
+- 已目检保存的 PNG：含中性制作来源“由 Rodya-caijing-studio 制作”，不含“作者已审核”或任何个人背书；正文、数据栅格、双证据及跟踪区均可读。
+- 受控浏览器仍受 `file://` URL 安全策略限制，未绕过该策略。PNG 的视觉事实源为用户从本机页面保存的实际截图，而非生成式图片或历史旧图。
 
 ## Required fidelity surfaces
 
@@ -20,20 +21,17 @@
 
 ## Findings
 
-- [P1] 自动渲染验证缺失。
-  - Evidence：本地实现 URL 被浏览器安全策略阻断。
-  - Impact：无法确认最终行高、字体回退和 1440 px 画布内是否溢出。
-  - Fix：由本机浏览器打开 HTML 或提供允许访问的本地预览 URL 后，捕获 1080 × 1440 渲染图并进行目检。
+- 无 P0/P1/P2 问题。PNG 为本机实际截图；后续如更改 HTML 内容、字体或画布高度，须重新截图替换同名 PNG，避免 README 预览与源文件漂移。
 
 ## Implementation checklist
 
-1. 在本机打开高密度草稿 HTML。
-2. 审核页底与跟踪区在目标导出画布中的高度。
-3. 确认后再替换主样张并更新 README 链接。
+1. 修改卡片 HTML 后，在本机重新导出同尺寸 PNG。
+2. 替换 `docs/samples/cmb/招商银行_估值客户合规卡.png` 后，运行 README 合约检查。
 
 ## Comparison history
 
 - Iteration 1：实现已完成；浏览器 URL 安全策略阻断本地渲染，未进行视觉比对。
-- Iteration 2：用户确认高密度方向后，HTML 升格为正式样张；静态检查通过，仍缺浏览器渲染截图。
+- Iteration 2：用户确认高密度方向后，HTML 升格为正式样张；静态检查通过。
+- Iteration 3：用户保存当前页面的实际 PNG；README 改为嵌入该 PNG，HTML 继续作为可检查的源文件。
 
-final result: blocked
+final result: passed（基于用户保存的实际 PNG 与静态合约检查）
